@@ -2,6 +2,7 @@ package server;
 
 import server.robot.maze.SimpleMaze;
 import server.robot.Command;
+import server.robot.Position;
 import server.robot.Robot;
 import server.robot.world.AbstractWorld;
 import server.robot.world.TextWorld;
@@ -18,26 +19,17 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(2201)) {
             System.out.println("Server started. Listening for incoming connections...");
 
-            try (Socket socket = serverSocket.accept()) {
-                System.out.println("Incoming connection accepted");
+            while (true) {
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Incoming connection accepted");
 
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream())); //creates new buffered reader object, reader.. reads input from client
-                    PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
+            
+            Server serverObject = new Server();
 
-                    AbstractWorld world = new TextWorld(new SimpleMaze());  //"word" represents the game world
-                    Robot robot = new Robot("Robot", world);
-
-                    while (true) {  //processes incoming commands from the client
-                        String instruction = reader.readLine();
-                        try {
-                            Command command = Command.create(instruction);
-                            boolean shouldContinue = robot.handleCommand(command);
-                            writer.println(robot.toString());
-                        } catch (IllegalArgumentException e) {
-                            writer.println("Sorry, I did not understand '" + instruction + "'.");
-                        }
-                    }
-                }
+            // Create a new thread for each client
+            ClientHandler clientHandler = new ClientHandler();
+            Thread clientThread = new Thread(clientHandler);
+            clientThread.start();
             }
         }
     }
