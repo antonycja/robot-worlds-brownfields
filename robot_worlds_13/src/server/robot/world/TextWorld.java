@@ -1,9 +1,9 @@
-package server.world;
+package server.robot.world;
 
 import java.util.List;
 
-import server.Position;
-import server.maze.Maze;
+import server.robot.maze.*;
+import server.robot.Position;
 
 public class TextWorld extends AbstractWorld {
     

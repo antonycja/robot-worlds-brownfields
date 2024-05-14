@@ -1,11 +1,11 @@
-package server.world;
+package server.robot.world;
 
 import java.util.List;
 import java.util.ArrayList;
 
-import server.Position;
-import server.Robot;
-import server.maze.*;
+import server.robot.maze.*;
+import server.robot.Position;
+import server.robot.Robot;
 
 public class AbstractWorld implements IWorld {
     private final Position TOP_LEFT = new Position(-100,200);

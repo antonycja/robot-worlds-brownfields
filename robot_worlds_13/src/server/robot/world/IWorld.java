@@ -1,8 +1,8 @@
-package server.world;
-
-import server.Position;
+package server.robot.world;
 
 import java.util.List;
+
+import server.robot.Position;
 
 /**
  * Your Text and Turtle worlds must implement this interface.

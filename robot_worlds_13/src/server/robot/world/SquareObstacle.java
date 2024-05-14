@@ -1,9 +1,9 @@
-package server.world;
-
-import server.Position;
+package server.robot.world;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import server.robot.Position;
 
 public class SquareObstacle implements Obstacle {
     private int x;

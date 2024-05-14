@@ -1,10 +1,10 @@
-package server;
+package server.robot;
 
 import java.util.Arrays;
 import java.util.List;
 
-import server.maze.*;
-import server.world.*;
+import server.robot.maze.*;
+import server.robot.world.*;
 
 public class Robot {
     private final Position TOP_LEFT = new Position(-100,200);

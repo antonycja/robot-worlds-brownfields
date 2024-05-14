@@ -1,8 +1,8 @@
-package server;
+package server.robot;
 
-import server.world.IWorld.UpdateResponse;
+import server.robot.world.IWorld.UpdateResponse;
 
-public class BackCommand extends server.Command {
+public class BackCommand extends server.robot.Command {
 
     @Override
     public boolean execute(Robot target) {

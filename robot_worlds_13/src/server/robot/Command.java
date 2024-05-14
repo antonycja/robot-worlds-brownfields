@@ -1,4 +1,4 @@
-package server;
+package server.robot;
 
 import java.util.ArrayList;
 import java.util.List;

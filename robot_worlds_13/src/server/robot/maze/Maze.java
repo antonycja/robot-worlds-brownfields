@@ -1,7 +1,7 @@
-package server.maze;
+package server.robot.maze;
 
-import server.Position;
-import server.world.Obstacle;
+import server.robot.Position;
+import server.robot.world.Obstacle;
 
 import java.util.List;
 

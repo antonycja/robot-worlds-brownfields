@@ -1,10 +1,11 @@
-package server.maze;
+package server.robot.maze;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import server.*;
-import server.world.*;
+import server.robot.Position;
+import server.robot.world.*;
 
 public class SimpleMaze extends AbstractMaze {
 

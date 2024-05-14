@@ -1,6 +1,6 @@
-package server.world;
+package server.robot.world;
 
-import server.Position;
+import server.robot.Position;
 
 /**
  * Defines an interface for obstacles you want to place in your world.

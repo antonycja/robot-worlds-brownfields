@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import server.*;
-import server.maze.SimpleMaze;
-import server.world.AbstractWorld;
-import server.world.TextWorld;
+import server.robot.maze.SimpleMaze;
+import server.robot.Robot;
+import server.robot.world.AbstractWorld;
+import server.robot.world.TextWorld;
 
 public class Play {
     static Scanner scanner;
@@ -39,13 +40,13 @@ public class Play {
         // print first status
         System.out.println(robot.toString());
 
-        server.Command command;
+        server.robot.Command command;
         boolean shouldContinue = true;
         do {
             String instruction = getInput(robot.getName() + "> What must I do next?").strip().toLowerCase();
             try {
 
-                command = server.Command.create(instruction);
+                command = server.robot.Command.create(instruction);
                 shouldContinue = robot.handleCommand(command);
 
             } catch (IllegalArgumentException e) {

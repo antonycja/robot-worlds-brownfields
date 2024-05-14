@@ -1,4 +1,4 @@
-package server;
+package server.robot;
 
 public class Position {
     private final int x;

@@ -1,8 +1,10 @@
 package server;
 
-import server.maze.SimpleMaze;
-import server.world.AbstractWorld;
-import server.world.TextWorld;
+import server.robot.maze.SimpleMaze;
+import server.robot.Command;
+import server.robot.Robot;
+import server.robot.world.AbstractWorld;
+import server.robot.world.TextWorld;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,7 +22,7 @@ public class Server {
                 System.out.println("Incoming connection accepted");
 
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream())); //creates new buffered reader object, reader.. reads input from client
-                     PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
+                    PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
 
                     AbstractWorld world = new TextWorld(new SimpleMaze());  //"word" represents the game world
                     Robot robot = new Robot("Robot", world);

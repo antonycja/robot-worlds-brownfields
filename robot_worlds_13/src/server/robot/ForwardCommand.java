@@ -1,7 +1,7 @@
-package server;
+package server.robot;
 
-import server.world.IWorld;
-import server.world.IWorld.UpdateResponse;
+import server.robot.world.IWorld;
+import server.robot.world.IWorld.UpdateResponse;
 
 public class ForwardCommand extends Command {
     
