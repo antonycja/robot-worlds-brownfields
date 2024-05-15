@@ -12,6 +12,8 @@ public class AbstractWorld implements IWorld {
     private final Position BOTTOM_RIGHT = new Position(100,-200);
     public static final Position CENTRE = IWorld.CENTRE;
 
+    public ArrayList<String> obstacleInStringFormat = new ArrayList<>();
+
 
     private List<Obstacle> obstacles = new ArrayList<>();
     private final Maze maze;
@@ -138,7 +140,7 @@ public class AbstractWorld implements IWorld {
     @Override
     public void showObstacles() {
         if(this.obstacles.size() > 0) {
-            System.out.println("There are some obstacles:");
+//            System.out.println("There are some obstacles:");
             for(Obstacle obstacle: obstacles ){
                 int xBottomLeft = obstacle.getBottomLeftX();
                 int yBottomLeft = obstacle.getBottomLeftY();
@@ -146,7 +148,8 @@ public class AbstractWorld implements IWorld {
                 int xTopRight = obstacle.getBottomLeftX()+4;
                 int yTopRight = obstacle.getBottomLeftY()+4;
 
-                System.out.printf("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight);
+                //System.out.printf("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight);
+                obstacleInStringFormat.add(String.format("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight));
             }
         }
 

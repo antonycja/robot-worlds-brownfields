@@ -42,6 +42,7 @@ public class Client {
                     dout.writeUTF(command);
                     dout.flush();
                 }
+
             }
             
             dout.flush();

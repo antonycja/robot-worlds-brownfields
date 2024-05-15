@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
 import java.net.*;
@@ -72,6 +73,9 @@ public class ClientHandler implements Runnable {
             sendMessage("Hello Kiddo!");
 
             world.showObstacles();  // will need to now return obstacles, and flush them to user
+            ArrayList<String> obstaclesData = world.obstacleInStringFormat;
+
+            sendMessage("Obstacles in the world: " + obstaclesData.get(0));
 
             sendMessage(robot.toString());
             
