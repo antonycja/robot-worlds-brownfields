@@ -11,15 +11,31 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
-    static String address = "localhost";
+    static String localAddress = "localhost";
+    static String serverIpAddress = "20.20.15.94";
     static Socket sThisClient;
     static DataOutputStream dout;
     static DataInputStream din;
     static Scanner line = new Scanner(System.in);
 
     public static void main(String[] args) {
+        
         try {
-            sThisClient = new Socket(address, 2201);
+            sThisClient = new Socket(serverIpAddress, 2201);
+        } catch (Exception ex) {
+            System.out.println("Failed to connect to the server using the specified IP address.");
+            System.out.println("Resorting to localhost...\n");
+            try {
+                sThisClient = new Socket(localAddress, 2201);
+            } catch (Exception e) {
+                System.out.println("Failed to connect to localhost.");
+                System.out.println("None of the known servers are running");
+                System.out.println("Exiting program...\n");
+                return;
+            }
+        }
+
+        try {
             dout = new DataOutputStream(sThisClient.getOutputStream());
             din = new DataInputStream(sThisClient.getInputStream());
 
@@ -32,8 +48,10 @@ public class Client {
                 
                 if (response.contains("Shutting down")) {
                     break;
+                } else if (response.contains("Server shutting down...")) {
+                    break;
                 }
-
+                
                 // if the message requires a response prompt current client for input
                 // and send the command
                 // (what do you want to name your robot / what do you want to do next)
@@ -42,12 +60,11 @@ public class Client {
                     dout.writeUTF(command);
                     dout.flush();
                 }
-
             }
-            
+
+            // close this client
             dout.flush();
             dout.close();
-            sThisClient.close();
         }
         catch (Exception e) {
             try {
@@ -55,9 +72,9 @@ public class Client {
                 dout.writeUTF("off");
                 dout.flush();
                 dout.close();
-                sThisClient.close();
+                // sThisClient.close();
             } catch (Exception i) {
-                System.out.println("Connection problem to the server encountered");
+                System.out.println("Connection problem encountered: Server is down or you do not an active internet connection");
             }
         }
     }

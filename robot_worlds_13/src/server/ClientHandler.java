@@ -23,7 +23,7 @@ public class ClientHandler implements Runnable {
     // it is responsible for giving the robot properties alread defined by the server's configuration
 
     // socket variables
-    private final Socket clientSocket;
+    final Socket clientSocket;
     DataInputStream dis;
     DataOutputStream dos;
     String clientIdentifier;
@@ -113,13 +113,13 @@ public class ClientHandler implements Runnable {
             System.out.println("Client " + clientIdentifier + " disconnected.");
             clientSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 
     private String getClientIdentifier(Socket clientSocket) {
         // Here you can determine the identifier based on client's IP address or any other parameter
-        return clientSocket.getInetAddress().getHostAddress(); // Using client's IP address as identifier
+        return clientSocket.getInetAddress().getHostAddress();
     }
 
     public String getCommand(){
@@ -128,7 +128,7 @@ public class ClientHandler implements Runnable {
             message = dis.readUTF();
             System.out.println("Client " + clientIdentifier + " says: " + message);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             return "ClientQuit";
         }
         return message;
@@ -140,7 +140,7 @@ public class ClientHandler implements Runnable {
             dos.writeUTF(response + question);
             dos.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 
@@ -150,9 +150,11 @@ public class ClientHandler implements Runnable {
             dos.writeUTF(response);
             dos.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
+
+
 }
 
 
