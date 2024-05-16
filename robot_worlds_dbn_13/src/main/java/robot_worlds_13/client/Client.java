@@ -19,7 +19,17 @@ public class Client {
     static Scanner line = new Scanner(System.in);
 
     public static void main(String[] args) {
-        
+        System.out.println("       " +
+                "  __\n" +
+                " _(\\    |@@|\n" +
+                "(__/\\__ \\--/ __\n" +
+                "   \\___|----|  |   __\n" +
+                "       \\ }{ /\\ )_ / _\\\n" +
+                "       /\\__/\\ \\__O (__      --WELCOME TO ROBOT WORLDS-- \n" +
+                "      (--/\\--)    \\__/\n" +
+                "      _)(  )(_\n" +
+                "     `---''---`");
+
         try {
             sThisClient = new Socket(serverIpAddress, 2201);
         } catch (Exception ex) {
