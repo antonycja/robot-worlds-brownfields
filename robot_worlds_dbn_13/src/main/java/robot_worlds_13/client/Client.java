@@ -30,10 +30,6 @@ public class Client {
                 "      _)(  )(_\n" +
                 "     `---''---`");
 
-<<<<<<< HEAD:robot_worlds_13/src/client/Client.java
-        
-=======
->>>>>>> origin/testing-making-tests:robot_worlds_dbn_13/src/main/java/robot_worlds_13/client/Client.java
         try {
             sThisClient = new Socket(serverIpAddress, 2201);
         } catch (Exception ex) {
