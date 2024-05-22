@@ -15,6 +15,9 @@ import robot_worlds_13.server.robot.*;
 import robot_worlds_13.server.robot.maze.*;
 import robot_worlds_13.server.robot.world.*;
 
+/*
+ * responsable for each thread
+ */
 public class ClientHandler implements Runnable {
     // This class by implementing the runnable interface, make each robot in the world
     // it is responsible for giving the robot properties alread defined by the server's configuration
@@ -57,10 +60,7 @@ public class ClientHandler implements Runnable {
             this.dos = new DataOutputStream(clientSocket.getOutputStream());
             this.clientIdentifier = getClientIdentifier(clientSocket);
             this.commandLine = new Scanner(System.in);
-
-            // Send a message to the server when a client connects
-            Server.broadcast("Client connected: " + clientIdentifier);
-
+            
             sendMessage("Connected");
 
             sendMessage("What do you want to name your robot?");
@@ -78,7 +78,7 @@ public class ClientHandler implements Runnable {
             sendMessage("Obstacles in the world: " + obstaclesData.get(0));
 
             sendMessage(robot.toString());
-
+            
             Command command;
             boolean shouldContinue = true;
             String instruction;
@@ -87,11 +87,11 @@ public class ClientHandler implements Runnable {
                 // getting robot commands from the server
                 sendMessage("What must I do next?");
                 instruction = getCommand();
-
+                
                 if (instruction.matches("ClientQuit")) {
                     break;
                 }
-
+                
                 // create the command, and execute it on the robot
                 try {
                     command = Command.create(instruction);
@@ -102,16 +102,13 @@ public class ClientHandler implements Runnable {
 
                 // print robot status after executing command
                 sendMessage(robot);
-
+                
                 if (shouldContinue) {
                     continue;
                 } else {
                     break;
                 }
             }
-
-            // Send a message to the server when a client disconnects
-            Server.broadcast("Client disconnected: " + clientIdentifier);
 
             System.out.println("Client " + clientIdentifier + " disconnected.");
             clientSocket.close();
@@ -156,4 +153,12 @@ public class ClientHandler implements Runnable {
             // e.printStackTrace();
         }
     }
+
+
 }
+
+
+
+
+
+

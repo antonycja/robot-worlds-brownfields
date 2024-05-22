@@ -1,7 +1,12 @@
 package robot_worlds_13.client;
 
+/*
+ * This class acts as the user's interface to the program
+ * it will employ charecteristics from play
+ */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -24,21 +29,14 @@ public class Client {
                 "      (--/\\--)    \\__/\n" +
                 "      _)(  )(_\n" +
                 "     `---''---`");
-        System.out.println("Here is a list of things I can do:\n"+
-                "OFF  - Shut down robot\n" +
-                "FORWARD - move forward by specified number of steps, e.g. 'FORWARD 10'\n" +
-                "BACK - move back by specified number of steps, e.g. 'BACK 10'\n" +
-                "LEFT - turn left by 90 degrees\n"+
-                "RIGHT - turn right by 90 degrees\n");
-
 
         try {
-            sThisClient = new Socket(serverIpAddress, 2204);
+            sThisClient = new Socket(serverIpAddress, 2201);
         } catch (Exception ex) {
             System.out.println("Failed to connect to the server using the specified IP address.");
             System.out.println("Resorting to localhost...\n");
             try {
-                sThisClient = new Socket(localAddress, 2204);
+                sThisClient = new Socket(localAddress, 2201);
             } catch (Exception e) {
                 System.out.println("Failed to connect to localhost.");
                 System.out.println("None of the known servers are running");
@@ -52,20 +50,21 @@ public class Client {
             din = new DataInputStream(sThisClient.getInputStream());
 
             while (true) {
-                // Get server messages
+                // get server messages
                 String response = din.readUTF();
-
-                // Print message to this client
+                
+                // print message to this client
                 System.out.println(response);
-
+                
                 if (response.contains("Shutting down")) {
                     break;
                 } else if (response.contains("Server shutting down...")) {
                     break;
                 }
-
-                // If the message requires a response prompt current client for input
+                
+                // if the message requires a response prompt current client for input
                 // and send the command
+                // (what do you want to name your robot / what do you want to do next)
                 if (response.startsWith("What")) {
                     String command = line.nextLine();
                     dout.writeUTF(command);
@@ -73,15 +72,17 @@ public class Client {
                 }
             }
 
-            // Close this client
+            // close this client
             dout.flush();
             dout.close();
         }
         catch (Exception e) {
             try {
+                
                 dout.writeUTF("off");
                 dout.flush();
                 dout.close();
+                // sThisClient.close();
             } catch (Exception i) {
                 System.out.println("Connection problem encountered: Server is down or you do not an active internet connection");
             }
