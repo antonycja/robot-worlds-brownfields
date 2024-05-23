@@ -48,6 +48,7 @@ public class AbstractWorld implements IWorld {
     public UpdateResponse updatePosition(int nrSteps) {
         int newX = this.position.getX();
         int newY = this.position.getY();
+        Position positionBeforeUpdate = new Position(newX, newY);
 
 
         if (Direction.UP.equals(this.currentDirection)) {
@@ -60,12 +61,30 @@ public class AbstractWorld implements IWorld {
             newX = newX - nrSteps;
         }
 
+        
         Position newPosition = new Position(newX, newY);
+        // is new position outside world
         if (!newPosition.isIn(TOP_LEFT, BOTTOM_RIGHT)){
             return UpdateResponse.FAILED_OUTSIDE_WORLD;
         }
 
+        // check if new position inside of obstacle
         else if (!isNewPositionAllowed(newPosition)) {
+            return UpdateResponse.FAILED_OBSTRUCTED;
+        }
+
+        // is position not take by a robot already?
+        else if (!isPositionNotOccupiedByRobot(newPosition)){
+            return UpdateResponse.FAILED_OBSTRUCTED;
+        }
+
+        // checking if path is not blocked by an obstacle in the world
+        else if (!isPathClearFromObstacles(positionBeforeUpdate, newPosition)) {
+            return UpdateResponse.FAILED_OBSTRUCTED;
+        }
+
+        // checking if path is not blocked by another robot in the world
+        else if (!isPathNotBlockedByRobot(positionBeforeUpdate, newPosition)) {
             return UpdateResponse.FAILED_OBSTRUCTED;
         }
 
@@ -133,6 +152,30 @@ public class AbstractWorld implements IWorld {
         return true;
     }
 
+    public boolean isPositionNotOccupiedByRobot(Position position) {
+        for (String name: serverObject.nameRobotMap.keySet()) {
+            if (name.equals(this.curentRobotName)){
+                continue;
+            }
+
+            ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
+            Position thatRobotsPosition = (Position) currentState.get(0);
+            if (thatRobotsPosition.equals(position)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isPathNotBlockedByRobot(Position start, Position end) {
+        List<Position> path = getRobotPath(start, end);
+        for (Position currePosition: path) {
+            if (!isPositionNotOccupiedByRobot(currePosition)) {
+                return false;
+            };
+        }
+        return true;
+    }
     @Override
     public boolean isAtEdge() {
 
@@ -174,7 +217,8 @@ public class AbstractWorld implements IWorld {
 
     }
 
-    public boolean isPathBlocked(Position currentPosition, Position destPosition){
+    // checks if the path is blocked by obstacles or not
+    public boolean isPathClearFromObstacles(Position currentPosition, Position destPosition){
         if(position.isIn(TOP_LEFT,BOTTOM_RIGHT)){
             for(Obstacle obstacle: obstacles){
                 if(obstacle.blocksPath(currentPosition, destPosition)){
@@ -192,5 +236,33 @@ public class AbstractWorld implements IWorld {
         this.curentRobotName = target.getName();
     }
     
-    
+    private List<Position> getRobotPath (Position a, Position b) {
+        int startX = a.getX();
+        int endX = b.getX();
+        
+        int startY = a.getY();
+        int endY = b.getY();
+        
+        List<Position> coordinates = new ArrayList<>();
+
+        if (startX == endX && startY < endY) {
+            for (int i = startY; i <= endY; i++) {
+                coordinates.add(new Position(startX, i));
+            }
+        } else if (startX == endX && startY > endY) {
+            for (int i = startY; i >= endY; i--) {
+                coordinates.add(new Position(startX, i));
+            }
+        } else if (startX < endX && startY == endY) {
+            for (int i = startX; i <= endX; i++) {
+                coordinates.add(new Position(i, startY));
+            }
+        } else if (startX > endX && startY == endY) {
+            for (int i = startX; i >= endX; i--) {
+                coordinates.add(new Position(i, startY));
+            }
+        }
+        
+        return coordinates;
+    }
 }
