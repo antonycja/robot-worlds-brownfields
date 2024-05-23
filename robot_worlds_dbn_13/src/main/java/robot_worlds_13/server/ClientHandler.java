@@ -68,7 +68,12 @@ public class ClientHandler implements Runnable {
 
             sendMessage(name + " " + "has successfully launched");
 
-            Robot robot = new Robot(name);
+            Robot robot = new Robot(this.name, this.world, this.start);
+            world.serverObject.robotNames.add(name);
+            ArrayList<Object> currentRobotState = new ArrayList<>();
+            currentRobotState.add(robot.getCurrentPosition());
+            currentRobotState.add(robot.getCurrentDirection());
+            world.serverObject.nameRobotMap.put(name, currentRobotState);
 
             sendMessage("Hello Kiddo!");
 

@@ -8,6 +8,8 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
     public boolean execute(Robot target) {
         int nrSteps = Integer.parseInt(getArgument());
 
+        target.worldData.giveCurrentRobotInfo(target);
+
         // -nrsteps since the update in abstract world has no front vs back
         if (target.worldData.updatePosition(-nrSteps) == UpdateResponse.FAILED_OBSTRUCTED) {
             // obstacle

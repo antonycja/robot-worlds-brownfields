@@ -12,6 +12,8 @@ public class ForwardCommand extends Command {
         // System.out.println("in forward");
         // where towards is either "front" or "back"
 
+        target.worldData.giveCurrentRobotInfo(target);
+        
         IWorld.UpdateResponse responseGiven = target.worldData.updatePosition(nrSteps);
         
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
@@ -32,6 +34,9 @@ public class ForwardCommand extends Command {
         else {
             System.out.println("Error");
         }
+
+
+
         return true;
     }
 

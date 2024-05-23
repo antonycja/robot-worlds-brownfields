@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import robot_worlds_13.server.robot.maze.*;
 import robot_worlds_13.server.robot.Position;
 import robot_worlds_13.server.robot.Robot;
+import robot_worlds_13.server.*;
 
 public class AbstractWorld implements IWorld {
     private final Position TOP_LEFT = new Position(-100,200);
     private final Position BOTTOM_RIGHT = new Position(100,-200);
     public static final Position CENTRE = IWorld.CENTRE;
 
+    public Server serverObject;
     public ArrayList<String> obstacleInStringFormat = new ArrayList<>();
 
 
@@ -19,6 +21,16 @@ public class AbstractWorld implements IWorld {
     private final Maze maze;
     private  Direction currentDirection;
     private Position position;
+    private String curentRobotName;
+
+    public AbstractWorld (Maze mazeChosen, Server givenServerObject) {
+        
+        this.obstacles = mazeChosen.getObstacles();
+        this.maze = mazeChosen;
+        this.position = IWorld.CENTRE;
+        this.currentDirection = Direction.UP;
+        this.serverObject = givenServerObject;
+    }
 
     public AbstractWorld (Maze mazeChosen) {
         
@@ -57,6 +69,7 @@ public class AbstractWorld implements IWorld {
             return UpdateResponse.FAILED_OBSTRUCTED;
         }
 
+        
         this.position = newPosition;
             return UpdateResponse.SUCCESS;
     }
@@ -165,6 +178,12 @@ public class AbstractWorld implements IWorld {
             return true;
         }
         return false;
+    }
+
+    public void giveCurrentRobotInfo(Robot target){
+        this.position = target.getPosition();
+        this.currentDirection = target.getCurrentDirection();
+        this.curentRobotName = target.getName();
     }
     
     

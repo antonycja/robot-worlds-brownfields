@@ -34,12 +34,24 @@ public class Robot {
         this.worldData = worldObject;
     }
 
+    public Robot(String name, AbstractWorld worldObject, Position startingPosition) {
+        this.name = name;
+        this.status = "Ready";
+        this.position = startingPosition;
+        this.currentDirection = IWorld.Direction.UP;
+        this.worldData = worldObject;
+    }
+
     public String getStatus() {
         return this.status;
     }
 
     public IWorld.Direction getCurrentDirection() {
         return this.currentDirection;
+    }
+
+    public Position getCurrentPosition() {
+        return this.position;
     }
 
     public boolean handleCommand(Command command) {

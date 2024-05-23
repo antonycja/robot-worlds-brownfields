@@ -31,7 +31,7 @@ public class Client {
                 "     `---''---`");
 
         try {
-            sThisClient = new Socket(serverIpAddress, 2201);
+            sThisClient = new Socket(localAddress, 2201);
         } catch (Exception ex) {
             System.out.println("Failed to connect to the server using the specified IP address.");
             System.out.println("Resorting to localhost...\n");

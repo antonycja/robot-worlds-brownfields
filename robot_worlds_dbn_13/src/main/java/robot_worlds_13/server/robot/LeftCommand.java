@@ -5,6 +5,8 @@ public class LeftCommand extends Command {
     @Override
     public boolean execute(Robot target) {
         
+        target.worldData.giveCurrentRobotInfo(target);
+
         target.worldData.updateDirection(false);
         target.updateDirection("left");
         target.setStatus("Turned left.");
