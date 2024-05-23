@@ -28,6 +28,11 @@ public class Position {
         return y == position.y;
     }
 
+    @Override
+    public String toString () {
+        return "(" + String.valueOf(this.x) + ", " + String.valueOf(this.y) + ")";
+    }
+
     public boolean isIn(Position topLeft, Position bottomRight) {
         boolean withinTop = this.y <= topLeft.getY();
         boolean withinBottom = this.y >= bottomRight.getY();

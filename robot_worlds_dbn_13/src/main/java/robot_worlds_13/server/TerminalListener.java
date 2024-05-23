@@ -22,11 +22,27 @@ public class TerminalListener implements Runnable {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             String input;
             while ((input = reader.readLine()) != null) {
-                if ("quit".equals(input)) {
+                if ("quit".equalsIgnoreCase(input)) {
                     System.out.println("Received quit command. Closing all clients and the server...");
                     closeAllClients();
                     closeServer();
                     break;
+                } else if ("robots".equalsIgnoreCase(input)) {
+                    System.out.println("Robots command received \n");
+                    
+                    if (serverObject.nameRobotMap.isEmpty()){
+                        System.out.println("No robots on world yet");
+                    }
+
+                    for (String name: serverObject.nameRobotMap.keySet()) {
+                        ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
+                        System.out.println("Robot name: " + name + "\n" + 
+                                            "Current position: " + currentState.get(0).toString() + "\n" + 
+                                            "Current direction: " + currentState.get(1).toString() + "\n");
+                    }
+
+                    System.out.println();
+
                 } else {
                     System.out.println("Terminal command received: " + input);
                 }

@@ -69,7 +69,9 @@ public class AbstractWorld implements IWorld {
             return UpdateResponse.FAILED_OBSTRUCTED;
         }
 
-        
+        // updating the robot position inside the 
+        ArrayList<Object> currentState = serverObject.nameRobotMap.get(curentRobotName);
+        currentState.set(0, newPosition);
         this.position = newPosition;
             return UpdateResponse.SUCCESS;
     }
@@ -101,6 +103,10 @@ public class AbstractWorld implements IWorld {
                 this.currentDirection = Direction.DOWN;
             }
         }
+
+        // updating the direction of the robot inside the hashmap
+        ArrayList<Object> currentState = serverObject.nameRobotMap.get(curentRobotName);
+        currentState.set(1, this.currentDirection);
     }
 
     @Override
