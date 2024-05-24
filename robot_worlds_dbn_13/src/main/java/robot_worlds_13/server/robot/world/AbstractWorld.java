@@ -2,6 +2,7 @@ package robot_worlds_13.server.robot.world;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import robot_worlds_13.server.robot.maze.*;
 import robot_worlds_13.server.robot.Position;
@@ -12,9 +13,11 @@ public class AbstractWorld implements IWorld {
     private final Position TOP_LEFT = new Position(-100,200);
     private final Position BOTTOM_RIGHT = new Position(100,-200);
     public static final Position CENTRE = IWorld.CENTRE;
+    
 
     public Server serverObject;
     public ArrayList<String> obstacleInStringFormat = new ArrayList<>();
+    public int visibility = 10;
 
 
     private List<Obstacle> obstacles = new ArrayList<>();
@@ -140,10 +143,6 @@ public class AbstractWorld implements IWorld {
 
     @Override
     public boolean isNewPositionAllowed(Position position) {
-        if(!position.isIn(TOP_LEFT,BOTTOM_RIGHT)) {
-            return false;
-        }
-        
         for (Obstacle obstacle: obstacles){
             if(obstacle.blocksPosition(position)){
                 return false;
@@ -262,7 +261,66 @@ public class AbstractWorld implements IWorld {
                 coordinates.add(new Position(i, startY));
             }
         }
-        
         return coordinates;
+    }
+
+    public ArrayList<Position> lookAround () {
+        int newX = this.position.getX();
+        int newY = this.position.getY();
+        Position positionBeforeUpdate = new Position(newX, newY);
+        
+        // obstructions
+        ArrayList<Object> obstructions = new ArrayList<>();
+        HashMap<String, ArrayList<Object>> mapOfObstructions = new HashMap<>();
+
+        // look up
+        List<Position> pathGoingUp = getRobotPath(positionBeforeUpdate, new Position(newX, newY + visibility));
+        for (Position currePosition: pathGoingUp) {
+            if (!isPositionNotOccupiedByRobot(currePosition)) {
+                obstructions.add(currePosition); // add the position
+                obstructions.add("Robot");// add the type of obstruction
+                if (currentDirection == Direction.UP) { // add the direction
+                    mapOfObstructions.put("North", obstructions);
+                }
+                
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("SOUTH", obstructions);
+                }
+
+                if (currentDirection == Direction.RIGHT) { // add the direction
+                    mapOfObstructions.put("WEST", obstructions);
+                }
+
+                if (currentDirection == Direction.LEFT) { // add the direction
+                    mapOfObstructions.put("EAST", obstructions);
+                }
+                
+                break;
+            }
+
+            if (!isNewPositionAllowed(currePosition)) {
+                obstructions.add(currePosition); // add the position
+                obstructions.add("Obstacle");// add the type of obstruction
+                if (currentDirection == Direction.UP) { // add the direction
+                    mapOfObstructions.put("North", obstructions);
+                }
+
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("SOUTH", obstructions);
+                }
+
+                if (currentDirection == Direction.RIGHT) { // add the direction
+                    mapOfObstructions.put("WEST", obstructions);
+                }
+
+                if (currentDirection == Direction.LEFT) { // add the direction
+                    mapOfObstructions.put("EAST", obstructions);
+                }
+                
+                break;
+            }
+        
+        }
+        return new ArrayList<>();
     }
 }
