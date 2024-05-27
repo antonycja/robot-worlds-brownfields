@@ -6,9 +6,14 @@ package robot_worlds_13.client;
  */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+
+import com.google.gson.Gson;
 
 public class Client {
     static String localAddress = "localhost";
@@ -17,6 +22,10 @@ public class Client {
     static DataOutputStream dout;
     static DataInputStream din;
     static Scanner line = new Scanner(System.in);
+    static String robotName = "";
+    
+    static private PrintWriter out;
+    static private Gson gson = new Gson();
 
     public static void main(String[] args) {
         System.out.println("       " +
@@ -48,7 +57,7 @@ public class Client {
         try {
             dout = new DataOutputStream(sThisClient.getOutputStream());
             din = new DataInputStream(sThisClient.getInputStream());
-
+            
             while (true) {
                 // get server messages
                 String response = din.readUTF();
@@ -66,9 +75,20 @@ public class Client {
                 // and send the command
                 // (what do you want to name your robot / what do you want to do next)
                 if (response.startsWith("What")) {
+
+                    // get imput
                     String command = line.nextLine();
-                    dout.writeUTF(command);
-                    dout.flush();
+
+                    // format input
+                    Map<String, Object> formattedCommand = CommandSplitter.splitCommand(command);
+
+                    // send to server as json
+                    sendCommand(formattedCommand);
+
+                    // dout.writeUTF(command);
+                    // dout.flush();
+
+
                 }
             }
 
@@ -87,5 +107,15 @@ public class Client {
                 System.out.println("Connection problem encountered: Server is down or you do not an active internet connection");
             }
         }
+
+        
+    }
+
+    static public void sendCommand(Map<String, Object> commandDetails) {
+        commandDetails.put("robot", robotName);  // Add robot name to the command details
+
+        String jsonRequest = gson.toJson(commandDetails);
+        System.out.println("Sending command: " + jsonRequest);  // For debug purposes
+        out.println(jsonRequest);
     }
 }

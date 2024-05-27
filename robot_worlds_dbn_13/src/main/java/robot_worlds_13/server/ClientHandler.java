@@ -102,6 +102,7 @@ public class ClientHandler implements Runnable {
                     command = Command.create(instruction);
                     shouldContinue = robot.handleCommand(command);
                 } catch (IllegalArgumentException e) {
+                    
                     robot.setStatus("Sorry, I did not understand '" + instruction + "'.");
                 }
 
