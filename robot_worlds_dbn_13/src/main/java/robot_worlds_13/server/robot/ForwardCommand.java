@@ -1,5 +1,9 @@
 package robot_worlds_13.server.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import robot_worlds_13.server.ServerProtocol;
 import robot_worlds_13.server.robot.world.IWorld;
 import robot_worlds_13.server.robot.world.IWorld.UpdateResponse;
 
@@ -18,18 +22,29 @@ public class ForwardCommand extends Command {
         
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
             // obstacle
-            target.setStatus("Sorry, there is an obstacle in the way.");
+
+            target.setStatus(ServerProtocol.buildResponse("ERROR",
+            Map.of("message", "Invalid arguments for forward command"), null));
             return true;
         }
 
         else if (responseGiven == UpdateResponse.FAILED_OUTSIDE_WORLD) {
             // outside world
-            target.setStatus("Sorry, I cannot go outside my safe zone.");
+            target.setStatus(ServerProtocol.buildResponse("ERROR",
+            Map.of("message", "Invalid arguments for forward command"), null));
             return true;
         }
 
         if (target.updatePosition(nrSteps, "front")){
-            target.setStatus("Moved forward by "+nrSteps+" steps.");
+            
+            Map<String, Object> data = new HashMap<>();
+            data.put("message", "Done");
+            
+            Map<String, Object> state = new HashMap<>();
+            state.put("position", new int[] {target.getPosition().getX(), target.getPosition().getY()});
+
+            
+            target.setStatus(ServerProtocol.buildResponse("OK", data, state));
         }
         else {
             System.out.println("Error");

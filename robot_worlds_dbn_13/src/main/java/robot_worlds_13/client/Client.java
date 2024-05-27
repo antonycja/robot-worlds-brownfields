@@ -23,8 +23,7 @@ public class Client {
     static DataInputStream din;
     static Scanner line = new Scanner(System.in);
     static String robotName = "";
-    
-    static private PrintWriter out;
+
     static private Gson gson = new Gson();
 
     public static void main(String[] args) {
@@ -60,7 +59,7 @@ public class Client {
             
             while (true) {
                 // get server messages
-                String response = din.readUTF();
+                String response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
                 
                 // print message to this client
                 System.out.println(response);
@@ -75,20 +74,26 @@ public class Client {
                 // and send the command
                 // (what do you want to name your robot / what do you want to do next)
                 if (response.startsWith("What")) {
-
                     // get imput
                     String command = line.nextLine();
 
                     // format input
-                    Map<String, Object> formattedCommand = CommandSplitter.splitCommand(command);
+                    Map<String, Object> formattedCommand = ClientProtocol.jsonRequestBuilder(command);
 
                     // send to server as json
-                    sendCommand(formattedCommand);
+                    sendJsonRequest(formattedCommand);
+                } else if (response.contains("Connected")){
+                    // server is connected launch a robot
+                    System.out.println("");
+                    
+                    // get imput
+                    String command = line.nextLine();
 
-                    // dout.writeUTF(command);
-                    // dout.flush();
+                    // format input
+                    Map<String, Object> formattedCommand = ClientProtocol.jsonRequestBuilder(command);
 
-
+                    // send to server as json
+                    sendJsonRequest(formattedCommand);
                 }
             }
 
@@ -111,11 +116,17 @@ public class Client {
         
     }
 
-    static public void sendCommand(Map<String, Object> commandDetails) {
+    static public void sendJsonRequest(Map<String, Object> commandDetails) {
         commandDetails.put("robot", robotName);  // Add robot name to the command details
 
         String jsonRequest = gson.toJson(commandDetails);
         System.out.println("Sending command: " + jsonRequest);  // For debug purposes
-        out.println(jsonRequest);
+        try {
+            dout.writeUTF(jsonRequest);
+            dout.flush();
+        } catch (Exception i) {
+            System.out.println("Could not send request");
+        }
+
     }
 }

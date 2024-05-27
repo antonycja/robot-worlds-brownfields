@@ -34,16 +34,16 @@ public abstract class Command {
         return this.argument;
     }
 
-    public static Command create(String instruction) {
+    public static Command create(String instruction, ArrayList arguments) {
         //  The 2 parameter specifies that the split operation should be performed at most once, resulting in two parts.
-        String[] args = instruction.toLowerCase().trim().split(" ", 2);
+        // String[] args = instruction.toLowerCase().trim().split(" ", 2);
 
-        // for replay
-        if (args.length == 1) {
-            args = new String[] {instruction, ""};
-        }
+        // // for replay
+        // if (args.length == 1) {
+        //     args = new String[] {instruction, ""};
+        // }
 
-        switch (args[0]){
+        switch (instruction){
             case "shutdown":
             case "off":
                 // reset the history list as a result of errors when running all the tests
@@ -53,7 +53,53 @@ public abstract class Command {
                 return new HelpCommand();
             case "forward":
                 if (!replayFlag) {commandList.add(instruction);}
-                return new ForwardCommand(args[1]);
+                return new ForwardCommand((String) arguments.get(0));
+
+            // ADDED
+            case "left":
+                if (!replayFlag) {commandList.add(instruction);}
+                return new LeftCommand();
+            case "turn":
+                if (((String) arguments.get(0)).equalsIgnoreCase("left")) {
+                    return new LeftCommand();
+                }
+                else if (((String) arguments.get(0)).equalsIgnoreCase("right")) {
+                    return new RightCommand();
+                }
+            case "right":
+                if (!replayFlag) {commandList.add(instruction);}
+                return new RightCommand();
+            case "back":
+                if (!replayFlag) {commandList.add(instruction);}
+                return new BackCommand((String) arguments.get(0));
+            case "look":
+                return new LookCommand();
+
+            default:
+                throw new IllegalArgumentException("Unsupported command: " + instruction);
+        }
+    }
+
+    public static Command create(String instruction) {
+        //  The 2 parameter specifies that the split operation should be performed at most once, resulting in two parts.
+        String[] args = instruction.toLowerCase().trim().split(" ", 2);
+
+        // for replay
+        if (args.length == 1) {
+            args = new String[] {instruction, ""};
+        }
+
+        switch (instruction){
+            case "shutdown":
+            case "off":
+                // reset the history list as a result of errors when running all the tests
+                commandList = new ArrayList<>();
+                return new ShutdownCommand();
+            case "help":
+                return new HelpCommand();
+            case "forward":
+                if (!replayFlag) {commandList.add(instruction);}
+                return new ForwardCommand(args[0]);
 
             // ADDED
             case "left":
@@ -64,7 +110,7 @@ public abstract class Command {
                 return new RightCommand();
             case "back":
                 if (!replayFlag) {commandList.add(instruction);}
-                return new BackCommand(args[1]);
+                return new BackCommand(args[0]);
             case "look":
                 return new LookCommand();
 

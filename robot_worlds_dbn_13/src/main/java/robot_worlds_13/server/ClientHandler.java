@@ -6,9 +6,14 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import robot_worlds_13.server.robot.*;
@@ -28,6 +33,8 @@ public class ClientHandler implements Runnable {
     DataOutputStream dos;
     String clientIdentifier;
     Scanner commandLine;
+    ServerProtocol serverProtocol;
+    private static Gson gson = new Gson();
 
     // loaded variables
     AbstractWorld world;
@@ -61,9 +68,18 @@ public class ClientHandler implements Runnable {
             this.clientIdentifier = getClientIdentifier(clientSocket);
             this.commandLine = new Scanner(System.in);
             
-            sendMessage("Connected");
+            // sendMessage("Connected");
+            Map<String, Object> data = new HashMap<>();
+            data.put("message", "Connected");
+            Map<String, Object> state = new HashMap<>();
+            state.put("position", new int[] {0, 0});
+            sendMessage(ServerProtocol.buildResponse("OK", data, state));
 
-            sendMessage("What do you want to name your robot?");
+            Map<String, Object> data1 = new HashMap<>();
+            data.put("message", "Connected");
+            Map<String, Object> state1 = new HashMap<>();
+            state.put("position", new int[] {0, 0});
+            sendMessage(ServerProtocol.buildResponse("What do you want to name your robot?", data1, state1));
             this.name = getCommand();
 
             sendMessage(name + " " + "has successfully launched");
@@ -93,16 +109,21 @@ public class ClientHandler implements Runnable {
                 sendMessage("What must I do next?");
                 instruction = getCommand();
                 
+                //
+                Map<String, Object> request = gson.fromJson(instruction, new TypeToken<Map<String, Object>>(){}.getType());
+                // String robot = (String) request.get("robot");
+                String requestedCommand = (String) request.get("command");
+                ArrayList arguments = (ArrayList) request.get("arguments");
+                
                 if (instruction.matches("ClientQuit")) {
                     break;
                 }
                 
                 // create the command, and execute it on the robot
                 try {
-                    command = Command.create(instruction);
+                    command = Command.create(requestedCommand, arguments);
                     shouldContinue = robot.handleCommand(command);
                 } catch (IllegalArgumentException e) {
-                    
                     robot.setStatus("Sorry, I did not understand '" + instruction + "'.");
                 }
 
@@ -141,9 +162,8 @@ public class ClientHandler implements Runnable {
     }
 
     public void sendMessage(String question) {
-        String response = "";
         try {
-            dos.writeUTF(response + question);
+            dos.writeUTF(question);
             dos.flush();
         } catch (IOException e) {
             // e.printStackTrace();
