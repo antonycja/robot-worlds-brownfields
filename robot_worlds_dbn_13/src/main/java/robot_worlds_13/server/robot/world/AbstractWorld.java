@@ -264,7 +264,7 @@ public class AbstractWorld implements IWorld {
         return coordinates;
     }
 
-    public ArrayList<Position> lookAround () {
+    public HashMap<String, ArrayList<Object>> lookAround () {
         int newX = this.position.getX();
         int newY = this.position.getY();
         Position positionBeforeUpdate = new Position(newX, newY);
@@ -321,6 +321,55 @@ public class AbstractWorld implements IWorld {
             }
         
         }
-        return new ArrayList<>();
+
+        // look down
+        List<Position> pathGoingDown = getRobotPath(positionBeforeUpdate, new Position(newX, newY + visibility));
+        for (Position currePosition: pathGoingDown) {
+            if (!isPositionNotOccupiedByRobot(currePosition)) {
+                obstructions.add(currePosition); // add the position
+                obstructions.add("Robot");// add the type of obstruction
+                if (currentDirection == Direction.UP) { // add the direction
+                    mapOfObstructions.put("North", obstructions);
+                }
+                
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("SOUTH", obstructions);
+                }
+
+                if (currentDirection == Direction.RIGHT) { // add the direction
+                    mapOfObstructions.put("WEST", obstructions);
+                }
+
+                if (currentDirection == Direction.LEFT) { // add the direction
+                    mapOfObstructions.put("EAST", obstructions);
+                }
+                
+                break;
+            }
+
+            if (!isNewPositionAllowed(currePosition)) {
+                obstructions.add(currePosition); // add the position
+                obstructions.add("Obstacle");// add the type of obstruction
+                if (currentDirection == Direction.UP) { // add the direction
+                    mapOfObstructions.put("North", obstructions);
+                }
+
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("SOUTH", obstructions);
+                }
+
+                if (currentDirection == Direction.RIGHT) { // add the direction
+                    mapOfObstructions.put("WEST", obstructions);
+                }
+
+                if (currentDirection == Direction.LEFT) { // add the direction
+                    mapOfObstructions.put("EAST", obstructions);
+                }
+                
+                break;
+            }
+        
+        }
+        return mapOfObstructions;
     }
 }

@@ -65,6 +65,8 @@ public abstract class Command {
             case "back":
                 if (!replayFlag) {commandList.add(instruction);}
                 return new BackCommand(args[1]);
+            case "look":
+                return new LookCommand();
 
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);

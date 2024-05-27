@@ -1,6 +1,9 @@
 package robot_worlds_13.server.robot;
 
-public class Look extends Command{
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class LookCommand extends Command{
     
     @Override
     public boolean execute(Robot target) {
@@ -10,13 +13,19 @@ public class Look extends Command{
         
 
         // return list with details
+        HashMap<String, ArrayList<Object>> obstructions = target.worldData.lookAround();
+        for (String obstacleType: obstructions.keySet()) {
+            if (obstacleType.equals("North")) {
+                
+            }
+        }
 
         // set status with look
         target.setStatus("Turned left.");
         return true;
     }
 
-    public Look() {
+    public LookCommand() {
         super("look");
     }
 }
