@@ -63,14 +63,16 @@ public class Client {
             while (true) {
                 // try to launch robot
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
-                    System.err.println(response);
+                System.err.println(response);
                 
                 
                 if (response.contains("Successfully launched")) {
                     break;
                 }
 
-                if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || response.contains("Connected successfully to")) {
+                if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || 
+                response.contains("Connected successfully to") || response.contains("Too many of you in this world")) {
+                    System.out.println("Launch a robot!, Hint use 'launch robot_name'");
                     // get imput
                     String command = line.nextLine();
 
@@ -79,8 +81,10 @@ public class Client {
 
                     // send to server as json
                     sendJsonRequest(formattedCommand);
-
                 }
+
+                
+
             }
 
             while (true) {
@@ -134,7 +138,7 @@ public class Client {
         commandDetails.put("robot", robotName);  // Add robot name to the command details
 
         String jsonRequest = gson.toJson(commandDetails);
-        System.out.println("Sending command: " + jsonRequest);  // For debug purposes
+        System.out.println("Sending command: " + jsonRequest + "\n");  // For debug purposes
         try {
             dout.writeUTF(jsonRequest);
             dout.flush();

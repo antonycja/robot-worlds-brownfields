@@ -73,13 +73,14 @@ public class ClientHandler implements Runnable {
             data.put("message", "Connected");
             Map<String, Object> state = new HashMap<>();
             state.put("position", new int[] {0, 0});
-            sendMessage(ServerProtocol.buildResponse("OK", data));
+            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 
-            data = new HashMap<>();
-            data.put("message", "Connected successfully to server you can launch a robot!, Hint use 'launch robot_name'");
-            state = new HashMap<>();
-            sendMessage(ServerProtocol.buildResponse("OK", data));
+            data.clear();
+            data.put("message", "Connected successfully to server you can launch a robot!");
+            state.clear();
+            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
             
+            // luanch validation
             String potentialRobotName;
             while (true) {
                 String launchCommand = getCommand();
@@ -99,26 +100,39 @@ public class ClientHandler implements Runnable {
                 }
 
                 if (!NameChecker.isValidName(arguments)) {
-                    // "Unsupported command"
+                    // "Unsuppotted name"
                     System.out.println("here");
-                    data = new HashMap<>();
+                    data.clear();
                     data.put("message", "Could not parse arguments");
-                    state = new HashMap<>();
+                    state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
                     continue;
                 }
                 
                 potentialRobotName = (String) arguments.get(0);
 
+                // if name already exists in world
+                if (world.serverObject.robotNames.contains(potentialRobotName)) {
+                    data.clear();
+                    data.put("message", "Too many of you in this world");
+                    state.clear();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    continue;
+                }
+
+                // TODO, add checker if position is available on the world
+
+
                 if (requestedCommand.equalsIgnoreCase("launch") && !world.serverObject.robotNames.contains(potentialRobotName)) {
-                    data = new HashMap<>();
+                    data.clear();
                     data.put("message", "Successfully launched");
-                    state = new HashMap<>();
+                    state.clear();
                     sendMessage(ServerProtocol.buildResponse("OK", data));
                     break;
                 }
             }
 
+            // make the robot itself
             this.name = potentialRobotName;
             Robot robot = new Robot(this.name, this.world, this.start);
             world.serverObject.robotNames.add(name);
@@ -127,31 +141,46 @@ public class ClientHandler implements Runnable {
             currentRobotState.add(robot.getCurrentDirection());
             world.serverObject.nameRobotMap.put(name, currentRobotState);
 
-            sendMessage("Hello Kiddo!");
+            // send hello message
+            data.clear();
+            data.put("message", "Hello Kiddo!");
+            state.clear();
+            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 
+            // Obstacles
             world.showObstacles();  // will need to now return obstacles, and flush them to user
             ArrayList<String> obstaclesData = world.obstacleInStringFormat;
+            data.clear();
+            data.put("message", "Obstacles in the world: " + obstaclesData.get(0));
+            state.clear();
+            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 
-            sendMessage("Obstacles in the world: " + obstaclesData.get(0));
-
-            sendMessage(robot.toString());
+            // starting position
+            data.clear();
+            data.put("message", robot.toString());
+            state.clear();
+            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
             
             Command command;
             boolean shouldContinue = true;
             String instruction;
 
             while (true) {
-                // getting robot commands from the server
-                sendMessage("What must I do next?");
+                // sending prompt to client
+                data.clear();
+                data.put("message", "What must I do next?");
+                sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+                
+                // get command as json string
                 instruction = getCommand();
                 
-                //
+                // unpack command
                 Map<String, Object> request = gson.fromJson(instruction, new TypeToken<Map<String, Object>>(){}.getType());
                 // String robot = (String) request.get("robot");
                 String requestedCommand = (String) request.get("command");
                 ArrayList arguments = (ArrayList) request.get("arguments");
                 
-                if (instruction.matches("ClientQuit")) {
+                if (requestedCommand.matches("ClientQuit")) {
                     break;
                 }
                 
