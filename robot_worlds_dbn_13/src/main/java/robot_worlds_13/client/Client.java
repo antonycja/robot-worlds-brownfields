@@ -57,9 +57,37 @@ public class Client {
             dout = new DataOutputStream(sThisClient.getOutputStream());
             din = new DataInputStream(sThisClient.getInputStream());
             
+            String response;
+            
+            while (true) {
+                // try to launch robot
+                response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
+
+                //
+                System.out.println(response);
+
+                if (response.contains("Connected")){
+                    // server is connected launch a robot
+                    System.out.println("");
+                    
+                    // get imput
+                    String command = line.nextLine();
+
+                    // format input
+                    Map<String, Object> formattedCommand = ClientProtocol.jsonRequestBuilder(command);
+
+                    // send to server as json
+                    sendJsonRequest(formattedCommand);
+                }
+
+                if (response.startsWith("What")) {
+                    break;
+                }
+            }
+
             while (true) {
                 // get server messages
-                String response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
+                response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
                 
                 // print message to this client
                 System.out.println(response);
@@ -74,18 +102,6 @@ public class Client {
                 // and send the command
                 // (what do you want to name your robot / what do you want to do next)
                 if (response.startsWith("What")) {
-                    // get imput
-                    String command = line.nextLine();
-
-                    // format input
-                    Map<String, Object> formattedCommand = ClientProtocol.jsonRequestBuilder(command);
-
-                    // send to server as json
-                    sendJsonRequest(formattedCommand);
-                } else if (response.contains("Connected")){
-                    // server is connected launch a robot
-                    System.out.println("");
-                    
                     // get imput
                     String command = line.nextLine();
 
