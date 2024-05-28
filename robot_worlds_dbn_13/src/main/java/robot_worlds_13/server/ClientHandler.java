@@ -73,17 +73,53 @@ public class ClientHandler implements Runnable {
             data.put("message", "Connected");
             Map<String, Object> state = new HashMap<>();
             state.put("position", new int[] {0, 0});
-            sendMessage(ServerProtocol.buildResponse("OK", data, state));
+            sendMessage(ServerProtocol.buildResponse("OK", data));
 
-            Map<String, Object> data1 = new HashMap<>();
-            data.put("message", "Connected");
-            Map<String, Object> state1 = new HashMap<>();
-            state.put("position", new int[] {0, 0});
-            sendMessage(ServerProtocol.buildResponse("What do you want to name your robot?", data1, state1));
-            this.name = getCommand();
+            data = new HashMap<>();
+            data.put("message", "Connected successfully to server you can launch a robot!, Hint use 'launch robot_name'");
+            state = new HashMap<>();
+            sendMessage(ServerProtocol.buildResponse("OK", data));
+            
+            String potentialRobotName;
+            while (true) {
+                String launchCommand = getCommand();
 
-            sendMessage(name + " " + "has successfully launched");
+                Map<String, Object> request = gson.fromJson(launchCommand, new TypeToken<Map<String, Object>>(){}.getType());
+                String requestedCommand = (String) request.get("command");
+                ArrayList arguments = (ArrayList) request.get("arguments");
+                
 
+                if (!requestedCommand.equalsIgnoreCase("launch")) {
+                    // "Unsupported command"
+                    data = new HashMap<>();
+                    data.put("message", "Unsupported command");
+                    state = new HashMap<>();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    continue;
+                }
+
+                if (!NameChecker.isValidName(arguments)) {
+                    // "Unsupported command"
+                    System.out.println("here");
+                    data = new HashMap<>();
+                    data.put("message", "Could not parse arguments");
+                    state = new HashMap<>();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    continue;
+                }
+                
+                potentialRobotName = (String) arguments.get(0);
+
+                if (requestedCommand.equalsIgnoreCase("launch") && !world.serverObject.robotNames.contains(potentialRobotName)) {
+                    data = new HashMap<>();
+                    data.put("message", "Successfully launched");
+                    state = new HashMap<>();
+                    sendMessage(ServerProtocol.buildResponse("OK", data));
+                    break;
+                }
+            }
+
+            this.name = potentialRobotName;
             Robot robot = new Robot(this.name, this.world, this.start);
             world.serverObject.robotNames.add(name);
             ArrayList<Object> currentRobotState = new ArrayList<>();

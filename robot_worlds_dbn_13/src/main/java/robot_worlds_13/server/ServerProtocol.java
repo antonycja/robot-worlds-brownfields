@@ -29,4 +29,11 @@ public class ServerProtocol {
         }
         return gson.toJson(responseMap);
     }
+
+    public static String buildResponse(String result, Map<String, Object> data) {
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("result", result);
+        responseMap.put("data", data);
+        return gson.toJson(responseMap);
+    }
 }

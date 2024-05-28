@@ -1,5 +1,6 @@
 package robot_worlds_13.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,13 +41,48 @@ public class ClientProtocol {
         return commandMap;
     }
 
+    public static Map<String, Object> jsonRequestBuilder (String input, String nameOfRobot) {
+        String[] parts = input.trim().split("\\s+", 2);  // Split on whitespace, limit 2 parts
+        String command = parts[0];  // The first part is always the command
+
+        Object[] arguments;
+        if (parts.length > 1) {
+            // If there are arguments, split them further by spaces
+            arguments = parts[1].split("\\s+");
+        } else {
+            // No arguments provided
+            arguments = new Object[0];
+        }
+
+        // Prepare the command and arguments for JSON formatting
+        HashMap<String, Object> commandMap = new HashMap<>();
+        commandMap.put("robot", nameOfRobot);
+        commandMap.put("command", command);
+        commandMap.put("arguments", arguments);
+
+        return commandMap;
+    }
+
     public static String jsonResponseUnpacker (String jsonResponse) {
         try {
             Map<String, Object> responseMap = gson.fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
             
             if ("OK".equals(responseMap.get("result"))) {
-                return "" + responseMap.get("data");
-            } else {
+                Map<String, Object> dataReceived = (Map<String, Object>) responseMap.get("data");
+                if (dataReceived.containsKey("message"))
+                    return (String) dataReceived.get("message");
+                else {
+                    return (String) responseMap.get("data");
+                }
+            } else if ("ERROR".equals(responseMap.get("result"))) {
+                Map<String, Object> dataReceived = (Map<String, Object>) responseMap.get("data");
+                if (dataReceived.containsKey("message"))
+                    return (String) dataReceived.get("message");
+                else {
+                    return (String) responseMap.get("data");
+                }
+            }
+            else {
                 return "Error executing command: " + responseMap.get("data");
             }
         } catch (Exception e) {

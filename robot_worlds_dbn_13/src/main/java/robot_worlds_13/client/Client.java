@@ -59,17 +59,18 @@ public class Client {
             
             String response;
             
+
             while (true) {
                 // try to launch robot
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
+                    System.err.println(response);
+                
+                
+                if (response.contains("Successfully launched")) {
+                    break;
+                }
 
-                //
-                System.out.println(response);
-
-                if (response.contains("Connected")){
-                    // server is connected launch a robot
-                    System.out.println("");
-                    
+                if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || response.contains("Connected successfully to")) {
                     // get imput
                     String command = line.nextLine();
 
@@ -78,10 +79,7 @@ public class Client {
 
                     // send to server as json
                     sendJsonRequest(formattedCommand);
-                }
 
-                if (response.startsWith("What")) {
-                    break;
                 }
             }
 
