@@ -22,16 +22,22 @@ public class ForwardCommand extends Command {
         
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
             // obstacle
-
             target.setStatus(ServerProtocol.buildResponse("ERROR",
-            Map.of("message", "Invalid arguments for forward command"), null));
+            Map.of("message", "Obstructed by obstacle"), null));
+            return true;
+        }
+
+        else if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED_BY_ROBOT) {
+            // robot
+            target.setStatus(ServerProtocol.buildResponse("ERROR",
+            Map.of("message", "Obstructed by other robot"), null));
             return true;
         }
 
         else if (responseGiven == UpdateResponse.FAILED_OUTSIDE_WORLD) {
             // outside world
             target.setStatus(ServerProtocol.buildResponse("ERROR",
-            Map.of("message", "Invalid arguments for forward command"), null));
+            Map.of("message", "Trying to move outside world"), null));
             return true;
         }
 

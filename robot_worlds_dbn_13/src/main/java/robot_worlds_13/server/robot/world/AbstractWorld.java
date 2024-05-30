@@ -78,7 +78,7 @@ public class AbstractWorld implements IWorld {
 
         // is position not take by a robot already?
         else if (!isPositionNotOccupiedByRobot(newPosition)){
-            return UpdateResponse.FAILED_OBSTRUCTED;
+            return UpdateResponse.FAILED_OBSTRUCTED_BY_ROBOT;
         }
 
         // checking if path is not blocked by an obstacle in the world
@@ -88,7 +88,7 @@ public class AbstractWorld implements IWorld {
 
         // checking if path is not blocked by another robot in the world
         else if (!isPathNotBlockedByRobot(positionBeforeUpdate, newPosition)) {
-            return UpdateResponse.FAILED_OBSTRUCTED;
+            return UpdateResponse.FAILED_OBSTRUCTED_BY_ROBOT;
         }
 
         // updating the robot position inside the 
