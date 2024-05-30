@@ -17,6 +17,9 @@ public class Robot {
     private String status;
     private String name;
     public AbstractWorld worldData;
+    public int ammo;
+    public int shields;
+    public int bullet_distance;
 
     public Robot(String name) {
         this.name = name;
@@ -40,6 +43,9 @@ public class Robot {
         this.position = startingPosition;
         this.currentDirection = IWorld.Direction.UP;
         this.worldData = worldObject;
+        this.ammo = 5;
+        this.shields = 5;
+        this.bullet_distance = 5;
     }
 
     public String getStatus() {
