@@ -23,7 +23,7 @@ public class Robot {
 
     public Robot(String name) {
         this.name = name;
-        this.status = "Ready";
+        this.status = "NORMAL";
         this.position = CENTRE;
         this.currentDirection = IWorld.Direction.UP;
         this.worldData = new TextWorld(new SimpleMaze());
@@ -31,7 +31,7 @@ public class Robot {
 
     public Robot(String name, AbstractWorld worldObject) {
         this.name = name;
-        this.status = "Ready";
+        this.status = "NORMAL";
         this.position = CENTRE;
         this.currentDirection = IWorld.Direction.UP;
         this.worldData = worldObject;
@@ -39,7 +39,7 @@ public class Robot {
 
     public Robot(String name, AbstractWorld worldObject, Position startingPosition) {
         this.name = name;
-        this.status = "Ready";
+        this.status = "NORMAL";
         this.position = startingPosition;
         this.currentDirection = IWorld.Direction.UP;
         this.worldData = worldObject;
@@ -152,5 +152,16 @@ public class Robot {
 
     public String getName() {
         return name;
+    }
+
+    public String getRobotStateString () {
+        String stateMessage = "";
+        stateMessage = stateMessage + getPosition().toString() + "\n" +
+            currentDirection.toString() + "\n" +
+            shields + "\n" +
+            ammo + "\n" +
+            status + "\n";
+
+        return stateMessage;
     }
 }
