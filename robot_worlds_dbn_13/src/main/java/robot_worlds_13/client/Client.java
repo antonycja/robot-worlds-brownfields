@@ -18,11 +18,11 @@ import com.google.gson.Gson;
 public class Client {
     static String localAddress = "localhost";
     static String serverIpAddress = "20.20.15.94";
-    static Socket sThisClient;
-    static DataOutputStream dout;
-    static DataInputStream din;
+    protected static Socket sThisClient;
+    protected static DataOutputStream dout;
+    public static DataInputStream din;
     static Scanner line = new Scanner(System.in);
-    static String robotName = "";
+    protected static String robotName;
 
     static private Gson gson = new Gson();
 
