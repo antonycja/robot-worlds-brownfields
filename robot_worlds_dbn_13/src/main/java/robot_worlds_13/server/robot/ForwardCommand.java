@@ -45,11 +45,8 @@ public class ForwardCommand extends Command {
             
             Map<String, Object> data = new HashMap<>();
             data.put("message", "Done");
-            
             Map<String, Object> state = new HashMap<>();
             state.put("position", new int[] {target.getPosition().getX(), target.getPosition().getY()});
-
-            
             target.setStatus(ServerProtocol.buildResponse("OK", data, state));
         }
         else {

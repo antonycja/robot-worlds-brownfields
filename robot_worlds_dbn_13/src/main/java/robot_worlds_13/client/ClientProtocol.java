@@ -22,8 +22,11 @@ public class ClientProtocol {
      */
     public static Map<String, Object> jsonRequestBuilder (String input) {
         String[] parts = input.trim().split("\\s+", 2);  // Split on whitespace, limit 2 parts
+        
+        // command
         String command = parts[0];  // The first part is always the command
-
+        
+        // 
         Object[] arguments;
         if (parts.length > 1) {
             // If there are arguments, split them further by spaces

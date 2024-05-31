@@ -58,15 +58,15 @@ public class Client {
             din = new DataInputStream(sThisClient.getInputStream());
             
             String response;
-            
+            String potentialRobotName = "";
 
             while (true) {
                 // try to launch robot
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
                 System.err.println(response);
                 
-                
                 if (response.contains("Successfully launched")) {
+                    robotName = potentialRobotName;
                     break;
                 }
 
@@ -76,15 +76,18 @@ public class Client {
                     // get imput
                     String command = line.nextLine();
 
+                    // save name
+                    String[] potentialRobotNameArray = command.split(" ");
+                    if (potentialRobotNameArray.length > 1) {
+                        potentialRobotName = potentialRobotNameArray[1];
+                    }
+
                     // format input
                     Map<String, Object> formattedCommand = ClientProtocol.jsonRequestBuilder(command);
 
                     // send to server as json
                     sendJsonRequest(formattedCommand);
                 }
-
-                
-
             }
 
             while (true) {
@@ -120,6 +123,7 @@ public class Client {
             dout.close();
         }
         catch (Exception e) {
+            System.err.println(e);
             try {
                 
                 dout.writeUTF("off");
@@ -136,9 +140,10 @@ public class Client {
 
     static public void sendJsonRequest(Map<String, Object> commandDetails) {
         commandDetails.put("robot", robotName);  // Add robot name to the command details
-
         String jsonRequest = gson.toJson(commandDetails);
+        
         System.out.println("Sending command: " + jsonRequest + "\n");  // For debug purposes
+        
         try {
             dout.writeUTF(jsonRequest);
             dout.flush();

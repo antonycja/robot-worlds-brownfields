@@ -85,7 +85,16 @@ public class ClientHandler implements Runnable {
             while (true) {
                 String launchCommand = getCommand();
 
-                Map<String, Object> request = gson.fromJson(launchCommand, new TypeToken<Map<String, Object>>(){}.getType());
+                Map<String, Object> request;
+                try {
+                    request = gson.fromJson(launchCommand, new TypeToken<Map<String, Object>>(){}.getType());
+                } catch (Exception e) {
+                    data.clear();
+                    data.put("message", "Could not parse arguments");
+                    state.clear();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    continue;
+                }
                 String requestedCommand = (String) request.get("command");
                 ArrayList arguments = (ArrayList) request.get("arguments");
                 
@@ -101,7 +110,6 @@ public class ClientHandler implements Runnable {
 
                 if (!NameChecker.isValidName(arguments)) {
                     // "Unsuppotted name"
-                    System.out.println("here");
                     data.clear();
                     data.put("message", "Could not parse arguments");
                     state.clear();
@@ -189,11 +197,21 @@ public class ClientHandler implements Runnable {
                     command = Command.create(requestedCommand, arguments);
                     shouldContinue = robot.handleCommand(command);
                 } catch (IllegalArgumentException e) {
-                    robot.setStatus("Sorry, I did not understand '" + instruction + "'.");
+                    data.clear();
+                    data.put("message", "Unsupported command '" + requestedCommand + "'.");
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    
+                } catch (IndexOutOfBoundsException e) {
+                    data.clear();
+                    data.put("message", "Could not parse arguments '" + arguments + "'.");
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    
                 }
 
                 // print robot status after executing command
-                sendMessage(robot);
+                data.clear();
+                data.put("message", robot.toString());
+                sendMessage(ServerProtocol.buildResponse("OK", data));
                 
                 if (shouldContinue) {
                     continue;
@@ -202,6 +220,11 @@ public class ClientHandler implements Runnable {
                 }
             }
 
+            world.serverObject.robotNames.remove(name);
+            currentRobotState = new ArrayList<>();
+            currentRobotState.add(robot.getCurrentPosition());
+            currentRobotState.add(robot.getCurrentDirection());
+            world.serverObject.nameRobotMap.remove(name, currentRobotState);
             System.out.println("Client " + clientIdentifier + " disconnected.");
             clientSocket.close();
         } catch (IOException e) {
