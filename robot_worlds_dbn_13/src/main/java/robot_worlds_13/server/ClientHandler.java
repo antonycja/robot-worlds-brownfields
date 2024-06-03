@@ -147,6 +147,7 @@ public class ClientHandler implements Runnable {
             ArrayList<Object> currentRobotState = new ArrayList<>();
             currentRobotState.add(robot.getCurrentPosition());
             currentRobotState.add(robot.getCurrentDirection());
+            currentRobotState.add(robot);
             world.serverObject.nameRobotMap.put(name, currentRobotState);
 
             // send hello message

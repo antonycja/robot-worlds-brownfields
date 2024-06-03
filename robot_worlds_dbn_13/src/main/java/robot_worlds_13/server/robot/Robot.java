@@ -164,4 +164,13 @@ public class Robot {
 
         return stateMessage;
     }
+
+    // in relation to fire command
+    public void decreaseAmmo () {
+        this.ammo -= 1;
+    }
+
+    public void decreaseShields () {
+        this.shields -= 1;
+    }
 }

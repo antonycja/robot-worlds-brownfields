@@ -123,7 +123,7 @@ public class Client {
             dout.close();
         }
         catch (Exception e) {
-            System.err.println(e);
+            // System.err.println(e);
             try {
                 
                 dout.writeUTF("off");

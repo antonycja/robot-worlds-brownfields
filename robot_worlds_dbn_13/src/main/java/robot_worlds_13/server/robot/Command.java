@@ -117,6 +117,8 @@ public abstract class Command {
                 return new LookCommand();
             case "state":
                 return new StateCommand(instruction);
+            case "fire":
+                return new FireCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }

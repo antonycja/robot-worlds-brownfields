@@ -265,6 +265,8 @@ public class AbstractWorld implements IWorld {
     }
 
     public HashMap<String, ArrayList<Object>> lookAround () {
+        // for each firection up, down, left, right add the first obstacle / robot it sees to a list
+        // 
         int newX = this.position.getX();
         int newY = this.position.getY();
         Position positionBeforeUpdate = new Position(newX, newY);
@@ -273,10 +275,11 @@ public class AbstractWorld implements IWorld {
         ArrayList<Object> obstructions = new ArrayList<>();
         HashMap<String, ArrayList<Object>> mapOfObstructions = new HashMap<>();
 
-        // look up
+        // look NORTH OF THE CURRENT POSITION
         List<Position> pathGoingUp = getRobotPath(positionBeforeUpdate, new Position(newX, newY + visibility));
         for (Position currePosition: pathGoingUp) {
             if (!isPositionNotOccupiedByRobot(currePosition)) {
+                obstructions.clear();
                 obstructions.add(currePosition); // add the position
                 obstructions.add("Robot");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
@@ -299,6 +302,7 @@ public class AbstractWorld implements IWorld {
             }
 
             if (!isNewPositionAllowed(currePosition)) {
+                obstructions.clear();
                 obstructions.add(currePosition); // add the position
                 obstructions.add("Obstacle");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
@@ -319,21 +323,21 @@ public class AbstractWorld implements IWorld {
                 
                 break;
             }
-        
         }
 
         // look down
-        List<Position> pathGoingDown = getRobotPath(positionBeforeUpdate, new Position(newX, newY + visibility));
+        List<Position> pathGoingDown = getRobotPath(positionBeforeUpdate, new Position(newX, newY - visibility));
         for (Position currePosition: pathGoingDown) {
             if (!isPositionNotOccupiedByRobot(currePosition)) {
+                obstructions.clear();
                 obstructions.add(currePosition); // add the position
                 obstructions.add("Robot");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("North", obstructions);
+                    mapOfObstructions.put("SOUTH", obstructions);
                 }
                 
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    mapOfObstructions.put("NORTH", obstructions);
                 }
 
                 if (currentDirection == Direction.RIGHT) { // add the direction
@@ -348,6 +352,7 @@ public class AbstractWorld implements IWorld {
             }
 
             if (!isNewPositionAllowed(currePosition)) {
+                obstructions.clear();
                 obstructions.add(currePosition); // add the position
                 obstructions.add("Obstacle");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
@@ -368,8 +373,153 @@ public class AbstractWorld implements IWorld {
                 
                 break;
             }
-        
         }
+
+        // look east of current direction
+        List<Position> pathGoingRight = getRobotPath(positionBeforeUpdate, new Position(newX + visibility, newY));
+        for (Position currePosition: pathGoingRight) {
+            if (!isPositionNotOccupiedByRobot(currePosition)) {
+                obstructions.clear();
+                obstructions.add(currePosition); // add the position
+                obstructions.add("Robot");// add the type of obstruction
+                if (currentDirection == Direction.UP) { // add the direction
+                    mapOfObstructions.put("EAST", obstructions);
+                }
+                
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("WEST", obstructions);
+                }
+
+                if (currentDirection == Direction.RIGHT) { // add the direction
+                    mapOfObstructions.put("SOUTH", obstructions);
+                }
+
+                if (currentDirection == Direction.LEFT) { // add the direction
+                    mapOfObstructions.put("NORTH", obstructions);
+                }
+                
+                break;
+            }
+
+            if (!isNewPositionAllowed(currePosition)) {
+                obstructions.clear();
+                obstructions.add(currePosition); // add the position
+                obstructions.add("Obstacle");// add the type of obstruction
+                if (currentDirection == Direction.UP) { // add the direction
+                    mapOfObstructions.put("EAST", obstructions);
+                }
+                
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("WEST", obstructions);
+                }
+
+                if (currentDirection == Direction.RIGHT) { // add the direction
+                    mapOfObstructions.put("SOUTH", obstructions);
+                }
+
+                if (currentDirection == Direction.LEFT) { // add the direction
+                    mapOfObstructions.put("NORTH", obstructions);
+                }
+                
+                break;
+            }
+        }
+
+        // 
+        // look WEST
+        List<Position> pathGoingLeft = getRobotPath(positionBeforeUpdate, new Position(newX - visibility, newY));
+        for (Position currePosition: pathGoingLeft) {
+            if (!isPositionNotOccupiedByRobot(currePosition)) {
+                obstructions.clear();
+                obstructions.add(currePosition); // add the position
+                obstructions.add("Robot");// add the type of obstruction
+                if (currentDirection == Direction.UP) { // add the direction
+                    mapOfObstructions.put("WEST", obstructions);
+                }
+                
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("EAST", obstructions);
+                }
+
+                if (currentDirection == Direction.RIGHT) { // add the direction
+                    mapOfObstructions.put("SOUTH", obstructions);
+                }
+
+                if (currentDirection == Direction.LEFT) { // add the direction
+                    mapOfObstructions.put("NORTH", obstructions);
+                }
+                
+                break;
+            }
+
+            if (!isNewPositionAllowed(currePosition)) {
+                obstructions.clear();
+                obstructions.add(currePosition); // add the position
+                obstructions.add("Obstacle");// add the type of obstruction
+                if (currentDirection == Direction.UP) { // add the direction
+                    mapOfObstructions.put("WEST", obstructions);
+                }
+                
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("EAST", obstructions);
+                }
+
+                if (currentDirection == Direction.RIGHT) { // add the direction
+                    mapOfObstructions.put("SOUTH", obstructions);
+                }
+
+                if (currentDirection == Direction.LEFT) { // add the direction
+                    mapOfObstructions.put("NORTH", obstructions);
+                }
+                
+                break;
+            }
+        } 
+
         return mapOfObstructions;
     }
+
+    public boolean isHit (int bulletDistance) {
+        Position startPosition = position;
+        Position endPosition;
+        if (currentDirection == Direction.UP) {
+            endPosition = new Position(position.getX(), position.getY() + bulletDistance);
+        } else if (currentDirection == Direction.DOWN) {
+            endPosition = new Position(position.getX(), position.getY() - bulletDistance);
+        } else if (currentDirection == Direction.LEFT) {
+            endPosition = new Position(position.getX() - bulletDistance, position.getY());
+        } else {
+            endPosition = new Position(position.getX() + bulletDistance, position.getY());
+        }
+
+        List<Position> bulletPath = getRobotPath(startPosition, endPosition);
+        for (Position currentBulletPosition: bulletPath) {
+            for(Obstacle obstacle: obstacles){
+                if(obstacle.blocksPosition(currentBulletPosition)){
+                    // has hit an obstacle, its immedietly a miss
+                    return false;
+                }
+            }
+
+
+            for (String name: serverObject.nameRobotMap.keySet()) {
+                if (name.equals(this.curentRobotName)){
+                    continue;
+                }
+                ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
+                Position thatRobotsPosition = (Position) currentState.get(0);
+                // has hit another robot, immedietly a hit
+                // decrease the robots health;
+                if (thatRobotsPosition.equals(position)) {
+                    Robot thatRobot = (Robot) currentState.get(2);
+                    thatRobot.decreaseShields();
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
 }

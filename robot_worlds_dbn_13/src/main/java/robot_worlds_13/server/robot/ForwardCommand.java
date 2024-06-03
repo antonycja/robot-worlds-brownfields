@@ -47,6 +47,7 @@ public class ForwardCommand extends Command {
             data.put("message", "Done");
             Map<String, Object> state = new HashMap<>();
             state.put("position", new int[] {target.getPosition().getX(), target.getPosition().getY()});
+            state.put("direction", target.getCurrentDirection());
             target.setStatus(ServerProtocol.buildResponse("OK", data, state));
         }
         else {
