@@ -19,7 +19,8 @@ public class ServerProtocol {
     // public jsonRequestUnpacker ()
 
     private static Gson gson = new Gson();
-
+    
+    // forward, left, right, 
     public static String buildResponse(String result, Map<String, Object> data, Map<String, Object> state) {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("result", result);
@@ -30,10 +31,20 @@ public class ServerProtocol {
         return gson.toJson(responseMap);
     }
 
+    //
     public static String buildResponse(String result, Map<String, Object> data) {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("result", result);
         responseMap.put("data", data);
+        return gson.toJson(responseMap);
+    }
+
+    // for commands like state
+    public static String buildResponse(Map<String, Object> state) {
+        Map<String, Object> responseMap = new HashMap<>();
+        if (state != null) {
+            responseMap.put("state", state);
+        }
         return gson.toJson(responseMap);
     }
 }

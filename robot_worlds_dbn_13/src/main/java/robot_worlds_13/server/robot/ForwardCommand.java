@@ -48,7 +48,10 @@ public class ForwardCommand extends Command {
             Map<String, Object> state = new HashMap<>();
             state.put("position", new int[] {target.getPosition().getX(), target.getPosition().getY()});
             state.put("direction", target.getCurrentDirection());
-            target.setStatus(ServerProtocol.buildResponse("OK", data, state));
+            state.put("shields", target.shields);
+            state.put("shots", target.ammo);
+            state.put("status", target.getStatus());
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
         }
         else {
             System.out.println("Error");

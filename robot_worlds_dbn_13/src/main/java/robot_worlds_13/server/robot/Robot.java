@@ -20,6 +20,7 @@ public class Robot {
     public int ammo;
     public int shields;
     public int bullet_distance;
+    private String responseToClient = "{}";
 
     public Robot(String name) {
         this.name = name;
@@ -172,5 +173,13 @@ public class Robot {
 
     public void decreaseShields () {
         this.shields -= 1;
+    }
+
+    public void setResponseToRobot (String stateGiven) {
+        this.responseToClient = stateGiven;
+    }
+
+    public String getResponseToRobot () {
+        return this.responseToClient;
     }
 }
