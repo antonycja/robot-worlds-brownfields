@@ -91,14 +91,21 @@ public class ClientProtocol {
                 }
             }
 
+            String message = "";
             // will need to change in order return the data, return
             if ("OK".equals(responseMap.get("result"))) {
                 Map<String, Object> dataReceived = (Map<String, Object>) responseMap.get("data");
                 if (dataReceived.containsKey("message")) {
-                    return (String) dataReceived.get("message");
-                } else {
-                    return (String) responseMap.get("data");
+                    message += (String) dataReceived.get("message");
+                } 
+                
+                Map<String, Object> stateReceived = (Map<String, Object>) responseMap.get("state");
+                if (stateReceived.containsKey("state")) {
+                    message += (String) stateReceived.get("state");
                 }
+
+                return message;
+
             } else {
                 return "Error executing command: " + responseMap.get("data");
             }
