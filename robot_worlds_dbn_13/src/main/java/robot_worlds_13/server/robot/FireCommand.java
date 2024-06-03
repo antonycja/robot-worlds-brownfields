@@ -22,10 +22,10 @@ public class FireCommand extends Command {
     target.worldData.giveCurrentRobotInfo(target);
 
     // 
-    if (target.worldData.isHit(robotBulletDistance)){
+    if (target.worldData.isHit(10)){
         // if its a hit then decrese the shield of the affected robot
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "Hit"); // should be removed
+        data.put("message", "Hit");
         Map<String, Object> state = new HashMap<>();
         state.put("position", new int[] {target.getPosition().getX(), target.getPosition().getY()});
         state.put("direction", target.getCurrentDirection());
@@ -33,7 +33,7 @@ public class FireCommand extends Command {
     } else {
         // if its a miss then nothing
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "Miss"); // should be removed
+        data.put("message", "Miss");
         Map<String, Object> state = new HashMap<>();
         state.put("position", new int[] {target.getPosition().getX(), target.getPosition().getY()});
         state.put("direction", target.getCurrentDirection());

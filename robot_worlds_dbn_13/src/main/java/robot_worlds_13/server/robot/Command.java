@@ -74,8 +74,10 @@ public abstract class Command {
                 return new BackCommand((String) arguments.get(0));
             case "look":
                 return new LookCommand();
-                case "state":
+            case "state":
                 return new StateCommand(instruction);
+            case "fire":
+                return new FireCommand();
 
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);

@@ -278,6 +278,10 @@ public class AbstractWorld implements IWorld {
         // look NORTH OF THE CURRENT POSITION
         List<Position> pathGoingUp = getRobotPath(positionBeforeUpdate, new Position(newX, newY + visibility));
         for (Position currePosition: pathGoingUp) {
+            if (currePosition.equals(positionBeforeUpdate)) {
+                continue;
+            }
+            
             if (!isPositionNotOccupiedByRobot(currePosition)) {
                 obstructions.clear();
                 obstructions.add(currePosition); // add the position
@@ -328,6 +332,10 @@ public class AbstractWorld implements IWorld {
         // look down
         List<Position> pathGoingDown = getRobotPath(positionBeforeUpdate, new Position(newX, newY - visibility));
         for (Position currePosition: pathGoingDown) {
+            if (currePosition.equals(positionBeforeUpdate)) {
+                continue;
+            }
+            
             if (!isPositionNotOccupiedByRobot(currePosition)) {
                 obstructions.clear();
                 obstructions.add(currePosition); // add the position
@@ -356,11 +364,11 @@ public class AbstractWorld implements IWorld {
                 obstructions.add(currePosition); // add the position
                 obstructions.add("Obstacle");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("North", obstructions);
-                }
-
-                if (currentDirection == Direction.DOWN) { // add the direction
                     mapOfObstructions.put("SOUTH", obstructions);
+                }
+                
+                if (currentDirection == Direction.DOWN) { // add the direction
+                    mapOfObstructions.put("NORTH", obstructions);
                 }
 
                 if (currentDirection == Direction.RIGHT) { // add the direction
@@ -378,6 +386,10 @@ public class AbstractWorld implements IWorld {
         // look east of current direction
         List<Position> pathGoingRight = getRobotPath(positionBeforeUpdate, new Position(newX + visibility, newY));
         for (Position currePosition: pathGoingRight) {
+            if (currePosition.equals(positionBeforeUpdate)) {
+                continue;
+            }
+            
             if (!isPositionNotOccupiedByRobot(currePosition)) {
                 obstructions.clear();
                 obstructions.add(currePosition); // add the position
@@ -391,11 +403,11 @@ public class AbstractWorld implements IWorld {
                 }
 
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    mapOfObstructions.put("NORTH", obstructions);
                 }
 
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("NORTH", obstructions);
+                    mapOfObstructions.put("SOUTH", obstructions);
                 }
                 
                 break;
@@ -414,11 +426,11 @@ public class AbstractWorld implements IWorld {
                 }
 
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    mapOfObstructions.put("NORTH", obstructions);
                 }
 
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("NORTH", obstructions);
+                    mapOfObstructions.put("SOUTH", obstructions);
                 }
                 
                 break;
@@ -429,6 +441,10 @@ public class AbstractWorld implements IWorld {
         // look WEST
         List<Position> pathGoingLeft = getRobotPath(positionBeforeUpdate, new Position(newX - visibility, newY));
         for (Position currePosition: pathGoingLeft) {
+            if (currePosition.equals(positionBeforeUpdate)) {
+                continue;
+            }
+            
             if (!isPositionNotOccupiedByRobot(currePosition)) {
                 obstructions.clear();
                 obstructions.add(currePosition); // add the position
@@ -510,9 +526,10 @@ public class AbstractWorld implements IWorld {
                 Position thatRobotsPosition = (Position) currentState.get(0);
                 // has hit another robot, immedietly a hit
                 // decrease the robots health;
-                if (thatRobotsPosition.equals(position)) {
+                if (thatRobotsPosition.equals(currentBulletPosition)) {
                     Robot thatRobot = (Robot) currentState.get(2);
                     thatRobot.decreaseShields();
+                    // set the robot as a global variable
                     return true;
                 }
             }
