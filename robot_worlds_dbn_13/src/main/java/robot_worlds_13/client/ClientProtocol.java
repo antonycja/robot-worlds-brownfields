@@ -128,10 +128,20 @@ public class ClientProtocol {
                         String shields = "        Shields: " + (String.valueOf((int) Math.round((double) stateMap.get("shields")))) + "\n";
                         message += shields;
                     }
-                    // if (innerMap.get("objects") != null) {  // obstacles one, nested within
-                    //     String objects = innerMap.get("objects");
-                    //     message += "    Objects: " + objects  + "\n";
-                    // }
+                    if (innerMap.get("objects") != null) {  // obstacles one, nested within
+                        message += "    Objects: " + "\n";
+                        ArrayList<Object> objects = (ArrayList<Object>) innerMap.get("objects");
+                        for (Object object: objects) {
+                            Map<String, Object> obstacleMap = gson.fromJson(((String) object), new TypeToken<Map<String, Object>>(){}.getType());
+                            String direction = "        Direction: " + obstacleMap.get("direction") + "\n";
+                            message += direction;
+                            String type = "        Type: " + obstacleMap.get("type") + "\n";
+                            message += type;
+                            String distance = "        Distance: " + String.valueOf(obstacleMap.get("distance")) + "\n";
+                            message += distance;
+                            message += "\n";
+                        }
+                    }
                     if (innerMap.get("position") != null) {
                         Object position = (Object) innerMap.get("position");
                         message += "    Position: " + position  + "\n";
@@ -181,9 +191,9 @@ public class ClientProtocol {
                 }
             }
 
-            if (message == null) {
-                return jsonResponse;
-            }
+            if (responseMap.get("command") != null) {
+                return (String) responseMap.get("command");
+                }
             
 
         } catch (Exception e) {
@@ -192,8 +202,18 @@ public class ClientProtocol {
             return jsonResponse;
         }
         return jsonResponse;
-        
-        
+    }
+
+    // gets the position of the robot
+    public static String getRobotFormattedPosition (String jsonResponse) {
+        Map<String, Object> responseMap = gson.fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
+        if (responseMap.get("state") != null) {
+            if (responseMap.get("state") instanceof Map) {
+                Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("state");
+                return innerMap.get("position") + "\n";
+            }
+        }
+        return "";
     }
 
     public static String formatJsonString(String jsonString) {

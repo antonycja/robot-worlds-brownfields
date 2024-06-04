@@ -46,4 +46,11 @@ public class ServerProtocol {
         }
         return gson.toJson(responseMap);
     }
+
+    // for commands like "shutting down..."
+    public static String buildResponse(String response) {
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("command", response);
+        return gson.toJson(responseMap);
+    }
 }
