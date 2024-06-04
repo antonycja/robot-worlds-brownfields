@@ -92,6 +92,7 @@ public class Client {
 
             while (true) {
                 // get server messages
+                // String robotPosition = 
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
                 
                 // print message to this client

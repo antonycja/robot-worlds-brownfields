@@ -1,6 +1,10 @@
 package robot_worlds_13.server.robot.world;
 
 import java.util.List;
+import java.util.Map;
+
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,6 +19,7 @@ public class AbstractWorld implements IWorld {
     public static final Position CENTRE = IWorld.CENTRE;
     
 
+    private static Gson gson = new Gson();
     public Server serverObject;
     public ArrayList<String> obstacleInStringFormat = new ArrayList<>();
     public int visibility = 10;
@@ -53,16 +58,30 @@ public class AbstractWorld implements IWorld {
         int newY = this.position.getY();
         Position positionBeforeUpdate = new Position(newX, newY);
 
-
-        if (Direction.UP.equals(this.currentDirection)) {
-            newY = newY + nrSteps;
-        }else if(Direction.RIGHT.equals(this.currentDirection)){
-            newX = newX + nrSteps;
-        }else  if(Direction.DOWN.equals(this.currentDirection)){
-            newY = newY - nrSteps;
-        }else if(Direction.LEFT.equals(this.currentDirection)){
-            newX = newX - nrSteps;
+        System.out.println(nrSteps);
+        if (nrSteps >= 0) {
+            if (Direction.UP.equals(this.currentDirection)) {
+                newY = newY + nrSteps;
+            }else if(Direction.RIGHT.equals(this.currentDirection)){
+                newX = newX + nrSteps;
+            }else  if(Direction.DOWN.equals(this.currentDirection)){
+                newY = newY - nrSteps;
+            }else if(Direction.LEFT.equals(this.currentDirection)){
+                newX = newX - nrSteps;
+            }
+        } else {
+            if (Direction.UP.equals(this.currentDirection)) {
+                newY = newY + nrSteps;
+            }else if(Direction.RIGHT.equals(this.currentDirection)){
+                newX = newX + nrSteps;
+            }else  if(Direction.DOWN.equals(this.currentDirection)){
+                newY = newY + nrSteps;
+            }else if(Direction.LEFT.equals(this.currentDirection)){
+                newX = newX + nrSteps;
+            }
         }
+        System.out.println(newY);
+            
 
         
         Position newPosition = new Position(newX, newY);
@@ -264,7 +283,7 @@ public class AbstractWorld implements IWorld {
         return coordinates;
     }
 
-    public HashMap<String, ArrayList<Object>> lookAround () {
+    public ArrayList<Object> lookAround () {
         // for each firection up, down, left, right add the first obstacle / robot it sees to a list
         // 
         int newX = this.position.getX();
@@ -273,7 +292,6 @@ public class AbstractWorld implements IWorld {
         
         // obstructions
         ArrayList<Object> obstructions = new ArrayList<>();
-        HashMap<String, ArrayList<Object>> mapOfObstructions = new HashMap<>();
 
         // look NORTH OF THE CURRENT POSITION
         List<Position> pathGoingUp = getRobotPath(positionBeforeUpdate, new Position(newX, newY + visibility));
@@ -281,48 +299,58 @@ public class AbstractWorld implements IWorld {
             if (currePosition.equals(positionBeforeUpdate)) {
                 continue;
             }
-            
             if (!isPositionNotOccupiedByRobot(currePosition)) {
-                obstructions.clear();
-                obstructions.add(currePosition); // add the position
-                obstructions.add("Robot");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("North", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "NORTH",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-                
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "SOUTH",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("WEST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "WEST",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("EAST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "EAST",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-                
                 break;
             }
 
             if (!isNewPositionAllowed(currePosition)) {
-                obstructions.clear();
-                obstructions.add(currePosition); // add the position
-                obstructions.add("Obstacle");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("North", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "NORTH",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "SOUTH",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("WEST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "WEST",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("EAST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "EAST",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
                 
                 break;
@@ -335,50 +363,61 @@ public class AbstractWorld implements IWorld {
             if (currePosition.equals(positionBeforeUpdate)) {
                 continue;
             }
-            
             if (!isPositionNotOccupiedByRobot(currePosition)) {
-                obstructions.clear();
-                obstructions.add(currePosition); // add the position
-                obstructions.add("Robot");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "SOUTH",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-                
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("NORTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "NORTH",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("WEST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "WEST",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("EAST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "EAST",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
                 
                 break;
             }
 
             if (!isNewPositionAllowed(currePosition)) {
-                obstructions.clear();
-                obstructions.add(currePosition); // add the position
-                obstructions.add("Obstacle");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "SOUTH",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-                
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("NORTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "NORTH",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("WEST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "WEST",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
 
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("EAST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "EAST",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-                
                 break;
             }
         }
@@ -389,50 +428,61 @@ public class AbstractWorld implements IWorld {
             if (currePosition.equals(positionBeforeUpdate)) {
                 continue;
             }
-            
             if (!isPositionNotOccupiedByRobot(currePosition)) {
-                obstructions.clear();
-                obstructions.add(currePosition); // add the position
                 obstructions.add("Robot");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("EAST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "EAST",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-                
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("WEST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "WEST",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("NORTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "NORTH",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "SOUTH",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
                 
                 break;
             }
 
             if (!isNewPositionAllowed(currePosition)) {
-                obstructions.clear();
-                obstructions.add(currePosition); // add the position
-                obstructions.add("Obstacle");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("EAST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "EAST",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-                
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("WEST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "WEST",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("NORTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "NORTH",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "SOUTH",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-                
                 break;
             }
         }
@@ -444,58 +494,68 @@ public class AbstractWorld implements IWorld {
             if (currePosition.equals(positionBeforeUpdate)) {
                 continue;
             }
-            
             if (!isPositionNotOccupiedByRobot(currePosition)) {
-                obstructions.clear();
-                obstructions.add(currePosition); // add the position
-                obstructions.add("Robot");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("WEST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "WEST",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-                
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("EAST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "EAST",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "SOUTH",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("NORTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "NORTH",
+                        "type", "Robot",
+                        "distance", currePosition)));
                 }
                 
                 break;
             }
 
             if (!isNewPositionAllowed(currePosition)) {
-                obstructions.clear();
-                obstructions.add(currePosition); // add the position
-                obstructions.add("Obstacle");// add the type of obstruction
                 if (currentDirection == Direction.UP) { // add the direction
-                    mapOfObstructions.put("WEST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "WEST",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-                
                 if (currentDirection == Direction.DOWN) { // add the direction
-                    mapOfObstructions.put("EAST", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "EAST",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.RIGHT) { // add the direction
-                    mapOfObstructions.put("SOUTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "SOUTH",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-
                 if (currentDirection == Direction.LEFT) { // add the direction
-                    mapOfObstructions.put("NORTH", obstructions);
+                    obstructions.add(gson.toJson(Map.of(
+                        "direction", "NORTH",
+                        "type", "Obstacle",
+                        "distance", currePosition)));
                 }
-                
                 break;
             }
         } 
 
-        return mapOfObstructions;
+        return obstructions;
     }
 
-    public boolean isHit (int bulletDistance) {
+    public Robot isHit (int bulletDistance) {
         Position startPosition = position;
         Position endPosition;
         if (currentDirection == Direction.UP) {
@@ -513,7 +573,7 @@ public class AbstractWorld implements IWorld {
             for(Obstacle obstacle: obstacles){
                 if(obstacle.blocksPosition(currentBulletPosition)){
                     // has hit an obstacle, its immedietly a miss
-                    return false;
+                    return new Robot("NonValid", null);
                 }
             }
 
@@ -530,13 +590,13 @@ public class AbstractWorld implements IWorld {
                     Robot thatRobot = (Robot) currentState.get(2);
                     thatRobot.decreaseShields();
                     // set the robot as a global variable
-                    return true;
+                    return thatRobot;
                 }
             }
 
         }
 
-        return false;
+        return new Robot("NonValid", null);
     }
 
 }

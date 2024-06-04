@@ -1,7 +1,9 @@
 package robot_worlds_13.server.robot;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import robot_worlds_13.server.robot.maze.*;
 import robot_worlds_13.server.robot.world.*;
@@ -171,6 +173,10 @@ public class Robot {
         this.ammo -= 1;
     }
 
+    public int ammoAvailable () {
+        return this.ammo;
+    }
+
     public void decreaseShields () {
         this.shields -= 1;
     }
@@ -181,5 +187,20 @@ public class Robot {
 
     public String getResponseToRobot () {
         return this.responseToClient;
+    }
+
+    public Map<String, Object> getRobotState () {
+        Map<String, Object> state = new HashMap<>();
+        state.put("position", new int[] {position.getX(), position.getY()});
+        state.put("direction", getCurrentDirection());
+        state.put("shields", shields);
+        state.put("shots", ammo);
+        state.put("status", getStatus());
+
+        return state;
+    }
+
+    public int getBulletDistance () {
+        return this.bullet_distance;
     }
 }

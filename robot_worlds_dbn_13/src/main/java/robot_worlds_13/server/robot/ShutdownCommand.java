@@ -7,7 +7,7 @@ public class ShutdownCommand extends Command {
 
     @Override
     public boolean execute(Robot target) {
-        target.setStatus("Shutting down...");
+        target.setResponseToRobot("Shutting down...");
         return false;
     }
 }

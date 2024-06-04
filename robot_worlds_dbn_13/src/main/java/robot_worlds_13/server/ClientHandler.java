@@ -70,11 +70,7 @@ public class ClientHandler implements Runnable {
             
             // sendMessage("Connected");
             Map<String, Object> data = new HashMap<>();
-            data.put("message", "Connected");
             Map<String, Object> state = new HashMap<>();
-            state.put("position", new int[] {0, 0});
-            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
-
             data.clear();
             data.put("message", "Connected successfully to server you can launch a robot!");
             state.clear();
@@ -135,7 +131,7 @@ public class ClientHandler implements Runnable {
                     data.clear();
                     data.put("message", "Successfully launched");
                     state.clear();
-                    sendMessage(ServerProtocol.buildResponse("OK", data));
+                    sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
                     break;
                 }
             }
@@ -166,9 +162,13 @@ public class ClientHandler implements Runnable {
 
             // starting position
             data.clear();
-            data.put("message", robot.toString());
-            state.clear();
-            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+            data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
+            data.put("visibility",  String.valueOf(5) + " steps");
+            data.put("reload", String.valueOf(5) + " seconds");
+            data.put("repair", String.valueOf(5) + " seconds");
+            data.put("shields", String.valueOf(5) + " hits");
+            state = robot.getRobotState();
+            sendMessage(ServerProtocol.buildResponse("OK", data, state));
             
             Command command;
             boolean shouldContinue = true;
@@ -201,18 +201,18 @@ public class ClientHandler implements Runnable {
                     data.clear();
                     data.put("message", "Unsupported command '" + requestedCommand + "'.");
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    continue;
                     
                 } catch (IndexOutOfBoundsException e) {
                     data.clear();
                     data.put("message", "Could not parse arguments '" + arguments + "'.");
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    continue;
                     
                 }
 
                 // print robot status after executing command
-                data.clear();
-                data.put("message", robot.toString());
-                sendMessage(ServerProtocol.buildResponse("OK", data));
+                sendMessage(robot.getResponseToRobot());
                 
                 if (shouldContinue) {
                     continue;

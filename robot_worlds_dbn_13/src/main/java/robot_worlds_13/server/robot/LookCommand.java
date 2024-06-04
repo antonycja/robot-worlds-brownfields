@@ -16,22 +16,12 @@ public class LookCommand extends Command{
         
 
         // return list with details
-        HashMap<String, ArrayList<Object>> obstructions = target.worldData.lookAround();
-        // for (String obstacleType: obstructions.keySet()) {
-        //     if (obstacleType.equals("North")) {
-                
-        //     }
-        // }
-
-        // // set status with look
-        // target.setStatus("Turned left.");
+        ArrayList<Object> obstructions = target.worldData.lookAround();
 
         Map<String, Object> data = new HashMap<>();
-        data.put("message", obstructions); // should be removed
-        Map<String, Object> state = new HashMap<>();
-        state.put("position", new int[] {target.getPosition().getX(), target.getPosition().getY()});
-        state.put("direction", target.getCurrentDirection());
-        target.setStatus(ServerProtocol.buildResponse("OK", data, state));
+        data.put("objects", obstructions);
+        Map<String, Object> state = target.getRobotState();
+        target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
         return true;
     }
 

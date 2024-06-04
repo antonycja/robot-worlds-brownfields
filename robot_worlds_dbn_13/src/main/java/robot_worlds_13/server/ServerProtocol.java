@@ -25,9 +25,8 @@ public class ServerProtocol {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("result", result);
         responseMap.put("data", data);
-        if (state != null) {
-            responseMap.put("state", state);
-        }
+        responseMap.put("state", state);
+
         return gson.toJson(responseMap);
     }
 

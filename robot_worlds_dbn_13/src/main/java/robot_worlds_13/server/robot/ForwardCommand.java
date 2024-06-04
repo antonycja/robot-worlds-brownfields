@@ -17,48 +17,43 @@ public class ForwardCommand extends Command {
         // where towards is either "front" or "back"
 
         target.worldData.giveCurrentRobotInfo(target);
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> state = target.getRobotState();
         
         IWorld.UpdateResponse responseGiven = target.worldData.updatePosition(nrSteps);
         
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
             // obstacle
-            target.setStatus(ServerProtocol.buildResponse("ERROR",
-            Map.of("message", "Obstructed by obstacle"), null));
+            data.clear();
+            data.put("message", "Obstructed - There is an obstacle in the way");
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
             return true;
         }
 
         else if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED_BY_ROBOT) {
             // robot
-            target.setStatus(ServerProtocol.buildResponse("ERROR",
-            Map.of("message", "Obstructed by other robot"), null));
+            data.clear();
+            data.put("message", "Obstructed - There is a robot in the way");
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
             return true;
         }
 
         else if (responseGiven == UpdateResponse.FAILED_OUTSIDE_WORLD) {
             // outside world
-            target.setStatus(ServerProtocol.buildResponse("ERROR",
-            Map.of("message", "Trying to move outside world"), null));
+            data.clear();
+            data.put("message", "Obstructed - Trying to move outside world");
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
             return true;
         }
 
         if (target.updatePosition(nrSteps, "front")){
             
-            Map<String, Object> data = new HashMap<>();
+            data.clear();
             data.put("message", "Done");
-            Map<String, Object> state = new HashMap<>();
-            state.put("position", new int[] {target.getPosition().getX(), target.getPosition().getY()});
-            state.put("direction", target.getCurrentDirection());
-            state.put("shields", target.shields);
-            state.put("shots", target.ammo);
-            state.put("status", target.getStatus());
+            state.clear();
+            state = target.getRobotState();
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
         }
-        else {
-            System.out.println("Error");
-        }
-
-
-
         return true;
     }
 

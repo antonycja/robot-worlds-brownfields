@@ -75,7 +75,7 @@ public class ClientProtocol {
             if ("ERROR".equals(responseMap.get("result"))) {
                 Map<String, Object> dataReceived = (Map<String, Object>) responseMap.get("data");
                 if (dataReceived.containsKey("message"))
-                    return (String) dataReceived.get("message");
+                    return "ERROR: " + (String) dataReceived.get("message");
                 else {
                     return (String) responseMap.get("data");
                 }
@@ -97,56 +97,101 @@ public class ClientProtocol {
             //     String resultOfCommand = (String) responseMap.get("result");
             //     // message += resultOfCommand;
             // }
+            
+            if (responseMap.get("data") != null) {
+                if (responseMap.get("data") instanceof Map) {
+                    Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("data");
+                    message += "Data: \n";
+                    if (innerMap.get("message") != null) {
+                        String messageResponse = (String) innerMap.get("message");
+                        message += "    Message: " + messageResponse + "\n";
+                    }
+                    if (innerMap.get("distance") != null) { // robots steps away
+                        String distance = String.valueOf(innerMap.get("distance"));
+                        message += "    Distance: " + distance  + "\n";
+                    }
+                    if (innerMap.get("robot") != null) { // its name
+                        String robot = (String) innerMap.get("robot");
+                        message += "    Robot: " + robot  + "\n";
+                    }
+                    if (innerMap.get("state") != null) { // nested
+                        message += "    State: " + "\n";
+                        Map<String, Object> stateMap = (Map<String, Object>) innerMap.get("state");
+                        String status = "        Status: " + stateMap.get("status") + "\n";
+                        message += status;
+                        String position = "        Position: " + stateMap.get("position") + "\n";
+                        message += position;
+                        String direction = "        Direction: " + stateMap.get("direction") + "\n";
+                        message += direction;
+                        String shots = "        Shots: " + (String.valueOf((int) Math.round((double) stateMap.get("shots")))) + "\n";
+                        message += shots;
+                        String shields = "        Shields: " + (String.valueOf((int) Math.round((double) stateMap.get("shields")))) + "\n";
+                        message += shields;
+                    }
+                    // if (innerMap.get("objects") != null) {  // obstacles one, nested within
+                    //     String objects = innerMap.get("objects");
+                    //     message += "    Objects: " + objects  + "\n";
+                    // }
+                    if (innerMap.get("position") != null) {
+                        Object position = (Object) innerMap.get("position");
+                        message += "    Position: " + position  + "\n";
+                    }
+                    if (innerMap.get("visibility") != null) {
+                        String visibility = (String) innerMap.get("visibility");
+                        message += "    Visibility: " + visibility  + "\n";
+                    }
+                    if (innerMap.get("reload") != null) {
+                        String reload = (String) innerMap.get("reload");
+                        message += "    Reload: " + reload  + "\n";
+                    }
+                    if (innerMap.get("repair") != null) {
+                        String repair = (String) innerMap.get("repair");
+                        message += "    Repair: " + repair  + "\n";
+                    }
+                    if (innerMap.get("shields") != null) {
+                        String shields = (String) innerMap.get("shields");
+                        message += "    Shields: " + shields + "\n";
+                    }
+                    
 
-            // if (responseMap.containsKey("data")) {
-            //     if (responseMap.get("data") instanceof Map) {
-            //         Map<String, String> innerMap = (Map<String, String>) responseMap.get("result");
-            //         String value = innerMap.get("innerKey");
-            //         message += value;
-            //     } else {
-            //         System.out.println("result is not a JSON object.");
-            //     }
-            // }
-                
+                } else {
+                    System.out.println("result is not a JSON object.");
+                }
+            }
+
             if (responseMap.get("state") != null) {
                 if (responseMap.get("state") instanceof Map) {
+                    message += "State: \n";
                     Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("state");
-                    String status = (String) innerMap.get("status");
+                    String status = "    Status: " + innerMap.get("status") + "\n";
                     message += status;
-                    String position = (String) innerMap.get("position");
+                    String position = "    Position: " + innerMap.get("position") + "\n";
                     message += position;
+                    String direction = "    Direction: " + innerMap.get("direction") + "\n";
+                    message += direction;
+                    String shots = "    Shots: " + (String.valueOf((int) Math.round((double) innerMap.get("shots")))) + "\n";
+                    message += shots;
+                    String shields = "    Shields: " + (String.valueOf((int) Math.round((double) innerMap.get("shields")))) + "\n";
+                    message += shields;
                     
+                    return message;
                 } else {
                     System.out.println("state is not a JSON object.");
+                    return "No";
                 }
+            }
+
+            if (message == null) {
+                return jsonResponse;
             }
             
 
-            
-            // will need to change in order return the data, return
-            if ("OK".equals(responseMap.get("result"))) {
-                Map<String, Object> dataReceived = (Map<String, Object>) responseMap.get("data");
-                if (dataReceived.containsKey("message")) {
-                    message += (String) dataReceived.get("message");
-                } 
-                if (responseMap.get("state") != null) {
-                    Map<String, Object> stateReceived = (Map<String, Object>) responseMap.get("state");
-                    if (stateReceived.containsKey("state")) {
-                        System.out.println("Yes");
-                        message += (String) stateReceived.get("state");
-                    }
-                }
-
-                return message;
-
-            } else {
-                return "Error executing command: " + responseMap.get("data");
-            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("No json found");
             return jsonResponse;
         }
+        return jsonResponse;
         
         
     }
