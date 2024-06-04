@@ -70,7 +70,10 @@ public class ClientHandler implements Runnable {
             
             // sendMessage("Connected");
             Map<String, Object> data = new HashMap<>();
+            data.put("message", "Connected");
             Map<String, Object> state = new HashMap<>();
+            state.put("position", new int[] {0, 0});
+            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 
             data.clear();
             data.put("message", "Connected successfully to server you can launch a robot!");
@@ -207,10 +210,9 @@ public class ClientHandler implements Runnable {
                 }
 
                 // print robot status after executing command
-                // data.clear();
-                // data.put("message", robot.getRobotStateString());
-                System.out.println(robot.getResponseToRobot());
-                sendMessage(robot.getResponseToRobot());
+                data.clear();
+                data.put("message", robot.toString());
+                sendMessage(ServerProtocol.buildResponse("OK", data));
                 
                 if (shouldContinue) {
                     continue;
@@ -248,9 +250,9 @@ public class ClientHandler implements Runnable {
         return message;
     }
 
-    public void sendMessage(String data) {
+    public void sendMessage(String question) {
         try {
-            dos.writeUTF(data);
+            dos.writeUTF(question);
             dos.flush();
         } catch (IOException e) {
             // e.printStackTrace();
