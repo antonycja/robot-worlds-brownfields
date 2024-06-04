@@ -69,7 +69,7 @@ public class ClientProtocol {
     public static String jsonResponseUnpacker (String jsonResponse) {
         try {
             // Map<String, Object> responseMap = gson.fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
-            Map<String, Object> responseMap = new Gson().fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
+            Map<String, Object> responseMap = gson.fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
 
             // first check for error commands
             if ("ERROR".equals(responseMap.get("result"))) {
@@ -108,17 +108,19 @@ public class ClientProtocol {
             //     }
             // }
                 
-
-            if (responseMap.get("state") instanceof Map) {
-                Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("state");
-                String status = (String) innerMap.get("status");
-                message += status;
-                String position = (String) innerMap.get("position");
-                message += position;
-                
-            } else {
-                System.out.println("state is not a JSON object.");
+            if (responseMap.get("state") != null) {
+                if (responseMap.get("state") instanceof Map) {
+                    Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("state");
+                    String status = (String) innerMap.get("status");
+                    message += status;
+                    String position = (String) innerMap.get("position");
+                    message += position;
+                    
+                } else {
+                    System.out.println("state is not a JSON object.");
+                }
             }
+            
 
             
             // will need to change in order return the data, return
@@ -127,11 +129,12 @@ public class ClientProtocol {
                 if (dataReceived.containsKey("message")) {
                     message += (String) dataReceived.get("message");
                 } 
-                
-                Map<String, Object> stateReceived = (Map<String, Object>) responseMap.get("state");
-                if (stateReceived.containsKey("state")) {
-                    System.out.println("Yes");
-                    message += (String) stateReceived.get("state");
+                if (responseMap.get("state") != null) {
+                    Map<String, Object> stateReceived = (Map<String, Object>) responseMap.get("state");
+                    if (stateReceived.containsKey("state")) {
+                        System.out.println("Yes");
+                        message += (String) stateReceived.get("state");
+                    }
                 }
 
                 return message;
