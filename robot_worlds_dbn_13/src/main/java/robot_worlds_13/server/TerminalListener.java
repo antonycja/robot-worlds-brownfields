@@ -32,15 +32,18 @@ public class TerminalListener implements Runnable {
                     closeAllClients();
                     closeServer();
                     break;
-                } else if ("robots".equalsIgnoreCase(input)) {
-                    System.out.println("Robots command received \n");
+                } 
+                
+                else if ("dump".equalsIgnoreCase(input)) {
+                    System.out.println("Dump command received \n");
                     
                     getRobotsInWorld();
                     System.out.println();
                     getObstaclesInWorld();
+                    System.out.println();
 
                 } else if ("robots".equalsIgnoreCase(input)) {
-                    System.out.println("Dump command received \n");
+                    System.out.println("Robots command received \n");
                     
                     getRobotsInWorld();
 
@@ -99,6 +102,8 @@ public class TerminalListener implements Runnable {
     }
 
     private void getObstaclesInWorld () {
-
+        for (String obstacle: world.obstacleInStringFormat) {
+            System.out.println(obstacle);
+        }
     }
 }
