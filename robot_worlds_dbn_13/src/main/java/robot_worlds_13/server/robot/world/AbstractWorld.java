@@ -58,7 +58,6 @@ public class AbstractWorld implements IWorld {
         int newY = this.position.getY();
         Position positionBeforeUpdate = new Position(newX, newY);
 
-        System.out.println(nrSteps);
         if (nrSteps >= 0) {
             if (Direction.UP.equals(this.currentDirection)) {
                 newY = newY + nrSteps;
@@ -80,7 +79,6 @@ public class AbstractWorld implements IWorld {
                 newX = newX + nrSteps;
             }
         }
-        System.out.println(newY);
             
 
         

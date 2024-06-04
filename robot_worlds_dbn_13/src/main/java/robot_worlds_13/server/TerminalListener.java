@@ -38,7 +38,11 @@ public class TerminalListener implements Runnable {
                         ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
                         System.out.println("Robot name: " + name + "\n" + 
                                             "Current position: " + currentState.get(0).toString() + "\n" + 
-                                            "Current direction: " + currentState.get(1).toString() + "\n");
+                                            "Current direction: " + currentState.get(1).toString() + "\n" +
+                                            "Current shields: " + currentState.get(1).toString() + "\n" +
+                                            "Current shots: " + currentState.get(1).toString() + "\n" + 
+                                            "Current status: " + currentState.get(1).toString() + "\n"
+                        );
                     }
 
                     System.out.println();
