@@ -7,14 +7,19 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
+import robot_worlds_13.server.robot.Robot;
+import robot_worlds_13.server.robot.world.AbstractWorld;
+
 public class TerminalListener implements Runnable {
 
     private final ServerSocket server;
     private final Server serverObject;
+    private final AbstractWorld world;
 
-    public TerminalListener(ServerSocket serverSocket, Server serverObjectGiven) {
+    public TerminalListener(ServerSocket serverSocket, Server serverObjectGiven, AbstractWorld worldGiven) {
         this.server = serverSocket;
         this.serverObject = serverObjectGiven;
+        this.world = worldGiven;
     }
 
     @Override
@@ -30,25 +35,21 @@ public class TerminalListener implements Runnable {
                 } else if ("robots".equalsIgnoreCase(input)) {
                     System.out.println("Robots command received \n");
                     
-                    if (serverObject.nameRobotMap.isEmpty()){
-                        System.out.println("No robots on world yet");
-                    }
-
-                    for (String name: serverObject.nameRobotMap.keySet()) {
-                        ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
-                        System.out.println("Robot name: " + name + "\n" + 
-                                            "Current position: " + currentState.get(0).toString() + "\n" + 
-                                            "Current direction: " + currentState.get(1).toString() + "\n" +
-                                            "Current shields: " + currentState.get(1).toString() + "\n" +
-                                            "Current shots: " + currentState.get(1).toString() + "\n" + 
-                                            "Current status: " + currentState.get(1).toString() + "\n"
-                        );
-                    }
-
+                    getRobotsInWorld();
                     System.out.println();
+                    getObstaclesInWorld();
 
-                } else {
-                    System.out.println("Terminal command received: " + input);
+                } else if ("robots".equalsIgnoreCase(input)) {
+                    System.out.println("Dump command received \n");
+                    
+                    getRobotsInWorld();
+
+
+                }
+                
+                else {
+                    System.out.println("Invalid terminal command received: " +"'" + input + "'");
+                    System.out.println("Hint use 'robots', 'quit' or 'dump'");
                 }
             }
         } catch (IOException e) {
@@ -76,5 +77,28 @@ public class TerminalListener implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void getRobotsInWorld () {
+        if (serverObject.nameRobotMap.isEmpty()){
+            System.out.println("No robots on world yet");
+        }
+
+        for (String name: serverObject.nameRobotMap.keySet()) {
+            ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
+            Robot thisRobot = (Robot) currentState.get(2);
+            System.out.println("Robots: ");
+            System.out.println("    Robot name: " + name + "\n" + 
+                                "    Position: " + currentState.get(0).toString() + "\n" + 
+                                "    Direction: " + currentState.get(1).toString() + "\n" +
+                                "    Shields: " + thisRobot.shieldsAvailable() + "\n" +
+                                "    Current shots: " + thisRobot.ammoAvailable() + "\n" + 
+                                "    Current status: " + thisRobot.getStatus() + "\n"
+            );
+        }
+    }
+
+    private void getObstaclesInWorld () {
+
     }
 }

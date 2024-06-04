@@ -29,17 +29,15 @@ public class Server {
         // this server
         Server serverObject = new Server();
         
-        //
+        // maze loaded
         AbstractWorld world = new TextWorld(new SimpleMaze(), serverObject);
 
-        
-        
 
         try (ServerSocket serverSocket = new ServerSocket(2201)) {
             System.out.println("Server started. Listening for incoming connections...");
 
             // thread for listening to terminal commands
-            Thread terminalListenerThread = new Thread(new TerminalListener(serverSocket, serverObject));
+            Thread terminalListenerThread = new Thread(new TerminalListener(serverSocket, serverObject, world));
             terminalListenerThread.start();;
 
             while (true) {

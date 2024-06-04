@@ -21,7 +21,7 @@ public class Robot {
     public AbstractWorld worldData;
     public int ammo;
     public int shields;
-    public int bullet_distance;
+    public int bulletDistance;
     private String responseToClient = "{}";
 
     public Robot(String name) {
@@ -48,7 +48,7 @@ public class Robot {
         this.worldData = worldObject;
         this.ammo = 5;
         this.shields = 5;
-        this.bullet_distance = 5;
+        this.bulletDistance = 5;
     }
 
     public String getStatus() {
@@ -200,7 +200,12 @@ public class Robot {
         return state;
     }
 
-    public int getBulletDistance () {
-        return this.bullet_distance;
+    public int shieldsAvailable () {
+        return this.shields;
     }
+
+    public int getBulletDistance() {
+        return this.bulletDistance;
+    }
+
 }

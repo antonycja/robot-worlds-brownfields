@@ -223,8 +223,8 @@ public class AbstractWorld implements IWorld {
                 int xBottomLeft = obstacle.getBottomLeftX();
                 int yBottomLeft = obstacle.getBottomLeftY();
 
-                int xTopRight = obstacle.getBottomLeftX()+4;
-                int yTopRight = obstacle.getBottomLeftY()+4;
+                int xTopRight = obstacle.getBottomLeftX() +4;
+                int yTopRight = obstacle.getBottomLeftY() +4;
 
                 //System.out.printf("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight);
                 obstacleInStringFormat.add(String.format("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight));
