@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 
 import robot_worlds_13.server.robot.maze.*;
 import robot_worlds_13.server.robot.world.*;
@@ -19,10 +23,14 @@ public class Robot {
     private String status;
     private String name;
     public AbstractWorld worldData;
+    public int maxShields;
+    public int maxAmmo;
     public int ammo;
     public int shields;
     public int bulletDistance;
     private String responseToClient = "{}";
+    private boolean repairing = false;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public Robot(String name) {
         this.name = name;
@@ -47,6 +55,19 @@ public class Robot {
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
         this.ammo = 5;
+        this.shields = 5;
+        this.bulletDistance = 5;
+    }
+
+    public Robot(String name, AbstractWorld worldObject, Position startingPosition, Map<String, Integer> robotConfigurable) {
+        this.name = name;
+        this.status = "NORMAL";
+        this.position = startingPosition;
+        this.currentDirection = IWorld.Direction.NORTH;
+        this.worldData = worldObject;
+        this.maxAmmo = 5;
+        this.ammo = 5;
+        this.maxShields = 5;
         this.shields = 5;
         this.bulletDistance = 5;
     }
@@ -142,7 +163,7 @@ public class Robot {
     @Override
     public String toString() {
        return "[" + this.position.getX() + "," + this.position.getY() + "] "
-               + this.name + "> " + this.status;
+                + this.name + "> " + this.status;
     }
 
     public Position getPosition() {
@@ -207,5 +228,19 @@ public class Robot {
     public int getBulletDistance() {
         return this.bulletDistance;
     }
+
+    public void repairShields(int repairTime){
+        if (!repairing){
+            repairing = true;
+            status = "REPAIR";
+            scheduler.schedule(() -> {
+                this.shields = maxShields;
+                //Repair shields to max value
+                status = "NORMAL";
+                repairing = false;
+            },repairTime, TimeUnit.SECONDS);
+        }
+    }
+
 
 }
