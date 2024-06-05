@@ -21,6 +21,22 @@ public class ForwardCommand extends Command {
         Map<String, Object> state = target.getRobotState();
         
         IWorld.UpdateResponse responseGiven = target.worldData.updatePosition(nrSteps);
+
+        if (target.getStatus() == "REPAIR") {
+            // repair
+            data.clear();
+            data.put("message", "Movement not allowed whilst repairing robot");
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            return true;
+        }
+
+        if (target.getStatus() == "RELOAD") {
+            // reload
+            data.clear();
+            data.put("message", "Movement not allowed whilst repairing robot");
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            return true;
+        }
         
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
             // obstacle

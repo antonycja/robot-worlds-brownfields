@@ -19,6 +19,22 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
 
         IWorld.UpdateResponse responseGiven = target.worldData.updatePosition(-nrSteps);
 
+        if (target.getStatus() == "REPAIR") {
+            // repair
+            data.clear();
+            data.put("message", "Movement not allowed whilst repairing robot");
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            return true;
+        }
+
+        if (target.getStatus() == "RELOAD") {
+            // reload
+            data.clear();
+            data.put("message", "Movement not allowed whilst repairing robot");
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            return true;
+        }
+
         // -nrsteps since the update in abstract world has no front vs back
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
             // obstacle
