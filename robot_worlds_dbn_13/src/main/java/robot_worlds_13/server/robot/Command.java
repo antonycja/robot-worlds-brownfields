@@ -82,6 +82,8 @@ public abstract class Command {
                 return new OrientationCommand();
             case "repair":
                 return new RepairCommand("repair");
+            case "reload":
+                return new ReloadCommand();
 
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);

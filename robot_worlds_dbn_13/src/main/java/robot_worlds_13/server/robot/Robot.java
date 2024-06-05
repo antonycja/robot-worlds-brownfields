@@ -31,6 +31,7 @@ public class Robot {
     private String responseToClient = "{}";
     private boolean repairing = false;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private int reloadTime;
 
     public Robot(String name) {
         this.name = name;
@@ -38,6 +39,8 @@ public class Robot {
         this.position = CENTRE;
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = new TextWorld(new SimpleMaze());
+        this.reloadTime = 5;
+
     }
 
     public Robot(String name, AbstractWorld worldObject) {
@@ -46,6 +49,8 @@ public class Robot {
         this.position = CENTRE;
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
+        this.reloadTime = 5;
+
     }
 
     public Robot(String name, AbstractWorld worldObject, Position startingPosition) {
@@ -54,7 +59,9 @@ public class Robot {
         this.position = startingPosition;
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
+        this.maxAmmo = 5;
         this.ammo = 5;
+        this.maxShields = 5;
         this.shields = 5;
         this.bulletDistance = 5;
     }
@@ -241,6 +248,17 @@ public class Robot {
             },repairTime, TimeUnit.SECONDS);
         }
     }
+    public void reload() {
+        this.ammo = maxAmmo;
+    }
 
+    public int getReloadTime() {
+        return this.reloadTime;
+    }
+
+    public void setReloadTime(int reloadTime) {
+        this.reloadTime = reloadTime;
+
+    }
 
 }

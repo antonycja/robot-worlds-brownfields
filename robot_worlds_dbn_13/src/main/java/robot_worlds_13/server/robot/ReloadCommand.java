@@ -1,12 +1,28 @@
 package robot_worlds_13.server.robot;
 
-public class ReloadCommand {
-    
-    // all robots have a maximum ammmo they can carry
-    // e.g 5 or 10
+public class ReloadCommand extends Command{
+    private Robot robot;
 
-    // say that the the robot has fired 2 shots
+    public ReloadCommand(Robot robot) {
+        super("reload"); // Call to Command constructor
+        this.robot = robot;
+    }
 
-    // reload will restore the ammo to the maximum ammo
-    // that the robot originally came with
+    public ReloadCommand() {
+        super("reload");
+    }
+
+    @Override
+    public boolean execute(Robot target) {
+        System.out.println("Reloading...");
+        // simulate reload time
+        try {
+            Thread.sleep(target.getReloadTime() * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        target.reload();
+        System.out.println("Reload complete!");
+        return true;
+    }
 }
