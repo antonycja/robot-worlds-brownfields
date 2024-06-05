@@ -123,6 +123,10 @@ public class Client {
                 }
             }
 
+            Main main = new Main();
+            // main.showRobot(robotName); // Pass the robot name to the showRobot method
+            main.setVisible(true); // Show the GUI screen
+
             while (true) {
                 // get server messages
                 // String robotPosition = 
