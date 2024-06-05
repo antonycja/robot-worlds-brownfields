@@ -64,7 +64,6 @@ public class Server {
         // maze loaded
         AbstractWorld world = new TextWorld(new SimpleMaze(), serverObject, dataMap);
 
-
         try (ServerSocket serverSocket = new ServerSocket(2201)) {
             System.out.println("Server started. Listening for incoming connections...");
 

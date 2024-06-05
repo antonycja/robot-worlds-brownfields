@@ -12,10 +12,14 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
 
 public class Client {
+    private static final String PORT_REGEX = "\\b([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\\b";
+    private static final String IP_REGEX = "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b";
     static String localAddress = "localhost";
     static String serverIpAddress = "20.20.15.94";
     protected static Socket sThisClient;
@@ -38,20 +42,49 @@ public class Client {
                 "      _)(  )(_\n" +
                 "     `---''---`");
 
-        try {
-            sThisClient = new Socket(localAddress, 2201);
-        } catch (Exception ex) {
-            System.out.println("Failed to connect to the server using the specified IP address.");
-            System.out.println("Resorting to localhost...\n");
+        // connecting to server
+        if (args.length == 0) {
             try {
                 sThisClient = new Socket(localAddress, 2201);
-            } catch (Exception e) {
-                System.out.println("Failed to connect to localhost.");
-                System.out.println("None of the known servers are running");
-                System.out.println("Exiting program...\n");
-                return;
+            } catch (Exception ex) {
+                System.out.println("Failed to connect to the server using the specified IP address.");
+                System.out.println("Resorting to localhost...\n");
+                try {
+                    sThisClient = new Socket(localAddress, 2201);
+                } catch (Exception e) {
+                    System.out.println("Failed to connect to localhost.");
+                    System.out.println("None of the known servers are running");
+                    System.out.println("Exiting program...\n");
+                    return;
+                }
+            }
+        } else if (args.length != 2) {
+            System.out.println("\nIncorrect ip address or port entered");
+            System.out.println("Correct format: 'Client.java ipAddress portNumber");
+            System.exit(0);
+        } else {
+            if (!isValidIPAddress(args[0])) {
+                if (!args[0].equalsIgnoreCase("localhost")) {
+                    System.out.println("\nIncorrect format for ip address");
+                    System.exit(0);
+                }
+                
+            }
+            
+            if (!isValidPortNumber(args[1])) {
+                System.out.println("\nIncorrect format for port address");
+                System.exit(0);
+            }
+            int port = Integer.parseInt(args[1]);
+            String address =args[0].toLowerCase();
+            try {
+                sThisClient = new Socket(address, port);
+            } catch (Exception ex) {
+                System.out.println("Failed to connect to the server using the specified IP address.");
+                System.exit(0);
             }
         }
+        
 
         try {
             dout = new DataOutputStream(sThisClient.getOutputStream());
@@ -152,5 +185,17 @@ public class Client {
             System.out.println("Could not send request");
         }
 
+    }
+
+    public static boolean isValidPortNumber(String portNumber) {
+        Pattern pattern = Pattern.compile(PORT_REGEX);
+        Matcher matcher = pattern.matcher(portNumber);
+        return matcher.matches();
+    }
+
+    public static boolean isValidIPAddress(String ipAddress) {
+        Pattern pattern = Pattern.compile(IP_REGEX);
+        Matcher matcher = pattern.matcher(ipAddress);
+        return matcher.matches();
     }
 }
