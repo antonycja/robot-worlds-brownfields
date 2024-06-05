@@ -42,8 +42,6 @@ public class ClientHandler implements Runnable {
 
     // robot variables
     String name;
-    Position start;
-
 
     public ClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -53,12 +51,6 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Socket clientSocket, AbstractWorld worldChosen) {
         this.clientSocket = clientSocket;
         this.world = worldChosen;
-    }
-
-    public ClientHandler(Socket clientSocket, AbstractWorld worldChosen, Position startingPosition) {
-        this.clientSocket = clientSocket;
-        this.world = worldChosen;
-        this.start = startingPosition;
     }
 
     @Override
@@ -73,7 +65,7 @@ public class ClientHandler implements Runnable {
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> state = new HashMap<>();
             data.clear();
-            data.put("message", "Connected successfully to server you can launch a robot!");
+            data.put("message", "\nConnected successfully to server you can launch a robot!\n");
             state.clear();
             sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
             
@@ -125,21 +117,43 @@ public class ClientHandler implements Runnable {
                     continue;
                 }
 
-                // TODO, add checker if position is available on the world
+                // if number of robots is too large
+                if (world.serverObject.robotNames.size() >= 5) {
+                    data.clear();
+                    data.put("message", "No more space in this world");
+                    state.clear();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    continue;
+                }
+                
+
 
 
                 if (requestedCommand.equalsIgnoreCase("launch") && !world.serverObject.robotNames.contains(potentialRobotName)) {
                     data.clear();
-                    data.put("message", "Successfully launched");
+                    data.put("message", "Successfully launched\n");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
                     break;
                 }
             }
 
+
+
+            // checker if position is available on the world
+            Position start = world.generatePosition();
+
+            // mocking starting position of robot
+            // Position startPosition =  new Position(0, 0);
+            // if (!serverObject.robotNames.isEmpty()) {
+            //     startPosition =  new Position(0, 10);
+            // }
+
+            // load robots bulletDistance, shields, shots
+
             // make the robot itself
             this.name = potentialRobotName;
-            Robot robot = new Robot(this.name, this.world, this.start);
+            Robot robot = new Robot(this.name, this.world, start);
             world.serverObject.robotNames.add(name);
             ArrayList<Object> currentRobotState = new ArrayList<>();
             currentRobotState.add(robot.getCurrentPosition());
@@ -149,7 +163,7 @@ public class ClientHandler implements Runnable {
 
             // send hello message
             data.clear();
-            data.put("message", "Hello Kiddo!");
+            data.put("message", "Hello Kiddo!\n");
             state.clear();
             sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 
@@ -175,10 +189,10 @@ public class ClientHandler implements Runnable {
             // starting position
             data.clear();
             data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
-            data.put("visibility",  String.valueOf(5) + " steps");
-            data.put("reload", String.valueOf(5) + " seconds");
-            data.put("repair", String.valueOf(5) + " seconds");
-            data.put("shields", String.valueOf(5) + " hits");
+            data.put("visibility",  world.visibility);
+            data.put("reload", world.ammoReloadTime);
+            data.put("repair", world.shieldRepairTime);
+            data.put("shields", robot.shields);
             state = robot.getRobotState();
             sendMessage(ServerProtocol.buildResponse("OK", data, state));
             

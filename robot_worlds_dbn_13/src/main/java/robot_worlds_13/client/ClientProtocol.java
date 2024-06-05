@@ -147,20 +147,20 @@ public class ClientProtocol {
                         message += "    Position: " + position  + "\n";
                     }
                     if (innerMap.get("visibility") != null) {
-                        String visibility = (String) innerMap.get("visibility");
-                        message += "    Visibility: " + visibility  + "\n";
+                        String visibility = String.valueOf((int) Math.round((double)innerMap.get("visibility")));
+                        message += "    Visibility: " + visibility  + " steps\n";
                     }
                     if (innerMap.get("reload") != null) {
-                        String reload = (String) innerMap.get("reload");
-                        message += "    Reload: " + reload  + "\n";
+                        String reload = String.valueOf((int) Math.round((double)innerMap.get("reload")));
+                        message += "    Reload: " + reload  + " seconds\n";
                     }
                     if (innerMap.get("repair") != null) {
-                        String repair = (String) innerMap.get("repair");
-                        message += "    Repair: " + repair  + "\n";
+                        String repair = String.valueOf((int) Math.round((double)innerMap.get("repair")));
+                        message += "    Repair: " + repair  + " seconds\n";
                     }
                     if (innerMap.get("shields") != null) {
-                        String shields = (String) innerMap.get("shields");
-                        message += "    Shields: " + shields + "\n";
+                        String shields = String.valueOf((int) Math.round((double)innerMap.get("shields")));
+                        message += "    Shields: " + shields + " hits\n";
                     }
                     
 

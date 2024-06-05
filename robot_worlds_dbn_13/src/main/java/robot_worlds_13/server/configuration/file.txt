@@ -1,0 +1,4 @@
+visibility 10
+reload 10
+repair 10
+shields 10

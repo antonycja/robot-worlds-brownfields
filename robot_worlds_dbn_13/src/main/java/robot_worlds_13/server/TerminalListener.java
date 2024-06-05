@@ -35,13 +35,13 @@ public class TerminalListener implements Runnable {
                 } 
                 
                 else if ("dump".equalsIgnoreCase(input)) {
-                    System.out.println("\nDump command received ");
+                    System.out.println("\nDump command received... ");
                     
                     getRobotsInWorld();
                     getObstaclesInWorld();
 
                 } else if ("robots".equalsIgnoreCase(input)) {
-                    System.out.println("\nRobots command received \n");
+                    System.out.println("\nRobots command received...");
                     
                     getRobotsInWorld();
 

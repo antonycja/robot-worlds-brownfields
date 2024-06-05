@@ -28,7 +28,7 @@ public class Robot {
         this.name = name;
         this.status = "NORMAL";
         this.position = CENTRE;
-        this.currentDirection = IWorld.Direction.UP;
+        this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = new TextWorld(new SimpleMaze());
     }
 
@@ -36,7 +36,7 @@ public class Robot {
         this.name = name;
         this.status = "NORMAL";
         this.position = CENTRE;
-        this.currentDirection = IWorld.Direction.UP;
+        this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
     }
 
@@ -44,7 +44,7 @@ public class Robot {
         this.name = name;
         this.status = "NORMAL";
         this.position = startingPosition;
-        this.currentDirection = IWorld.Direction.UP;
+        this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
         this.ammo = 5;
         this.shields = 5;
@@ -74,29 +74,29 @@ public class Robot {
         // where towards is either "front" or "back"
         // symbolising whether this function was called by forward / back command
 
-        if (IWorld.Direction.UP.equals(this.currentDirection) && towards == "front") {
+        if (IWorld.Direction.NORTH.equals(this.currentDirection) && towards == "front") {
             newY = newY + nrSteps;
         }
-        else if (IWorld.Direction.DOWN.equals(this.currentDirection) && towards == "front") {
+        else if (IWorld.Direction.SOUTH.equals(this.currentDirection) && towards == "front") {
             newY = newY - nrSteps;
         }
-        else if (IWorld.Direction.LEFT.equals(this.currentDirection) && towards == "front") {
+        else if (IWorld.Direction.WEST.equals(this.currentDirection) && towards == "front") {
             newX = newX - nrSteps;
         }
-        else if (IWorld.Direction.RIGHT.equals(this.currentDirection) && towards == "front") {
+        else if (IWorld.Direction.EAST.equals(this.currentDirection) && towards == "front") {
             newX = newX + nrSteps;
         }
 
-        if (IWorld.Direction.UP.equals(this.currentDirection) && towards == "back") {
+        if (IWorld.Direction.NORTH.equals(this.currentDirection) && towards == "back") {
             newY = newY - nrSteps;
         }
-        else if (IWorld.Direction.DOWN.equals(this.currentDirection) && towards == "back") {
+        else if (IWorld.Direction.SOUTH.equals(this.currentDirection) && towards == "back") {
             newY = newY + nrSteps;
         }
-        else if (IWorld.Direction.LEFT.equals(this.currentDirection) && towards == "back") {
+        else if (IWorld.Direction.WEST.equals(this.currentDirection) && towards == "back") {
             newX = newX + nrSteps;
         }
-        else if (IWorld.Direction.RIGHT.equals(this.currentDirection) && towards == "back") {
+        else if (IWorld.Direction.EAST.equals(this.currentDirection) && towards == "back") {
             newX = newX - nrSteps;
         }
 
@@ -112,29 +112,29 @@ public class Robot {
     public boolean updateDirection(String turnTo) {
         // System.out.println(turnTo);
 
-        if (this.currentDirection == IWorld.Direction.UP && turnTo == "left") {
-            this.currentDirection = IWorld.Direction.LEFT;
+        if (this.currentDirection == IWorld.Direction.NORTH && turnTo == "left") {
+            this.currentDirection = IWorld.Direction.WEST;
         }
-        else if (this.currentDirection == IWorld.Direction.LEFT && turnTo == "left") {
-            this.currentDirection = IWorld.Direction.DOWN;
+        else if (this.currentDirection == IWorld.Direction.WEST && turnTo == "left") {
+            this.currentDirection = IWorld.Direction.SOUTH;
         }
-        else if (this.currentDirection == IWorld.Direction.DOWN && turnTo == "left") {
-            this.currentDirection = IWorld.Direction.RIGHT;
+        else if (this.currentDirection == IWorld.Direction.SOUTH && turnTo == "left") {
+            this.currentDirection = IWorld.Direction.EAST;
         }
-        else if (this.currentDirection == IWorld.Direction.RIGHT && turnTo == "left") {
-            this.currentDirection = IWorld.Direction.UP;
+        else if (this.currentDirection == IWorld.Direction.EAST && turnTo == "left") {
+            this.currentDirection = IWorld.Direction.NORTH;
         }
-        else if (this.currentDirection == IWorld.Direction.UP && turnTo == "right") {
-            this.currentDirection = IWorld.Direction.RIGHT;
+        else if (this.currentDirection == IWorld.Direction.NORTH && turnTo == "right") {
+            this.currentDirection = IWorld.Direction.EAST;
         }
-        else if (this.currentDirection == IWorld.Direction.RIGHT && turnTo == "right") {
-            this.currentDirection = IWorld.Direction.DOWN;
+        else if (this.currentDirection == IWorld.Direction.EAST && turnTo == "right") {
+            this.currentDirection = IWorld.Direction.SOUTH;
         }
-        else if (this.currentDirection == IWorld.Direction.DOWN && turnTo == "right") {
-            this.currentDirection = IWorld.Direction.LEFT;
+        else if (this.currentDirection == IWorld.Direction.SOUTH && turnTo == "right") {
+            this.currentDirection = IWorld.Direction.WEST;
         }
-        else if (this.currentDirection == IWorld.Direction.LEFT && turnTo == "right") {
-            this.currentDirection = IWorld.Direction.UP;
+        else if (this.currentDirection == IWorld.Direction.WEST && turnTo == "right") {
+            this.currentDirection = IWorld.Direction.NORTH;
         }
         return true;
     }

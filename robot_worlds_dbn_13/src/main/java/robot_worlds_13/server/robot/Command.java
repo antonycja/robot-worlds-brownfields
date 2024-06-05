@@ -78,6 +78,8 @@ public abstract class Command {
                 return new StateCommand(instruction);
             case "fire":
                 return new FireCommand();
+            case "orientation":
+                return new OrientationCommand();
 
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);

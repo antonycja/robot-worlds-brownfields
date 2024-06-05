@@ -12,7 +12,7 @@ public interface IWorld {
      * Enum used to track direction
      */
     enum Direction {
-        UP, LEFT, RIGHT, DOWN
+        NORTH, WEST, EAST, SOUTH
     }
 
     /**
