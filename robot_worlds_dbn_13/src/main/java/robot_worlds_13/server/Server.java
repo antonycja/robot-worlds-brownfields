@@ -41,7 +41,8 @@ public class Server {
         
         //
         String path = new File(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
-        String directoryPath = new File(path).getParent() + "/classes/robot_worlds_13/server/configuration/file.txt";
+        String otherFilePath = "/../src/main/java/robot_worlds_13/server/configuration/file.txt";
+        String directoryPath = new File(path).getParent() + otherFilePath;
         // System.out.println(directoryPath);
 
         // load configured variables
