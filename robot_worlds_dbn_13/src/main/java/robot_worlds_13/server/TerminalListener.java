@@ -28,22 +28,20 @@ public class TerminalListener implements Runnable {
             String input;
             while ((input = reader.readLine()) != null) {
                 if ("quit".equalsIgnoreCase(input)) {
-                    System.out.println("Received quit command. Closing all clients and the server...");
+                    System.out.println("\nReceived quit command. Closing all clients and the server...");
                     closeAllClients();
                     closeServer();
                     break;
                 } 
                 
                 else if ("dump".equalsIgnoreCase(input)) {
-                    System.out.println("Dump command received \n");
+                    System.out.println("\nDump command received ");
                     
                     getRobotsInWorld();
-                    System.out.println();
                     getObstaclesInWorld();
-                    System.out.println();
 
                 } else if ("robots".equalsIgnoreCase(input)) {
-                    System.out.println("Robots command received \n");
+                    System.out.println("\nRobots command received \n");
                     
                     getRobotsInWorld();
 
@@ -51,7 +49,7 @@ public class TerminalListener implements Runnable {
                 }
                 
                 else {
-                    System.out.println("Invalid terminal command received: " +"'" + input + "'");
+                    System.out.println("\nInvalid terminal command received: " +"'" + input + "'");
                     System.out.println("Hint use 'robots', 'quit' or 'dump'");
                 }
             }
@@ -85,12 +83,14 @@ public class TerminalListener implements Runnable {
     private void getRobotsInWorld () {
         if (serverObject.nameRobotMap.isEmpty()){
             System.out.println("No robots on world yet");
+            return;
         }
 
+        System.out.println("Robots: ");
         for (String name: serverObject.nameRobotMap.keySet()) {
             ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
             Robot thisRobot = (Robot) currentState.get(2);
-            System.out.println("Robots: ");
+            
             System.out.println("    Robot name: " + name + "\n" + 
                                 "    Position: " + currentState.get(0).toString() + "\n" + 
                                 "    Direction: " + currentState.get(1).toString() + "\n" +
@@ -102,8 +102,13 @@ public class TerminalListener implements Runnable {
     }
 
     private void getObstaclesInWorld () {
-        for (String obstacle: world.obstacleInStringFormat) {
-            System.out.println(obstacle);
+        if (world.getObstaclesAsString().isEmpty()) {
+            System.out.println("There are no obstacles in the world");
+            return;
+        }
+        System.out.println("Obstacles in world: ");
+        for (String obstacle: world.getObstaclesAsString()) {
+            System.out.println("    " + obstacle);
         }
     }
 }

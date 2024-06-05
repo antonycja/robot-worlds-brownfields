@@ -217,6 +217,12 @@ public class AbstractWorld implements IWorld {
 
     @Override
     public void showObstacles() {
+        
+    }
+    
+    public List<String> getObstaclesAsString() {
+        List<String> message = new ArrayList<String>();
+        
         if(this.obstacles.size() > 0) {
 //            System.out.println("There are some obstacles:");
             for(Obstacle obstacle: obstacles ){
@@ -227,9 +233,10 @@ public class AbstractWorld implements IWorld {
                 int yTopRight = obstacle.getBottomLeftY() +4;
 
                 //System.out.printf("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight);
-                obstacleInStringFormat.add(String.format("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight));
+                message.add(String.format("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight));
             }
         }
+        return message;
 
     }
 

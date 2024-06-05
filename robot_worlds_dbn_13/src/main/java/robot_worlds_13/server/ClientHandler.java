@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -153,10 +154,21 @@ public class ClientHandler implements Runnable {
             sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 
             // Obstacles
-            world.showObstacles();  // will need to now return obstacles, and flush them to user
-            ArrayList<String> obstaclesData = world.obstacleInStringFormat;
+            // world.showObstacles();  // will need to now return obstacles, and flush them to user
+            List<String> obstaclesData = world.getObstaclesAsString();
+            String obstacleMessage = "";
+            if (obstaclesData.isEmpty()) {
+                obstacleMessage += "There are no obstacles in the world";
+                
+            } else {
+                obstacleMessage += "Obstacles in world: \n";
+                for (String obstacle: obstaclesData) {
+                    obstacleMessage += "    " + obstacle;
+                }
+            }
+            
             data.clear();
-            data.put("message", "Obstacles in the world: " + obstaclesData.get(0));
+            data.put("message", obstacleMessage);
             state.clear();
             sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 
