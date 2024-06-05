@@ -248,8 +248,19 @@ public class Robot {
             },repairTime, TimeUnit.SECONDS);
         }
     }
-    public void reload() {
-        this.ammo = maxAmmo;
+
+    public void reload(int reloadTime) {
+        boolean reloading = false;
+        if (!reloading){
+            reloading = true;
+            status = "RELOAD";
+            scheduler.schedule(() -> {
+                this.ammo = maxAmmo;
+                //Repair shields to max value
+                status = "NORMAL";
+                
+            },reloadTime, TimeUnit.SECONDS);
+        }
     }
 
     public int getReloadTime() {
