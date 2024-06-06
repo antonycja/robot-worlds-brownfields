@@ -131,6 +131,10 @@ public class Client {
                 // get server messages
                 // String robotPosition = 
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
+
+                if (response.contains("GUI")) {
+                    continue;
+                }
                 
                 // print message to this client
                 System.out.println(response);

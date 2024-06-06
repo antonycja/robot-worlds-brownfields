@@ -72,6 +72,10 @@ public class ClientProtocol {
             Map<String, Object> responseMap = gson.fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
 
             // first check for error commands
+            if ("GUI".equals(responseMap.get("result"))) {
+                return "";
+            }
+            
             if ("ERROR".equals(responseMap.get("result"))) {
                 Map<String, Object> dataReceived = (Map<String, Object>) responseMap.get("data");
                 if (dataReceived.containsKey("message"))

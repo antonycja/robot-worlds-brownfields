@@ -32,6 +32,8 @@ public class Robot {
     private boolean repairing = false;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private int reloadTime;
+    private Position previouPosition;
+    private String responseGUIToClient = "{}";
 
     public Robot(String name) {
         this.name = name;
@@ -47,6 +49,7 @@ public class Robot {
         this.name = name;
         this.status = "NORMAL";
         this.position = CENTRE;
+        this.previouPosition = CENTRE;
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
         this.reloadTime = 5;
@@ -64,6 +67,7 @@ public class Robot {
         this.maxShields = 5;
         this.shields = 5;
         this.bulletDistance = 5;
+        this.previouPosition = startingPosition;
     }
 
     public Robot(String name, AbstractWorld worldObject, Position startingPosition, Map<String, Integer> robotConfigurable) {
@@ -77,6 +81,7 @@ public class Robot {
         this.maxShields = 5;
         this.shields = 5;
         this.bulletDistance = 5;
+        this.previouPosition = startingPosition;
     }
 
     public String getStatus() {
@@ -98,6 +103,7 @@ public class Robot {
     public boolean updatePosition(int nrSteps, String towards){
         int newX = this.position.getX();
         int newY = this.position.getY();
+        this.previouPosition = new Position(newX, newY);
 
         // where towards is either "front" or "back"
         // symbolising whether this function was called by forward / back command
@@ -219,6 +225,27 @@ public class Robot {
 
     public Map<String, Object> getRobotState () {
         Map<String, Object> state = new HashMap<>();
+        state.put("position", new int[] {position.getX(), position.getY()});
+        state.put("direction", getCurrentDirection());
+        state.put("shields", shields);
+        state.put("shots", ammo);
+        state.put("status", getStatus());
+
+        return state;
+    }
+
+    public void setGUIResponseToRobot (String stateGiven) {
+        this.responseGUIToClient = stateGiven;
+    }
+
+    public String getGUIResponseToRobot () {
+        return this.responseGUIToClient;
+    }
+
+    public Map<String, Object> getGUIRobotState () {
+        Map<String, Object> state = new HashMap<>();
+        state.put("name", this.name);
+        state.put("previousPosition", new int[] {previouPosition.getX(), previouPosition.getY()});
         state.put("position", new int[] {position.getX(), position.getY()});
         state.put("direction", getCurrentDirection());
         state.put("shields", shields);

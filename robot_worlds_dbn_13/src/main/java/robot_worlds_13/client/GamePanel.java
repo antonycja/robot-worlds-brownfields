@@ -83,13 +83,15 @@ public class GamePanel extends JPanel implements Runnable {
         while (gameThread != null) {
             
             // listen for command
-            String response;
-            // try {
-            //     response = GUIProtocol.jsonResponseUnpacker(din.readUTF());
-            // } catch (IOException e) {
-            //     throw new RuntimeException(e);
-            // }
-            //
+            Map<String, Object> response;
+            try {
+                response = GUIProtocol.jsonResponseUnpacker(din.readUTF());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            
+
+            System.out.println(response);
 
             // if response is launch create robot
                 // add it to list of robots
@@ -104,27 +106,27 @@ public class GamePanel extends JPanel implements Runnable {
             // System.err.println(response);
             
 
-            long currentTime = System.nanoTime();
+            // long currentTime = System.nanoTime();
 
-            // 1 UPDATE: update information such as character positions
-            update();
-            // 2 DRAW: draw screen with the updated information
-            repaint();
+            // // 1 UPDATE: update information such as character positions
+            // update();
+            // // 2 DRAW: draw screen with the updated information
+            // repaint();
 
-            try {
-                double remainingTime = nextDrawTime - System.nanoTime();
-                remainingTime = remainingTime / 1000000;  //converting time to milliseconds
+            // try {
+            //     double remainingTime = nextDrawTime - System.nanoTime();
+            //     remainingTime = remainingTime / 1000000;  //converting time to milliseconds
 
-                if (remainingTime < 0) {
-                    remainingTime = 0;
-                }
+            //     if (remainingTime < 0) {
+            //         remainingTime = 0;
+            //     }
 
-                Thread.sleep((long) remainingTime);
+            //     Thread.sleep((long) remainingTime);
 
-                nextDrawTime += drawInterval;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            //     nextDrawTime += drawInterval;
+            // } catch (InterruptedException e) {
+            //     e.printStackTrace();
+            // }
         }
     }
 

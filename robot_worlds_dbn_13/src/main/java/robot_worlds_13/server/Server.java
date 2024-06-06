@@ -1,9 +1,11 @@
 package robot_worlds_13.server;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class Server {
 
     // clients
     List<ClientHandler> clients = new ArrayList<>();
+    private static List<Socket> clientConnections = new ArrayList<>();
+    static DataOutputStream dos;
 
     // random
     Random rand = new Random();
@@ -77,6 +81,9 @@ public class Server {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Incoming connection accepted");
 
+                // add client to connections
+                clientConnections.add(clientSocket);
+
                 // Create a new thread for each client
                 ClientHandler clientHandler = new ClientHandler(clientSocket, world);
                 serverObject.clients.add(clientHandler);
@@ -107,5 +114,17 @@ public class Server {
         return result;
     }
 
+    public static void broadcastMessage(String message) {
+        for (Socket client : clientConnections) {
+            try {
+                dos = new DataOutputStream(client.getOutputStream());
+                dos.writeUTF(message);
+                dos.flush();
+
+            } catch (IOException e) {
+                System.err.println("Error broadcasting message to client: " + e.getMessage());
+            }
+        }
+    }
 
 }

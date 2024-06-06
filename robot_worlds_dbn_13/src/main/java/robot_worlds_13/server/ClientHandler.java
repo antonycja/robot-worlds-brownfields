@@ -239,6 +239,7 @@ public class ClientHandler implements Runnable {
 
                 // print robot status after executing command
                 sendMessage(robot.getResponseToRobot());
+                Server.broadcastMessage(robot.getGUIResponseToRobot());
                 
                 if (shouldContinue) {
                     continue;
