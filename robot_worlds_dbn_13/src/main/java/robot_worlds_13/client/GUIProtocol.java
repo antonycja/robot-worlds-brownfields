@@ -21,8 +21,10 @@ public class GUIProtocol {
         //     state.clear();
         //     state = target.getGUIRobotState();
         //     target.setResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+        
         Map<String, Object> commandMap =  new HashMap<>();
         if (jsonResponse.equals("{}")) {
+            
             return commandMap;
         }
 
@@ -36,11 +38,15 @@ public class GUIProtocol {
             } 
 
             if (responseMap.get("data") != null) {
+                System.out.println("data key found");
                 if (responseMap.get("data") instanceof Map) {
+                    
                     Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("data");
+                    
                     if (innerMap.get("message") != null) {
+                        System.out.println("message key found");
                         String messageResponse = (String) innerMap.get("message");
-                        commandMap.put("command", messageResponse);
+                        commandMap.put("message", messageResponse);
                     }
                 }
             }

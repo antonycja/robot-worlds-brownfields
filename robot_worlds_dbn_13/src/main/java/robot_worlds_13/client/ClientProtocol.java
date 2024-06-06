@@ -73,7 +73,7 @@ public class ClientProtocol {
 
             // first check for error commands
             if ("GUI".equals(responseMap.get("result"))) {
-                return "";
+                return jsonResponse;
             }
             
             if ("ERROR".equals(responseMap.get("result"))) {

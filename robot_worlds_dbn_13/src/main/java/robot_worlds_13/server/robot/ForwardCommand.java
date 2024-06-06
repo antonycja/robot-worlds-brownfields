@@ -71,7 +71,7 @@ public class ForwardCommand extends Command {
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
 
             data.clear();
-            data.put("message", "MOVE");
+            data.put("message", "FRONT");
             state.clear();
             state = target.getGUIRobotState();
             target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));

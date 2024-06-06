@@ -170,6 +170,8 @@ public class Robot {
         else if (this.currentDirection == IWorld.Direction.WEST && turnTo == "right") {
             this.currentDirection = IWorld.Direction.NORTH;
         }
+        
+        this.previouPosition = position;
         return true;
     }
 

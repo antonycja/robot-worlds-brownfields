@@ -67,6 +67,12 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
             state.clear();
             state = target.getRobotState();
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+
+            data.clear();
+            data.put("message", "BACK");
+            state.clear();
+            state = target.getGUIRobotState();
+            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
         }
         return true;
     }

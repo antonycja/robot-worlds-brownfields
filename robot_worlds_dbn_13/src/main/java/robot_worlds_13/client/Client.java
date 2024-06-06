@@ -93,6 +93,10 @@ public class Client {
             String response;
             String potentialRobotName = "";
 
+            Main main = new Main();
+            // main.showRobot(robotName); // Pass the robot name to the showRobot method
+           
+
             while (true) {
                 // try to launch robot
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
@@ -100,6 +104,7 @@ public class Client {
                 
                 if (response.contains("Successfully launched")) {
                     robotName = potentialRobotName;
+                    main.setVisible(true); // Show the GUI screen
                     break;
                 }
 
@@ -123,9 +128,7 @@ public class Client {
                 }
             }
 
-            Main main = new Main();
-            // main.showRobot(robotName); // Pass the robot name to the showRobot method
-            main.setVisible(true); // Show the GUI screen
+           
 
             while (true) {
                 // get server messages
@@ -133,6 +136,10 @@ public class Client {
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
 
                 if (response.contains("GUI")) {
+                    if (response.contains("LAUNCH")) {
+                        
+                    }
+                    
                     continue;
                 }
                 

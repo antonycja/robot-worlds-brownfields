@@ -2,6 +2,7 @@ package entity;
 
 import robot_worlds_13.client.GamePanel;
 import robot_worlds_13.client.KeyHandler;
+import robot_worlds_13.server.robot.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,11 +14,20 @@ public class Player extends Entity {
 
     GamePanel gp;
     KeyHandler keyH;
+    public String characterName;
 
-    public Player(GamePanel gp, KeyHandler keyH) {
+    public Player() {
+
+    }
+
+    public Player(GamePanel gp, KeyHandler keyH, Position startPosition, String givenName) {
         this.gp = gp;
         this.keyH = keyH;
-
+        this.characterName = givenName;
+        // x = 200;
+        // y = 400;
+        x = (gp.width / 2) + startPosition.getX() - 4;
+        y = (gp.height / 2) - startPosition.getY() - 4;
         setDefaultValues();
         getPlayerImage();
         direction = "up";
@@ -25,8 +35,6 @@ public class Player extends Entity {
 
     public void setDefaultValues() {
         // Set player's default position
-        x = 0;
-        y = 0;
         speed = 1;
     }
 
@@ -61,6 +69,56 @@ public class Player extends Entity {
         } else if (keyH.rightPressed) {
             direction = "right";
             x += speed;
+        }
+
+        spriteCounter++;
+        if(spriteCounter >10) {
+            if(spriteNum == 1) {
+                spriteNum = 2;
+            }
+            spriteCounter = 0;
+        }
+    }
+
+    public void update(Direction headingDirection) {
+        
+        if (headingDirection == Direction.NORTH) {
+            direction = "up";
+            y -= speed;
+        } else if (headingDirection == Direction.SOUTH) {
+            direction = "down";
+            y += speed;
+        } else if (headingDirection == Direction.WEST) {
+            direction = "left";
+            x -= speed;
+        } else if (headingDirection == Direction.EAST) {
+            direction = "right";
+            x += speed;
+        }
+
+        spriteCounter++;
+        if(spriteCounter >10) {
+            if(spriteNum == 1) {
+                spriteNum = 2;
+            }
+            spriteCounter = 0;
+        }
+    }
+
+    public void updateBack(Direction headingDirection) {
+        
+        if (headingDirection == Direction.NORTH) {
+            direction = "up";
+            y += speed;
+        } else if (headingDirection == Direction.SOUTH) {
+            direction = "down";
+            y -= speed;
+        } else if (headingDirection == Direction.WEST) {
+            direction = "left";
+            x += speed;
+        } else if (headingDirection == Direction.EAST) {
+            direction = "right";
+            x -= speed;
         }
 
         spriteCounter++;

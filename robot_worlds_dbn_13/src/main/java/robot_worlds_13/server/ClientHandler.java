@@ -195,6 +195,13 @@ public class ClientHandler implements Runnable {
             data.put("shields", robot.shields);
             state = robot.getRobotState();
             sendMessage(ServerProtocol.buildResponse("OK", data, state));
+
+            data.clear();
+            data.put("message", "LAUNCH");
+            state.clear();
+            state = robot.getGUIRobotState();
+            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+
             
             Command command;
             boolean shouldContinue = true;
