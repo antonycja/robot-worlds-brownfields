@@ -10,7 +10,9 @@ public class ShutdownCommand extends Command {
     @Override
     public boolean execute(Robot target) {
         target.worldData.giveCurrentRobotInfo(target);
+        target.setStatus("Shutting down...");
         target.setResponseToRobot(ServerProtocol.buildResponse("Shutting down..."));
         return false;
     }
+    
 }

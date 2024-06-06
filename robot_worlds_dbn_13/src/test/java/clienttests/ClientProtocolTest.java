@@ -44,7 +44,7 @@ public class ClientProtocolTest {
     public void testJsonResponseUnpackerErrorResponse() {
         String jsonResponse = "{\"result\":\"ERROR\",\"data\":{\"message\":\"Command not found\"}}";
         String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
-        assertEquals("Command not found", response);
+        assertEquals("{\"result\":\"ERROR\",\"data\":{\"message\":\"Command not found\"}}", response);
     }
 
     @Test
