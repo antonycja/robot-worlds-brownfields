@@ -29,7 +29,7 @@ public class SquareObstacle implements Obstacle {
 
     @Override
     public int getSize() {
-        return 5;
+        return 20;
     }
 
     private void generateObstacle() {

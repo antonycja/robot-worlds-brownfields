@@ -6,6 +6,7 @@ package robot_worlds_13.client;
  */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,6 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.Binding;
+import org.jline.reader.Reference;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import org.jline.keymap.KeyMap;
+
 import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
@@ -128,7 +138,11 @@ public class Client {
                 }
             }
 
-           
+            // Create a terminal
+            Terminal terminal = TerminalBuilder.builder().build();
+
+            // Create a LineReader
+            LineReader lineReader = LineReaderBuilder.builder().terminal(terminal).build();
 
             while (true) {
                 // get server messages
@@ -139,7 +153,6 @@ public class Client {
                     if (response.contains("LAUNCH")) {
                         
                     }
-                    
                     continue;
                 }
                 
@@ -158,6 +171,7 @@ public class Client {
                 if (response.startsWith("What")) {
                     // get imput
                     String command = line.nextLine();
+                    
 
                     // format input
                     Map<String, Object> formattedCommand = ClientProtocol.jsonRequestBuilder(command);

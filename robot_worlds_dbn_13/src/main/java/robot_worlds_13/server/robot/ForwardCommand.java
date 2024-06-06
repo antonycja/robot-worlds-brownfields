@@ -27,6 +27,13 @@ public class ForwardCommand extends Command {
             data.clear();
             data.put("message", "Movement not allowed whilst repairing robot");
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+
+            target.previouPosition = target.position;
+            data.clear();
+            data.put("message", "FRONT");
+            state.clear();
+            state = target.getGUIRobotState();
+            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -35,6 +42,12 @@ public class ForwardCommand extends Command {
             data.clear();
             data.put("message", "Movement not allowed whilst repairing robot");
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            target.previouPosition = target.position;
+            data.clear();
+            data.put("message", "FRONT");
+            state.clear();
+            state = target.getGUIRobotState();
+            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
         
@@ -43,6 +56,12 @@ public class ForwardCommand extends Command {
             data.clear();
             data.put("message", "Obstructed - There is an obstacle in the way");
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            target.previouPosition = target.position;
+            data.clear();
+            data.put("message", "FRONT");
+            state.clear();
+            state = target.getGUIRobotState();
+            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -51,6 +70,12 @@ public class ForwardCommand extends Command {
             data.clear();
             data.put("message", "Obstructed - There is a robot in the way");
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            target.previouPosition = target.position;
+            data.clear();
+            data.put("message", "FRONT");
+            state.clear();
+            state = target.getGUIRobotState();
+            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -59,6 +84,13 @@ public class ForwardCommand extends Command {
             data.clear();
             data.put("message", "Obstructed - Trying to move outside world");
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            target.previouPosition = target.position;
+            data.clear();
+            data.put("message", "FRONT");
+            state.clear();
+            state = target.getGUIRobotState();
+            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+
             return true;
         }
 

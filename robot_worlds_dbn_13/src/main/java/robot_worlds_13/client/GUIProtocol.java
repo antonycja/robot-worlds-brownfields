@@ -1,5 +1,6 @@
 package robot_worlds_13.client;
 
+import java.awt.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,13 +39,11 @@ public class GUIProtocol {
             } 
 
             if (responseMap.get("data") != null) {
-                System.out.println("data key found");
                 if (responseMap.get("data") instanceof Map) {
                     
                     Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("data");
                     
                     if (innerMap.get("message") != null) {
-                        System.out.println("message key found");
                         String messageResponse = (String) innerMap.get("message");
                         commandMap.put("message", messageResponse);
                     }
@@ -54,6 +53,12 @@ public class GUIProtocol {
             if (responseMap.get("state") != null) {
                 if (responseMap.get("state") instanceof Map) {
                     Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("state");
+                    if (innerMap.get("obstacles") != null) {
+                        Object obstacles = (Object) innerMap.get("obstacles");
+                        commandMap.put("obstacles", obstacles);
+                        return commandMap;
+                    }
+                    
                     Object name = (Object) innerMap.get("name");
                     commandMap.put("name", name);
                     Object previousPosition = (Object) innerMap.get("previousPosition");

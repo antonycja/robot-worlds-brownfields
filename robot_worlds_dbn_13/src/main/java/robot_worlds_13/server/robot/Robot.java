@@ -18,7 +18,7 @@ public class Robot {
 
     public static final Position CENTRE = new Position(0,0);
 
-    private Position position;
+    public Position position;
     private IWorld.Direction currentDirection;
     private String status;
     private String name;
@@ -32,7 +32,7 @@ public class Robot {
     private boolean repairing = false;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private int reloadTime;
-    private Position previouPosition;
+    public Position previouPosition;
     private String responseGUIToClient = "{}";
 
     public Robot(String name) {
@@ -170,7 +170,7 @@ public class Robot {
         else if (this.currentDirection == IWorld.Direction.WEST && turnTo == "right") {
             this.currentDirection = IWorld.Direction.NORTH;
         }
-        
+
         this.previouPosition = position;
         return true;
     }

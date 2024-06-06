@@ -2,12 +2,14 @@ package robot_worlds_13.client;
 
 import entity.Player;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.awt.*;
-
+import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,13 +18,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
 import robot_worlds_13.client.Main;
 import robot_worlds_13.server.robot.Direction;
 import robot_worlds_13.server.robot.Position;
+import robot_worlds_13.server.robot.world.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -54,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
     Scanner line = new Scanner(System.in);
     String robotName = "";
     Gson gson = new Gson();
+    ArrayList<int []> obstacles = new ArrayList<>();
 
     public int height = 800;
     public int width = 400;
@@ -103,6 +111,16 @@ public class GamePanel extends JPanel implements Runnable {
 
             System.out.println(response);
 
+            if (response.containsKey("message") && response.get("message").equals("OBSTACLES")) {
+                List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("obstacles");
+                for (Map<String, Object> obstacle : obstaclesList) {
+                    int x = (width/2) + ((int)((double) obstacle.get("x")));
+                    int y = (height/2) + ((int)((double) obstacle.get("y")));
+                    obstacles.add(new int[] {x, y});
+                }
+                continue;
+            }
+
             // if response is launch create robot
             //     add it to list of robots
             String name = (String) response.get("name");
@@ -115,108 +133,115 @@ public class GamePanel extends JPanel implements Runnable {
                 players.add(player);
             }
 
-            Player currentPlayer = new Player();
-            for (Player player: players) {
-                if (name.equals(player.characterName)){
-                    currentPlayer = player;
-                    System.out.println("Player found: " + name);
-                }
+            
 
 
             // if response move
                 // using the name, get player object
                 // from and too position, move by one unit
             if (((String) response.get("message")).equalsIgnoreCase("FRONT")) {
-                
-                        int previousX = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(0)));
-                        int previousY = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(1)));
-                        if (startX > previousX) {
-                            for (int step=previousX; step!=startX; step++) {
-                                currentPlayer.update(Direction.EAST);
+                        for (Player player: players) {
+                            if (name.equals(player.characterName)){
+            
+                            int previousX = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(0)));
+                            int previousY = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(1)));
+                            if (startX == previousX && startY == previousY) {
+                                continue;
                             }
-                        }
-                        if (startY > previousY) {
-                            for (int step=previousY; step != startY; step++){
-                                currentPlayer.update(Direction.NORTH);
+                            if (startX > previousX) {
+                                for (int step=previousX; step!=startX; step++) {
+                                    player.update(Direction.EAST);
+                                }
                             }
-                        }
-                        if (startX < previousX) {
-                            for (int step=previousX; step!=startX; step++) {
-                                currentPlayer.update(Direction.WEST);
+                            if (startY > previousY) {
+                                for (int step=previousY; step != startY; step++){
+                                    player.update(Direction.NORTH);
+                                }
                             }
-                        }
-                        if (startY < previousY) {
-                            for (int step=previousY; step!=previousY; step++) {
-                                currentPlayer.update(Direction.SOUTH);
+                            if (startX < previousX) {
+                                for (int step=startX; step!=previousX; step++) {
+                                    player.update(Direction.WEST);
+                                }
                             }
-                        }
-                    
+                            if (startY < previousY) {
+                                for (int step=startY; step!=previousY; step++) {
+                                    player.update(Direction.SOUTH);
+                                }
+                            }
+                    }
                 }
             }
 
             if (((String) response.get("message")).equalsIgnoreCase("BACK")) {
-                
+                for (Player player: players) {
+                    if (name.equals(player.characterName)){
+
                 int previousX = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(0)));
                 int previousY = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(1)));
+                if (startX == previousX && startY == previousY) {
+                    continue;
+                }
                 if (startX < previousX) {
-                    for (int step=previousX; step!=startX; step--) {
-                        currentPlayer.updateBack(Direction.EAST);
+                    for (int step=previousX; step != startX; step--) {
+                        player.updateBack(Direction.EAST);
                     }
                 }
                 if (startY < previousY) {
                     for (int step=previousY; step != startY; step--){
-                        currentPlayer.updateBack(Direction.NORTH);
+                        player.updateBack(Direction.NORTH);
                     }
                 }
                 if (startX > previousX) {
-                    for (int step=previousX; step!=startX; step--) {
-                        currentPlayer.updateBack(Direction.WEST);
+                    for (int step=startX; step != previousY; step--) {
+                        player.updateBack(Direction.WEST);
                     }
                 }
                 if (startY > previousY) {
-                    for (int step=previousY; step!=previousY; step--) {
-                        currentPlayer.updateBack(Direction.SOUTH);
+                    for (int step=startY; step != previousY; step--) {
+                        player.updateBack(Direction.SOUTH);
                     }
                 }
-            
+                }
+            }
         }
 
             if (((String) response.get("message")).equalsIgnoreCase("RIGHT")) {
-                switch ( currentPlayer.direction) {
+                for (Player player: players) {
+                    if (name.equals(player.characterName)){
+                switch (player.direction) {
                     case "up":
-                        currentPlayer.direction = "right";
+                    player.direction = "right";
                         break;
                     case "down":
-                        currentPlayer.direction = "left";
+                    player.direction = "left";
                         break;
                     case "left":
-                        currentPlayer.direction = "up";
+                    player.direction = "up";
                         break;
                     case "right":
-                        currentPlayer.direction = "down";
+                    player.direction = "down";
                         break;
-                }
-            }
+                }}
+            }}
 
             if (((String) response.get("message")).equalsIgnoreCase("LEFT")) {
-                switch ( currentPlayer.direction) {
+                for (Player player: players) {
+                    if (name.equals(player.characterName)){
+                switch ( player.direction) {
                     case "up":
-                        currentPlayer.direction = "left";
+                    player.direction = "left";
                         break;
                     case "down":
-                        currentPlayer.direction = "right";
+                    player.direction = "right";
                         break;
                     case "left":
-                        currentPlayer.direction = "down";
+                    player.direction = "down";
                         break;
                     case "right":
-                        currentPlayer.direction = "up";
+                    player.direction = "up";
                         break;
-                }
-            }
-
-
-            
+                }}
+            }}
 
 
             // System.err.println(response);
@@ -273,6 +298,7 @@ public class GamePanel extends JPanel implements Runnable {
         int yCartesian = 400 - ySwing;
 
         // Draw a point at the converted coordinates
+        
         g.fillOval(xSwing - 4, ySwing - 4, 8, 8);
         g.drawString("Swing: (" + xSwing + ", " + ySwing + ")", xSwing + 10, ySwing);
         g.drawString("Cartesian: (" + xCartesian + ", " + yCartesian + ")", xSwing + 10, ySwing + 20);
@@ -300,10 +326,27 @@ public class GamePanel extends JPanel implements Runnable {
                 player.draw(g2);
             }
         }
+
+        if (obstacles != null) {
+            for (int [] array: obstacles) {
+                // minus 5 because of it bottom left as obstacle but should be topleft on swing
+                drawSquare(g2, array[0] - 5, array[1] - 5);
+            }
+        }
         
 
         g2.dispose();
     }
+
+    public void drawSquare(Graphics2D g2, int obstX, int obstY) {
+            BufferedImage image;
+            try {
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../player/skeletonlord_down_1.png")));
+                g2.drawImage(image, obstX, obstY, tileSize, tileSize, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     
 }

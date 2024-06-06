@@ -91,9 +91,9 @@ public class AbstractWorld implements IWorld {
             }else if(Direction.EAST.equals(this.currentDirection)){
                 newX = newX + nrSteps;
             }else  if(Direction.SOUTH.equals(this.currentDirection)){
-                newY = newY + nrSteps;
+                newY = newY - nrSteps;
             }else if(Direction.WEST.equals(this.currentDirection)){
-                newX = newX + nrSteps;
+                newX = newX - nrSteps;
             }
         }
             

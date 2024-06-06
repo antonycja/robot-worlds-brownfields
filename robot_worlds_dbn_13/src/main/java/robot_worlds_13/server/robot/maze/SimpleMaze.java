@@ -14,6 +14,7 @@ public class SimpleMaze extends AbstractMaze {
     public SimpleMaze (){
         this.obstacles = new ArrayList<>();
         obstacles.add(new SquareObstacle(1,1));
+        obstacles.add(new SquareObstacle(5, 5));
     }
 
     @Override

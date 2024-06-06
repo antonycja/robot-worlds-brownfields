@@ -186,6 +186,14 @@ public class ClientHandler implements Runnable {
             state.clear();
             sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 
+            List<Obstacle> obstacles = world.getObstacles();
+            data.clear();
+            data.put("message", "OBSTACLES");
+            state.clear();
+            state.put("obstacles", obstacles);
+            System.out.println(obstacles);
+            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+
             // starting position
             data.clear();
             data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
