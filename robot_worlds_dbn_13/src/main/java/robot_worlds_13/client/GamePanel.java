@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
@@ -30,6 +31,7 @@ import robot_worlds_13.client.Main;
 import robot_worlds_13.server.robot.Direction;
 import robot_worlds_13.server.robot.Position;
 import robot_worlds_13.server.robot.world.*;
+import robot_worlds_13.server.robot.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -43,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int screenWidth = tileSize * maxScreenCol; // 768 pixels
     final int screenHeight = tileSize * maxScreenRow; // 576 pixels
     public ArrayList<Player> players = new ArrayList<>();
+    List<Player> bullets = new ArrayList<>();
 
     int FPS = 60;
 
@@ -126,9 +129,9 @@ public class GamePanel extends JPanel implements Runnable {
 
             // if response is launch create robot
             //     add it to list of robots
-            String name = (String) response.get("name");
-            int startX = (int) Math.round(( (double) ((ArrayList<Double>) response.get("position")).get(0)));
-            int startY = (int) Math.round(( (double) ((ArrayList<Double>) response.get("position")).get(1)));
+            String name = (response.get("name")) != null ? (String) response.get("name") : "name";
+            int startX = (response.get("position")) != null ? (int) Math.round(( (double) ((ArrayList<Double>) response.get("position")).get(0))) : 0;
+            int startY = (response.get("position")) != null ? (int) Math.round(( (double) ((ArrayList<Double>) response.get("position")).get(1))): 0;
 
             if (((String) response.get("message")).equalsIgnoreCase("LAUNCH")) {
                 // Position startingPosition = new Position(, playerSpeed)
@@ -136,9 +139,35 @@ public class GamePanel extends JPanel implements Runnable {
                 players.add(player);
             }
 
+            if (((String) response.get("message")).equalsIgnoreCase("OTHERCHARACTERS")) {
+                
+                Map<String, ArrayList<Object>> robotMap = ((Map<String, ArrayList<Object>>) response.get("robots"));
+                System.out.println("found robot map !!!");
+                for (Map.Entry<String, ArrayList<Object>> entry: robotMap.entrySet()) {
+                    String robotName = entry.getKey();
+                    ArrayList<Object> list = entry.getValue();
+                    Map positionMap = (Map) list.get(0); // This cast is safe because list.get(0) returns a LinkedTreeMap
+                    int x = ((Number) positionMap.get("x")).intValue(); // Cast to Number first to avoid ClassCastException
+                    int y = ((Number) positionMap.get("y")).intValue();
+
+                    String direction = (String) list.get(1);
+                    System.out.println(direction);
+                    Position thatRobotPosition = new Position(x, y);
+                    Player thatPlayer = new Player (this, keyH, thatRobotPosition, direction, robotName);
+                    players.add(thatPlayer);
+
+                }
+                // Player player = new Player(this, keyH, new Position(startX, startY), name);
+                // players.add(player);
+            }
+
             if (((String) response.get("message")).equalsIgnoreCase("FIRE")) {
                 // Position startingPosition = new Position(, playerSpeed)
-                Player player = new Player(this, keyH, new Position(startX, startY), name);
+                int previousX = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(0)));
+                int previousY = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(1)));
+                Player bullet = new Player(this, keyH, new Position(startX, startY), name);
+                bullet.setDestination(new Position(previousX, previousY)); // Set where the bullet should stop
+                bullets.add(bullet);
                 
             }
 
@@ -277,6 +306,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        Iterator<Player> it = bullets.iterator();
+        while (it.hasNext()) {
+            Player bullet = it.next();
+            if (bullet.hasReachedDestination()) {
+                it.remove(); // Remove the bullet if it has reached its destination
+            } else {
+                bullet.update(); // Update bullet's position
+            }
+        }
+        
         if (players == null) {
             return;
         }
@@ -291,7 +330,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
 
         // Draw Cartesian axes
-        g.drawLine(0, (height / 2), height, (width / 2)); // Horizontal line (x-axis)
+        g.drawLine(0, (height / 2), width, (height / 2)); // Horizontal line (x-axis)
         g.drawLine((width / 2), 0, (width / 2), height); // Vertical line (y-axis)
 
         Graphics2D g2 = (Graphics2D) g;

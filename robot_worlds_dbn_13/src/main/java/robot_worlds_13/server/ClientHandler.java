@@ -10,6 +10,8 @@ import java.util.Scanner;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import entity.Player;
+
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
@@ -38,7 +40,8 @@ public class ClientHandler implements Runnable {
     private static Gson gson = new Gson();
 
     // loaded variables
-    AbstractWorld world;
+    public AbstractWorld world;
+    public Server connectedServer;
 
     // robot variables
     String name;
@@ -48,9 +51,11 @@ public class ClientHandler implements Runnable {
         this.world = new TextWorld(new SimpleMaze());
     }
 
-    public ClientHandler(Socket clientSocket, AbstractWorld worldChosen) {
+    public ClientHandler(Socket clientSocket, AbstractWorld worldChosen, Server currentConnectedServer) {
         this.clientSocket = clientSocket;
         this.world = worldChosen;
+        this.connectedServer = currentConnectedServer;
+
     }
 
     @Override
@@ -156,6 +161,31 @@ public class ClientHandler implements Runnable {
             // }
 
             // load robots bulletDistance, shields, shots
+            
+            //
+            Map <String, ArrayList<Object>> robotMap = connectedServer.getNamesAndPositionsOnly();
+            
+            Map <String, ArrayList<Object>> currentRobotMap = new HashMap<>();
+            
+            for (Map.Entry<String, ArrayList<Object>> entry: robotMap.entrySet()) {
+                    String robotName = entry.getKey();
+                    ArrayList<Object> list = entry.getValue();
+                    ArrayList<Object> states = new ArrayList<>();
+                    
+                    Position thatRobotPosition = (Position) list.get(0);
+                    IWorld.Direction thatRobotDirection = (IWorld.Direction) list.get(1);
+                    states.add(thatRobotPosition);
+                    states.add(thatRobotDirection);
+                    currentRobotMap.put(robotName, states);
+
+                }
+
+            System.out.println();
+            data.clear();
+            data.put("message", "OTHERCHARACTERS");
+            state.clear();
+            state.put("robots", currentRobotMap);
+            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             // make the robot itself
             this.name = potentialRobotName;
@@ -164,14 +194,21 @@ public class ClientHandler implements Runnable {
             ArrayList<Object> currentRobotState = new ArrayList<>();
             currentRobotState.add(robot.getCurrentPosition());
             currentRobotState.add(robot.getCurrentDirection());
+
+            world.serverObject.nameAndPositionMap.put(name, currentRobotState);
             currentRobotState.add(robot);
+
             world.serverObject.nameRobotMap.put(name, currentRobotState);
+
+            
 
             // send hello message
             data.clear();
             data.put("message", "Hello Kiddo!\n");
             state.clear();
             sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+
+            
 
             // Obstacles
             // world.showObstacles();  // will need to now return obstacles, and flush them to user

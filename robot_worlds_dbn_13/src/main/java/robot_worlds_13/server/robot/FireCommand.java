@@ -65,6 +65,7 @@ public class FireCommand extends Command {
     data.clear();
     data.put("message", "FIRE");
     state.clear();
+    state.put("name", "fireRobot");
     state.put("previousPosition", new int[] {startX, startY});
     state.put("position", new int[] {affectedRobot.getPosition().getX(), affectedRobot.getPosition().getX()});
     Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));

@@ -77,6 +77,11 @@ public class GUIProtocol {
                         Object direction = (Object) innerMap.get("direction");
                         commandMap.put("direction", direction);
                     }
+
+                    if (innerMap.get("robots") != null) {
+                        Object robots = (Object) innerMap.get("robots");
+                        commandMap.put("robots", robots);
+                    }
                 }
             }
 

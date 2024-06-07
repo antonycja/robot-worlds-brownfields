@@ -34,6 +34,7 @@ public class Server {
     public ArrayList<String> robotNames = new ArrayList<>();
     public ArrayList<Object> states = new ArrayList<>();
     public HashMap<String, ArrayList<Object>> nameRobotMap = new HashMap<>();
+    public HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
 
     // configured data
     //shields etc
@@ -85,7 +86,7 @@ public class Server {
                 clientConnections.add(clientSocket);
 
                 // Create a new thread for each client
-                ClientHandler clientHandler = new ClientHandler(clientSocket, world);
+                ClientHandler clientHandler = new ClientHandler(clientSocket, world, serverObject);
                 serverObject.clients.add(clientHandler);
                 Thread clientThread = new Thread(clientHandler);
                 clientThread.start();
@@ -126,5 +127,9 @@ public class Server {
             }
         }
     }
+
+public Map <String, ArrayList<Object>> getNamesAndPositionsOnly () {
+    return nameAndPositionMap;
+}
 
 }

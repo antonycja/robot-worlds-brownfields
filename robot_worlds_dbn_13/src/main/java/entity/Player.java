@@ -16,6 +16,9 @@ public class Player extends Entity {
     KeyHandler keyH;
     public String characterName;
 
+    private Position position;
+    private Position destination;
+
     public Player() {
 
     }
@@ -31,6 +34,19 @@ public class Player extends Entity {
         setDefaultValues();
         getPlayerImage();
         direction = "up";
+    }
+
+    public Player(GamePanel gp, KeyHandler keyH, Position startPosition, String directionGiven, String givenName) {
+        this.gp = gp;
+        this.keyH = keyH;
+        this.characterName = givenName;
+        // x = 200;
+        // y = 400;
+        x = (gp.width / 2) + startPosition.getX() - (gp.tileSize / 2);
+        y = (gp.height / 2) - startPosition.getY() - (gp.tileSize / 2);
+        setDefaultValues();
+        getPlayerImage();
+        direction = setDirection(directionGiven);
     }
 
     public void setDefaultValues() {
@@ -78,6 +94,12 @@ public class Player extends Entity {
             }
             spriteCounter = 0;
         }
+
+        // Implement smooth movement towards destination
+        int dx = Integer.compare(destination.getX(), position.getX());
+        int dy = Integer.compare(destination.getY(), position.getY());
+        position.setX(position.getX() + dx);
+        position.setY(position.getY() + dy);
     }
 
     public void update(Direction headingDirection) {
@@ -152,6 +174,30 @@ public class Player extends Entity {
         }
             g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
         }
+
+    public String setDirection (String directionGiven) {
+        switch (directionGiven) {
+            case "NORTH":
+                return "up";
+            case "EAST":
+                return "left";
+            case "WEST":
+                return "right";
+            case "SOUTH":
+                return "down";
+            default:
+                return "up";
+        }
+    }
+
+    public void setDestination(Position destination) {
+        this.destination = destination;
+    }
+
+
+    public boolean hasReachedDestination() {
+        return position.equals(destination);
+    }
 
         
     }
