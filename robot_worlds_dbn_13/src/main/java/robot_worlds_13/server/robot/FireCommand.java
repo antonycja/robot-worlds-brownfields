@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import robot_worlds_13.server.Server;
 import robot_worlds_13.server.ServerProtocol;
+import robot_worlds_13.server.robot.world.IWorld;
 
 public class FireCommand extends Command {
     
@@ -24,7 +26,7 @@ public class FireCommand extends Command {
 
 
     // bullet distance
-    int robotBulletDistance = target.getBulletDistance(); // change later to private varable
+    int robotBulletDistance = target.getBulletDistance();
 
     // this check for a respone of either hit or miss
     
@@ -44,6 +46,30 @@ public class FireCommand extends Command {
         state = target.getRobotState();
         target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
     }
+
+    int startX = target.position.getX();
+    int startY = target.position.getY();
+
+    int endX = startX;
+    int endY = startY;
+    if (IWorld.Direction.NORTH.equals(target.getCurrentDirection())) {
+        endY = startY + robotBulletDistance;
+    } else if (IWorld.Direction.SOUTH.equals(target.getCurrentDirection())) {
+        endY = startY - robotBulletDistance;
+    } else if (IWorld.Direction.WEST.equals(target.getCurrentDirection())) {
+        endX = startX - robotBulletDistance;
+    } else if (IWorld.Direction.EAST.equals(target.getCurrentDirection())) {
+        endX = startX + robotBulletDistance;
+    }
+
+    data.clear();
+    data.put("message", "FIRE");
+    state.clear();
+    ArrayList<int []> positions = new ArrayList<>();
+    positions.add(new int[] {startX, startY});
+    positions.add(new int[] {endX, endY});
+    state.put("state", affectedRobot);
+    Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
     return true;
     }

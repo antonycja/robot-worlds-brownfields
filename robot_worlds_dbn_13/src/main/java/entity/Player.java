@@ -26,8 +26,8 @@ public class Player extends Entity {
         this.characterName = givenName;
         // x = 200;
         // y = 400;
-        x = (gp.width / 2) + startPosition.getX() - 4;
-        y = (gp.height / 2) - startPosition.getY() - 4;
+        x = (gp.width / 2) + startPosition.getX() - (gp.tileSize / 2);
+        y = (gp.height / 2) - startPosition.getY() - (gp.tileSize / 2);
         setDefaultValues();
         getPlayerImage();
         direction = "up";

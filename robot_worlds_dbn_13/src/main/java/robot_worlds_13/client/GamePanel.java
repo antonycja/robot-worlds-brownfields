@@ -34,8 +34,8 @@ import robot_worlds_13.server.robot.world.*;
 public class GamePanel extends JPanel implements Runnable {
 
     // Screen settings
-    final int originalTitleSize = 10; // 16x16 tile
-    final int scale = 3;
+    final int originalTitleSize = 16; // 16x16 tile
+    final int scale = 2;
 
     public final int tileSize = originalTitleSize * scale;  // 48x48 tile
     final int maxScreenCol = 16;
@@ -63,11 +63,12 @@ public class GamePanel extends JPanel implements Runnable {
     Gson gson = new Gson();
     ArrayList<int []> obstacles = new ArrayList<>();
 
-    public int height = 800;
-    public int width = 400;
+    public int height;
+    public int width;
 
-    public GamePanel() {
-        
+    public GamePanel(int widthGiven, int heightGiven) {
+        this.width = widthGiven;
+        this.height = heightGiven;
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
@@ -76,6 +77,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void startGameThread() {
+        
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -114,8 +116,9 @@ public class GamePanel extends JPanel implements Runnable {
             if (response.containsKey("message") && response.get("message").equals("OBSTACLES")) {
                 List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("obstacles");
                 for (Map<String, Object> obstacle : obstaclesList) {
+                    int size = 20;
                     int x = (width/2) + ((int)((double) obstacle.get("x")));
-                    int y = (height/2) + ((int)((double) obstacle.get("y")));
+                    int y = (height/2) - ((int)((double) obstacle.get("y"))) - tileSize;
                     obstacles.add(new int[] {x, y});
                 }
                 continue;
@@ -133,7 +136,13 @@ public class GamePanel extends JPanel implements Runnable {
                 players.add(player);
             }
 
-            
+            if (((String) response.get("message")).equalsIgnoreCase("FIRE")) {
+                // Position startingPosition = new Position(, playerSpeed)
+                Player player = new Player(this, keyH, new Position(startX, startY), name);
+                
+            }
+
+
 
 
             // if response move
@@ -243,10 +252,6 @@ public class GamePanel extends JPanel implements Runnable {
                 }}
             }}
 
-
-            // System.err.println(response);
-            
-
             long currentTime = System.nanoTime();
 
             // 1 UPDATE: update information such as character positions
@@ -286,39 +291,9 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
 
         // Draw Cartesian axes
-        g.drawLine(0, 400, 400, 400); // Horizontal line (x-axis)
-        g.drawLine(200, 0, 200, 800); // Vertical line (y-axis)
+        g.drawLine(0, (height / 2), height, (width / 2)); // Horizontal line (x-axis)
+        g.drawLine((width / 2), 0, (width / 2), height); // Vertical line (y-axis)
 
-        // Swing point (example: Swing coordinate (300, 300))
-        int xSwing = 100;
-        int ySwing = 100;
-
-        // Convert to Cartesian coordinates
-        int xCartesian = xSwing - 200;
-        int yCartesian = 400 - ySwing;
-
-        // Draw a point at the converted coordinates
-        
-        g.fillOval(xSwing - 4, ySwing - 4, 8, 8);
-        g.drawString("Swing: (" + xSwing + ", " + ySwing + ")", xSwing + 10, ySwing);
-        g.drawString("Cartesian: (" + xCartesian + ", " + yCartesian + ")", xSwing + 10, ySwing + 20);
-
-        // Draw borders for the play area
-        int leftX = 0;   // Corresponds to Cartesian -200
-        int rightX = 400; // Corresponds to Cartesian +200
-        int topY = 0;    // Corresponds to Cartesian +400
-        int bottomY = 800; // Corresponds to Cartesian -400
-
-
-        // Top border (y=400, the middle line, minus 400 units upward)
-        g.drawLine(leftX, topY + 400, rightX, topY + 400);
-        // Bottom border (y=400, the middle line, plus 400 units downward)
-        g.drawLine(leftX, bottomY - 400, rightX, bottomY - 400);
-        // Left border
-        g.drawLine(leftX + 200, topY, leftX + 200, bottomY);
-        // Right border
-        g.drawLine(rightX - 200, topY, rightX - 200, bottomY);
-        
         Graphics2D g2 = (Graphics2D) g;
         
         if (players != null) {
@@ -329,11 +304,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         if (obstacles != null) {
             for (int [] array: obstacles) {
-                // minus 5 because of it bottom left as obstacle but should be topleft on swing
-                drawSquare(g2, array[0] - 5, array[1] - 5);
+                drawSquare(g2, array[0], array[1]);
             }
         }
-        
 
         g2.dispose();
     }
@@ -341,7 +314,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void drawSquare(Graphics2D g2, int obstX, int obstY) {
             BufferedImage image;
             try {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../player/skeletonlord_down_1.png")));
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../player/New _obstacle.png")));
                 g2.drawImage(image, obstX, obstY, tileSize, tileSize, null);
             } catch (IOException e) {
                 e.printStackTrace();

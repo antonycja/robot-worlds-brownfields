@@ -13,8 +13,8 @@ import robot_worlds_13.server.robot.maze.*;
 import robot_worlds_13.server.robot.world.*;
 
 public class Robot {
-    private final Position TOP_LEFT = new Position(-100,200);
-    private final Position BOTTOM_RIGHT = new Position(100,-200);
+    private final Position TOP_LEFT;
+    private final Position BOTTOM_RIGHT;
 
     public static final Position CENTRE = new Position(0,0);
 
@@ -36,6 +36,8 @@ public class Robot {
     private String responseGUIToClient = "{}";
 
     public Robot(String name) {
+        TOP_LEFT = new Position(-100,200);
+        BOTTOM_RIGHT = new Position(100, -200);
         this.name = name;
         this.status = "NORMAL";
         this.position = CENTRE;
@@ -46,6 +48,8 @@ public class Robot {
     }
 
     public Robot(String name, AbstractWorld worldObject) {
+        this.TOP_LEFT = worldObject.TOP_LEFT;
+        this.BOTTOM_RIGHT = worldObject.BOTTOM_RIGHT;
         this.name = name;
         this.status = "NORMAL";
         this.position = CENTRE;
@@ -57,6 +61,8 @@ public class Robot {
     }
 
     public Robot(String name, AbstractWorld worldObject, Position startingPosition) {
+        this.TOP_LEFT = worldObject.TOP_LEFT;
+        this.BOTTOM_RIGHT = worldObject.BOTTOM_RIGHT;
         this.name = name;
         this.status = "NORMAL";
         this.position = startingPosition;
@@ -71,6 +77,8 @@ public class Robot {
     }
 
     public Robot(String name, AbstractWorld worldObject, Position startingPosition, Map<String, Integer> robotConfigurable) {
+        this.TOP_LEFT = worldObject.TOP_LEFT;
+        this.BOTTOM_RIGHT = worldObject.BOTTOM_RIGHT;
         this.name = name;
         this.status = "NORMAL";
         this.position = startingPosition;

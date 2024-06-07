@@ -15,8 +15,8 @@ import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.*;
 
 public class AbstractWorld implements IWorld {
-    private final Position TOP_LEFT = new Position(-100,200);
-    private final Position BOTTOM_RIGHT = new Position(100,-200);
+    public final Position TOP_LEFT;
+    public final Position BOTTOM_RIGHT;
     public static final Position CENTRE = IWorld.CENTRE;
     
 
@@ -37,6 +37,8 @@ public class AbstractWorld implements IWorld {
     public int ammoReloadTime;
     public int shieldRepairTime;
     public int maximumShieldStrength;
+    public int width;
+    public int height;
 
     public AbstractWorld (Maze mazeChosen, Server givenServerObject, Map<String, Integer> mapConfigurables) {
         this.obstacles = mazeChosen.getObstacles();
@@ -46,6 +48,12 @@ public class AbstractWorld implements IWorld {
         this.serverObject = givenServerObject;
 
         // configured from server
+        this.width = (mapConfigurables.get("width") != null) ? mapConfigurables.get("width") : 400;
+        this.height = (mapConfigurables.get("height") != null) ? mapConfigurables.get("height") : 800;
+        
+        TOP_LEFT = new Position(-(width / 2),(height / 2));
+        BOTTOM_RIGHT = new Position((width / 2),-(height / 2));
+        
         this.visibility = (mapConfigurables.get("visibility") != null) ? mapConfigurables.get("visibility") : 10;
         this.ammoReloadTime = (mapConfigurables.get("reload") != null) ? mapConfigurables.get("reload") : 5;
         this.shieldRepairTime = (mapConfigurables.get("repair") != null) ? mapConfigurables.get("repair") : 5 ;
@@ -53,6 +61,9 @@ public class AbstractWorld implements IWorld {
     }
 
     public AbstractWorld (Maze mazeChosen) {
+
+        TOP_LEFT = new Position(-100,200);
+        BOTTOM_RIGHT = new Position(100, -200);
         
         this.obstacles = mazeChosen.getObstacles();
         this.maze = mazeChosen;
@@ -246,8 +257,8 @@ public class AbstractWorld implements IWorld {
                 int xBottomLeft = obstacle.getBottomLeftX();
                 int yBottomLeft = obstacle.getBottomLeftY();
 
-                int xTopRight = obstacle.getBottomLeftX() +4;
-                int yTopRight = obstacle.getBottomLeftY() +4;
+                int xTopRight = obstacle.getBottomLeftX() + obstacle.getSize();
+                int yTopRight = obstacle.getBottomLeftY() + obstacle.getSize();
 
                 //System.out.printf("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight);
                 message.add(String.format("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight));

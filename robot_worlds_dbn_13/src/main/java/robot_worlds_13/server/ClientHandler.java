@@ -130,10 +130,16 @@ public class ClientHandler implements Runnable {
 
 
                 if (requestedCommand.equalsIgnoreCase("launch") && !world.serverObject.robotNames.contains(potentialRobotName)) {
+                    
                     data.clear();
-                    data.put("message", "Successfully launched\n");
-                    state.clear();
+                    data.put("message", "Successfully launched " + "width " + world.width + " height " + world.height);
                     sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+                    try {
+                        Thread.sleep(3000);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                    
                     break;
                 }
             }
@@ -191,7 +197,6 @@ public class ClientHandler implements Runnable {
             data.put("message", "OBSTACLES");
             state.clear();
             state.put("obstacles", obstacles);
-            System.out.println(obstacles);
             Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             // starting position

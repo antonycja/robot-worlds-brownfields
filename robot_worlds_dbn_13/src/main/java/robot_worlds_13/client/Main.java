@@ -4,13 +4,13 @@ import javax.swing.*;
 
 public class Main extends JFrame {
 
-    public Main() {
+    public Main(int widthGiven, int heightGiven) {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Robot World");
 
-        GamePanel gamePanel = new GamePanel();
+        GamePanel gamePanel = new GamePanel(widthGiven, heightGiven);
         window.add(gamePanel);
         window.pack(); // Ensure the window is sized correctly based on its content
 
@@ -30,7 +30,7 @@ public class Main extends JFrame {
         super.setVisible(visible);
     }
 
-    public static void main(String[] args) {
-        new Main();
-    }
+    // public static void main(String[] args) {
+    //     new Main();
+    // }
 }

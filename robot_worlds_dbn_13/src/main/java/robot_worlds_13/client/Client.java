@@ -103,20 +103,27 @@ public class Client {
             String response;
             String potentialRobotName = "";
 
-            Main main = new Main();
+            
             // main.showRobot(robotName); // Pass the robot name to the showRobot method
            
 
             while (true) {
                 // try to launch robot
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
-                System.err.println(response);
-                
+
                 if (response.contains("Successfully launched")) {
                     robotName = potentialRobotName;
-                    main.setVisible(true); // Show the GUI screen
+                    System.out.println("resoltion found");
+                    int width = Integer.parseInt(response.split(" ")[3]);
+                    int height = Integer.parseInt(response.split(" ")[5]);
+                    Main main = new Main(width, height);
+                    
+                    main.setVisible(true);
+
                     break;
                 }
+
+                System.err.println(response);
 
                 if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || 
                 response.contains("Connected successfully to") || response.contains("Too many of you in this world")) {
@@ -186,7 +193,7 @@ public class Client {
             dout.close();
         }
         catch (Exception e) {
-            // System.err.println(e);
+            System.err.println(e);
             try {
                 
                 dout.writeUTF("off");
