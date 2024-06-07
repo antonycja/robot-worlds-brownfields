@@ -44,7 +44,17 @@ public class Robot {
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = new TextWorld(new SimpleMaze());
         this.reloadTime = 5;
+    }
 
+    public Robot(String name, Position startPosition) {
+        TOP_LEFT = new Position(-100,200);
+        BOTTOM_RIGHT = new Position(100, -200);
+        this.name = name;
+        this.status = "NORMAL";
+        this.position = startPosition;
+        this.currentDirection = IWorld.Direction.NORTH;
+        this.worldData = new TextWorld(new SimpleMaze());
+        this.reloadTime = 5;
     }
 
     public Robot(String name, AbstractWorld worldObject) {

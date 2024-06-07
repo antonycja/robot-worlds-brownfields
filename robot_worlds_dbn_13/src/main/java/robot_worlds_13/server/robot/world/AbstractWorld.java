@@ -606,7 +606,7 @@ public class AbstractWorld implements IWorld {
             for(Obstacle obstacle: obstacles){
                 if(obstacle.blocksPosition(currentBulletPosition)){
                     // has hit an obstacle, its immedietly a miss
-                    return new Robot("NonValid", null);
+                    return new Robot("NonValid", new Position(currentBulletPosition.getX(), currentBulletPosition.getY()));
                 }
             }
 
@@ -627,7 +627,7 @@ public class AbstractWorld implements IWorld {
                 }
             }
         }
-        return new Robot("NonValid", null);
+        return new Robot("NonValid", new Position(endPosition.getX(), endPosition.getY()));
     }
 
     private Position getRandomPosition (){

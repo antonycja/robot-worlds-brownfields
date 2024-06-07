@@ -50,25 +50,23 @@ public class FireCommand extends Command {
     int startX = target.position.getX();
     int startY = target.position.getY();
 
-    int endX = startX;
-    int endY = startY;
-    if (IWorld.Direction.NORTH.equals(target.getCurrentDirection())) {
-        endY = startY + robotBulletDistance;
-    } else if (IWorld.Direction.SOUTH.equals(target.getCurrentDirection())) {
-        endY = startY - robotBulletDistance;
-    } else if (IWorld.Direction.WEST.equals(target.getCurrentDirection())) {
-        endX = startX - robotBulletDistance;
-    } else if (IWorld.Direction.EAST.equals(target.getCurrentDirection())) {
-        endX = startX + robotBulletDistance;
-    }
+    // int endX = startX;
+    // int endY = startY;
+    // if (IWorld.Direction.NORTH.equals(target.getCurrentDirection())) {
+    //     endY = startY + robotBulletDistance;
+    // } else if (IWorld.Direction.SOUTH.equals(target.getCurrentDirection())) {
+    //     endY = startY - robotBulletDistance;
+    // } else if (IWorld.Direction.WEST.equals(target.getCurrentDirection())) {
+    //     endX = startX - robotBulletDistance;
+    // } else if (IWorld.Direction.EAST.equals(target.getCurrentDirection())) {
+    //     endX = startX + robotBulletDistance;
+    // }
 
     data.clear();
     data.put("message", "FIRE");
     state.clear();
-    ArrayList<int []> positions = new ArrayList<>();
-    positions.add(new int[] {startX, startY});
-    positions.add(new int[] {endX, endY});
-    state.put("state", affectedRobot);
+    state.put("previousPosition", new int[] {startX, startY});
+    state.put("position", new int[] {affectedRobot.getPosition().getX(), affectedRobot.getPosition().getX()});
     Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
     return true;
