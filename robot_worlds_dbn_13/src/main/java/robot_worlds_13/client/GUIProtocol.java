@@ -58,15 +58,25 @@ public class GUIProtocol {
                         commandMap.put("obstacles", obstacles);
                         return commandMap;
                     }
+                    if (innerMap.get("name") != null) {
+                        Object name = (Object) innerMap.get("name");
+                        commandMap.put("name", name);
+                    }
+
+                    if (innerMap.get("previousPosition") != null) {
+                        Object previousPosition = (Object) innerMap.get("previousPosition");
+                        commandMap.put("previousPosition", previousPosition);
+                    }
                     
-                    Object name = (Object) innerMap.get("name");
-                    commandMap.put("name", name);
-                    Object previousPosition = (Object) innerMap.get("previousPosition");
-                    commandMap.put("previousPosition", previousPosition);
-                    Object position = (Object) innerMap.get("position");
-                    commandMap.put("position", position);
-                    Object direction = (Object) innerMap.get("direction");
-                    commandMap.put("direction", direction);
+                    if (innerMap.get("position") != null) {
+                        Object position = (Object) innerMap.get("position");
+                        commandMap.put("position", position);
+                    }
+                    
+                    if (innerMap.get("direction") != null) {
+                        Object direction = (Object) innerMap.get("direction");
+                        commandMap.put("direction", direction);
+                    }
                 }
             }
 
