@@ -54,6 +54,14 @@ public abstract class Command {
             case "forward":
                 if (!replayFlag) {commandList.add(instruction);}
                 return new ForwardCommand((String) arguments.get(0));
+            case "[A":
+                return new ForwardCommand("10");
+            case "[D":
+                return new LeftCommand();
+            case "[C":
+                return new RightCommand();
+            case "[B":
+                return new BackCommand("10");
 
             // ADDED
             case "left":

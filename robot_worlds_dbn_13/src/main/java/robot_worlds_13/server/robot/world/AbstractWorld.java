@@ -15,8 +15,8 @@ import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.*;
 
 public class AbstractWorld implements IWorld {
-    private final Position TOP_LEFT = new Position(-100,200);
-    private final Position BOTTOM_RIGHT = new Position(100,-200);
+    public final Position TOP_LEFT;
+    public final Position BOTTOM_RIGHT;
     public static final Position CENTRE = IWorld.CENTRE;
     
 
@@ -31,21 +31,31 @@ public class AbstractWorld implements IWorld {
     private  Direction currentDirection;
     private Position position;
     private String curentRobotName;
+    private int robotHitBoxFromCenter;
     
     // configure
     public int visibility;
     public int ammoReloadTime;
     public int shieldRepairTime;
     public int maximumShieldStrength;
+    public int width;
+    public int height;
 
     public AbstractWorld (Maze mazeChosen, Server givenServerObject, Map<String, Integer> mapConfigurables) {
         this.obstacles = mazeChosen.getObstacles();
+        this.robotHitBoxFromCenter = obstacles.get(0).getSize() / 2;
         this.maze = mazeChosen;
         this.position = IWorld.CENTRE;
         this.currentDirection = Direction.NORTH;
         this.serverObject = givenServerObject;
 
         // configured from server
+        this.width = (mapConfigurables.get("width") != null) ? mapConfigurables.get("width") : 400;
+        this.height = (mapConfigurables.get("height") != null) ? mapConfigurables.get("height") : 800;
+        
+        TOP_LEFT = new Position(-(width / 2),(height / 2));
+        BOTTOM_RIGHT = new Position((width / 2),-(height / 2));
+        
         this.visibility = (mapConfigurables.get("visibility") != null) ? mapConfigurables.get("visibility") : 10;
         this.ammoReloadTime = (mapConfigurables.get("reload") != null) ? mapConfigurables.get("reload") : 5;
         this.shieldRepairTime = (mapConfigurables.get("repair") != null) ? mapConfigurables.get("repair") : 5 ;
@@ -53,8 +63,12 @@ public class AbstractWorld implements IWorld {
     }
 
     public AbstractWorld (Maze mazeChosen) {
+
+        TOP_LEFT = new Position(-100,200);
+        BOTTOM_RIGHT = new Position(100, -200);
         
         this.obstacles = mazeChosen.getObstacles();
+        this.robotHitBoxFromCenter = obstacles.get(0).getSize() / 2;
         this.maze = mazeChosen;
         this.position = IWorld.CENTRE;
         this.currentDirection = Direction.NORTH;
@@ -65,7 +79,7 @@ public class AbstractWorld implements IWorld {
         this. maximumShieldStrength = 5;
     }
 
-    public Maze getMaze(){
+    public Maze getMaze() {
         return this.maze;
     }
 
@@ -91,9 +105,9 @@ public class AbstractWorld implements IWorld {
             }else if(Direction.EAST.equals(this.currentDirection)){
                 newX = newX + nrSteps;
             }else  if(Direction.SOUTH.equals(this.currentDirection)){
-                newY = newY + nrSteps;
+                newY = newY - nrSteps;
             }else if(Direction.WEST.equals(this.currentDirection)){
-                newX = newX + nrSteps;
+                newX = newX - nrSteps;
             }
         }
             
@@ -175,8 +189,8 @@ public class AbstractWorld implements IWorld {
         return this.currentDirection;
     }
 
-    @Override
-    public boolean isNewPositionAllowed(Position position) {
+    //@Override
+    public boolean isNewPositionAllowed1(Position position) {
         for (Obstacle obstacle: obstacles){
             if(obstacle.blocksPosition(position)){
                 return false;
@@ -184,8 +198,34 @@ public class AbstractWorld implements IWorld {
         }
         return true;
     }
+    @Override
+    public boolean isNewPositionAllowed(Position position) {
+        int robotSize = robotHitBoxFromCenter; // Size of the robot's outer perimeter
 
-    public boolean isPositionNotOccupiedByRobot(Position position) {
+        for (Obstacle obstacle: obstacles){
+            if(obstacle.blocksPosition(position)){
+                return false;
+            }
+        }
+    
+        // Calculate the corners of the robot's outer perimeter
+        Position topLeft = new Position(position.getX() - robotSize / 2, position.getY() + robotSize / 2);
+        Position bottomRight = new Position(position.getX() + robotSize / 2, position.getY() - robotSize / 2);
+        
+        // Check each corner of the robot's perimeter against obstacles
+        for (Obstacle obstacle : obstacles) {
+            if (obstacle.blocksPosition(topLeft) || 
+                obstacle.blocksPosition(bottomRight) ||
+                obstacle.blocksPosition(new Position(topLeft.getX(), bottomRight.getY())) ||
+                obstacle.blocksPosition(new Position(bottomRight.getX(), topLeft.getY()))) {
+                return false; // Collision detected
+            }
+        }
+    
+        return true; // No collision detected
+    }
+
+    public boolean isPositionNotOccupiedByRobot1(Position position) {
         for (String name: serverObject.nameRobotMap.keySet()) {
             if (name.equals(this.curentRobotName)){
                 continue;
@@ -198,6 +238,57 @@ public class AbstractWorld implements IWorld {
             }
         }
         return true;
+    }
+
+    public boolean isPositionNotOccupiedByRobot(Position position) {
+        int currentRobotX = position.getX();
+        int currentRobotY = position.getY();
+        int currentRobotSize = robotHitBoxFromCenter; // Size of the current robot's hit box
+        
+        for (String name: serverObject.nameRobotMap.keySet()) {
+            if (name.equals(this.curentRobotName)){
+                continue;
+            }
+
+            ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
+            Position thatRobotsPosition = (Position) currentState.get(0);
+            if (thatRobotsPosition.equals(position)) {
+                return false;
+            }
+        }
+
+        // Calculate the corners of the current robot's hit box
+        Position currentRobotTopLeft = new Position(currentRobotX - currentRobotSize / 2, currentRobotY + currentRobotSize / 2);
+        Position currentRobotBottomRight = new Position(currentRobotX + currentRobotSize / 2, currentRobotY - currentRobotSize / 2);
+    
+        // Iterate through other robots to check for overlaps
+        for (String name : serverObject.nameRobotMap.keySet()) {
+            if (name.equals(this.curentRobotName)) {
+                continue;
+            }
+    
+            ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
+            Position otherRobotPosition = (Position) currentState.get(0);
+            int otherRobotSize = robotHitBoxFromCenter; // Size of other robot's hit box
+    
+            // Calculate the corners of the other robot's hit box
+            Position otherRobotTopLeft = new Position(otherRobotPosition.getX() - otherRobotSize / 2, otherRobotPosition.getY() + otherRobotSize / 2);
+            Position otherRobotBottomRight = new Position(otherRobotPosition.getX() + otherRobotSize / 2, otherRobotPosition.getY() - otherRobotSize / 2);
+    
+            // Check for overlap between hit boxes
+            if (doHitBoxesOverlap(currentRobotTopLeft, currentRobotBottomRight, otherRobotTopLeft, otherRobotBottomRight)) {
+                return false; // Position is occupied
+            }
+        }
+        return true; // Position is not occupied
+    }
+    
+    private boolean doHitBoxesOverlap(Position topLeft1, Position bottomRight1, Position topLeft2, Position bottomRight2) {
+        // Check if the hit boxes overlap in the x-axis and y-axis
+        return (topLeft1.getX() < bottomRight2.getX() &&
+                bottomRight1.getX() > topLeft2.getX() &&
+                topLeft1.getY() > bottomRight2.getY() &&
+                bottomRight1.getY() < topLeft2.getY());
     }
 
     public boolean isPathNotBlockedByRobot(Position start, Position end) {
@@ -246,8 +337,8 @@ public class AbstractWorld implements IWorld {
                 int xBottomLeft = obstacle.getBottomLeftX();
                 int yBottomLeft = obstacle.getBottomLeftY();
 
-                int xTopRight = obstacle.getBottomLeftX() +4;
-                int yTopRight = obstacle.getBottomLeftY() +4;
+                int xTopRight = obstacle.getBottomLeftX() + obstacle.getSize();
+                int yTopRight = obstacle.getBottomLeftY() + obstacle.getSize();
 
                 //System.out.printf("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight);
                 message.add(String.format("- At position %d,%d (to %d,%d)%n", xBottomLeft, yBottomLeft, xTopRight, yTopRight));
@@ -595,7 +686,7 @@ public class AbstractWorld implements IWorld {
             for(Obstacle obstacle: obstacles){
                 if(obstacle.blocksPosition(currentBulletPosition)){
                     // has hit an obstacle, its immedietly a miss
-                    return new Robot("NonValid", null);
+                    return new Robot("NonValid", new Position(currentBulletPosition.getX(), currentBulletPosition.getY()));
                 }
             }
 
@@ -616,27 +707,33 @@ public class AbstractWorld implements IWorld {
                 }
             }
         }
-        return new Robot("NonValid", null);
+        return new Robot("NonValid", new Position(endPosition.getX(), endPosition.getY()));
     }
 
-    private Position getRandomPosition (){
-        int maxY = 200;
-        int minY = -200;
-        int coordinateY = rand.nextInt((maxY - minY) + 1) + minY;
+    private Position getRandomPosition () {
+        int maxY = (height / 2);
+        int minY = -(height / 2);
+        int coordinateY = roundToMultiple(rand.nextInt((maxY - minY) + 1) + minY, 10);
 
-        int maxX = 100;
-        int minX = -100;
-        int coordinateX = rand.nextInt((maxX - minX) + 1) + minX;
+        int maxX = (width / 2);
+        int minX = -(width / 2);
+        int coordinateX = roundToMultiple(rand.nextInt((maxX - minX) + 1) + minX, 10);
 
         return new Position(coordinateX, coordinateY);
     }
 
+    private int roundToMultiple(int number, int multiple) {
+        return ((number + multiple / 2) / multiple) * multiple;
+    }
+
     private boolean isPositionOccupied (Position destinationPosition) {
-        if (isNewPositionAllowed(destinationPosition)) {
-            return false;
+        if (!isNewPositionAllowed(destinationPosition)) {
+            return true;
+        } else if (!isPositionNotOccupiedByRobot(destinationPosition)) {
+            return true;
         }
         else {
-            return true;
+            return false;
         }
     }
 

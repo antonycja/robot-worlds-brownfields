@@ -29,7 +29,7 @@ public class SquareObstacle implements Obstacle {
 
     @Override
     public int getSize() {
-        return 5;
+        return 40;
     }
 
     private void generateObstacle() {
@@ -51,7 +51,7 @@ public class SquareObstacle implements Obstacle {
         }
 
         for (Position obstacle : validObstacles) {
-            Position topRightObstacle = new Position(obstacle.getX() + getSize() - 1, obstacle.getY() + getSize() - 1);
+            Position topRightObstacle = new Position(obstacle.getX() + getSize(), obstacle.getY() + getSize());
 
             if (position.isInObstacle(obstacle, topRightObstacle)) {
                 return true;

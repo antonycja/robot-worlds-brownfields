@@ -6,6 +6,7 @@ package robot_worlds_13.client;
  */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,6 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.Binding;
+import org.jline.reader.Reference;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import org.jline.keymap.KeyMap;
+
 import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
@@ -93,15 +103,27 @@ public class Client {
             String response;
             String potentialRobotName = "";
 
+            
+            // main.showRobot(robotName); // Pass the robot name to the showRobot method
+            
+
             while (true) {
                 // try to launch robot
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
-                System.err.println(response);
-                
+
                 if (response.contains("Successfully launched")) {
                     robotName = potentialRobotName;
+                    System.out.println("resoltion found");
+                    int width = Integer.parseInt(response.split(" ")[3]);
+                    int height = Integer.parseInt(response.split(" ")[5]);
+                    Main main = new Main(width, height);
+                    
+                    main.setVisible(true);
+
                     break;
                 }
+
+                System.err.println(response);
 
                 if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || 
                 response.contains("Connected successfully to") || response.contains("Too many of you in this world")) {
@@ -123,10 +145,23 @@ public class Client {
                 }
             }
 
+            // Create a terminal
+            Terminal terminal = TerminalBuilder.builder().build();
+
+            // Create a LineReader
+            LineReader lineReader = LineReaderBuilder.builder().terminal(terminal).build();
+
             while (true) {
                 // get server messages
                 // String robotPosition = 
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
+
+                if (response.contains("GUI")) {
+                    if (response.contains("LAUNCH")) {
+                        
+                    }
+                    continue;
+                }
                 
                 // print message to this client
                 System.out.println(response);
@@ -143,6 +178,7 @@ public class Client {
                 if (response.startsWith("What")) {
                     // get imput
                     String command = line.nextLine();
+                    
 
                     // format input
                     Map<String, Object> formattedCommand = ClientProtocol.jsonRequestBuilder(command);
@@ -157,7 +193,7 @@ public class Client {
             dout.close();
         }
         catch (Exception e) {
-            // System.err.println(e);
+            System.err.println(e);
             try {
                 
                 dout.writeUTF("off");

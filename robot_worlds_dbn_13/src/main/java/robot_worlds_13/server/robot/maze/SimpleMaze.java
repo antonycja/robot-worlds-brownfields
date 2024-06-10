@@ -13,7 +13,13 @@ public class SimpleMaze extends AbstractMaze {
 
     public SimpleMaze (){
         this.obstacles = new ArrayList<>();
-        obstacles.add(new SquareObstacle(1,1));
+        for (int number=0; number!=10; number++)
+        obstacles.add(new SquareObstacle(0,0));
+        // obstacles.add(new SquareObstacle(20, 20));
+        // obstacles.add(new SquareObstacle(40, 40));
+        // obstacles.add(new SquareObstacle(-20, 40));
+        // obstacles.add(new SquareObstacle(-20, -20));
+        // obstacles.add(new SquareObstacle(-20, -40));
     }
 
     @Override
@@ -25,6 +31,8 @@ public class SimpleMaze extends AbstractMaze {
     public boolean blocksPath(Position a, Position b) {
         return false;
     }
+
+    
 
     
     
