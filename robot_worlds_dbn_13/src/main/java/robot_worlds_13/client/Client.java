@@ -105,7 +105,7 @@ public class Client {
 
             
             // main.showRobot(robotName); // Pass the robot name to the showRobot method
-           
+            
 
             while (true) {
                 // try to launch robot

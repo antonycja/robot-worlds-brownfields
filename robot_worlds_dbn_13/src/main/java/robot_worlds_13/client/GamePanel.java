@@ -165,9 +165,20 @@ public class GamePanel extends JPanel implements Runnable {
                 // Position startingPosition = new Position(, playerSpeed)
                 int previousX = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(0)));
                 int previousY = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(1)));
-                Player bullet = new Player(this, keyH, new Position(startX, startY), name);
+                Player bullet = new Player(this, keyH, new Position(startX, startY), "NORTH", name);
                 bullet.setDestination(new Position(previousX, previousY)); // Set where the bullet should stop
                 bullets.add(bullet);
+
+                Iterator<Player> it = bullets.iterator();
+                while (it.hasNext()) {
+                    Player bulletMovening = it.next();
+                    if (bulletMovening.hasReachedDestination()) {
+                        it.remove(); // Remove the bullet if it has reached its destination
+                    } else {
+                        System.out.println("moving by 1");
+                        bulletMovening.update(Direction.NORTH); // Update bullet's position
+                    }
+                }
                 
             }
 
@@ -286,6 +297,7 @@ public class GamePanel extends JPanel implements Runnable {
             // 1 UPDATE: update information such as character positions
             // update();
             // 2 DRAW: draw screen with the updated information
+            // update();
             repaint();
 
             try {
@@ -306,13 +318,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        Iterator<Player> it = bullets.iterator();
-        while (it.hasNext()) {
-            Player bullet = it.next();
-            if (bullet.hasReachedDestination()) {
-                it.remove(); // Remove the bullet if it has reached its destination
-            } else {
-                bullet.update(); // Update bullet's position
+        if (bullets != null) {
+            Iterator<Player> it = bullets.iterator();
+            while (it.hasNext()) {
+                Player bullet = it.next();
+                if (bullet.hasReachedDestination()) {
+                    it.remove(); // Remove the bullet if it has reached its destination
+                } else {
+                    System.out.println("moving by 1");
+                    bullet.update(); // Update bullet's position
+                }
             }
         }
         
@@ -342,6 +357,12 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (obstacles != null) {
+            for (int [] array: obstacles) {
+                drawSquare(g2, array[0], array[1]);
+            }
+        }
+
+        if (bullets != null) {
             for (int [] array: obstacles) {
                 drawSquare(g2, array[0], array[1]);
             }
