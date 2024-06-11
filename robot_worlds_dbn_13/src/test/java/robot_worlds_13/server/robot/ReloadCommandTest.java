@@ -40,6 +40,26 @@ class ReloadCommandTest {
 
     }
 
+    @Test
+    void testExecute_ReloadTimeIsPositive() {
+        int reloadTime = 5;
+        when(mockRobot.getReloadTime()).thenReturn(reloadTime);
+
+        boolean result = reloadCommand.execute(mockRobot);
+
+        assertTrue(result);
+        verify(mockRobot).reload(reloadTime);
+        Map<String, Object> expectedData = new HashMap<>();
+        expectedData.put("message", "Done");
+        verify(mockRobot).setResponseToRobot(ServerProtocol.buildResponse("OK", expectedData, mockRobot.getRobotState()));
+    }
+
+
+    @Test
+    void testExecute_RobotIsNull() {
+        assertThrows(NullPointerException.class, () -> reloadCommand.execute(null));
+    }
+
 
 
 }
