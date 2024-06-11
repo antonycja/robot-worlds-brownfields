@@ -29,6 +29,7 @@ public class Player extends Entity {
         this.characterName = givenName;
         // x = 200;
         // y = 400;
+        this.position = startPosition;
         x = (gp.width / 2) + startPosition.getX() - (gp.tileSize / 2);
         y = (gp.height / 2) - startPosition.getY() - (gp.tileSize / 2);
         setDefaultValues();
@@ -42,6 +43,7 @@ public class Player extends Entity {
         this.characterName = givenName;
         // x = 200;
         // y = 400;
+        this.position = startPosition;
         x = (gp.width / 2) + startPosition.getX() - (gp.tileSize / 2);
         y = (gp.height / 2) - startPosition.getY() - (gp.tileSize / 2);
         setDefaultValues();

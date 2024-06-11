@@ -66,6 +66,18 @@ public class ClientProtocol {
         return commandMap;
     }
 
+    public static Map<String, Object> jsonRequestBuilder(String potentialRobotName, String make,
+            ArrayList<Object> attributes) {
+        
+                HashMap<String, Object> commandMap = new HashMap<>();
+                commandMap.put("robot", potentialRobotName);
+                attributes.add(make);
+                commandMap.put("command", "launch");
+                commandMap.put("arguments", attributes);
+
+                return commandMap;
+    }
+
     public static String jsonResponseUnpacker (String jsonResponse) {
         try {
             // Map<String, Object> responseMap = gson.fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
@@ -115,8 +127,9 @@ public class ClientProtocol {
                         message += "    Message: " + messageResponse + "\n";
                     }
                     if (innerMap.get("distance") != null) { // robots steps away
-                        String distance = String.valueOf(innerMap.get("distance"));
-                        message += "    Distance: " + distance  + "\n";
+                        // (String.valueOf((int) Math.round((double) innerMap.get("distance"))))
+                        String distance = (String.valueOf((int) Math.round((double) innerMap.get("distance"))));
+                        message += "    Distance: " + distance  + " steps away\n";
                     }
                     if (innerMap.get("robot") != null) { // its name
                         String robot = (String) innerMap.get("robot");
@@ -131,9 +144,9 @@ public class ClientProtocol {
                         message += position;
                         String direction = "        Direction: " + stateMap.get("direction") + "\n";
                         message += direction;
-                        String shots = "        Shots: " + (String.valueOf((int) Math.round((double) stateMap.get("shots")))) + "\n";
+                        String shots = "        Shots: " + (String.valueOf((int) Math.round((double) stateMap.get("shots")))) + " left\n";
                         message += shots;
-                        String shields = "        Shields: " + (String.valueOf((int) Math.round((double) stateMap.get("shields")))) + "\n";
+                        String shields = "        Shields: " + (String.valueOf((int) Math.round((double) stateMap.get("shields")))) + " hits left\n";
                         message += shields;
                     }
                     if (innerMap.get("objects") != null) {  // obstacles one, nested within
@@ -145,7 +158,8 @@ public class ClientProtocol {
                             message += direction;
                             String type = "        Type: " + obstacleMap.get("type") + "\n";
                             message += type;
-                            String distance = "        Distance: " + String.valueOf(obstacleMap.get("distance")) + "\n";
+                            // (String.valueOf((int) Math.round((double) obstacleMap.get("distance"))))
+                            String distance = "        Distance: " + (String.valueOf((int) Math.round((double) obstacleMap.get("distance")))) + " steps away\n";
                             message += distance;
                             message += "\n";
                         }
@@ -168,7 +182,7 @@ public class ClientProtocol {
                     }
                     if (innerMap.get("shields") != null) {
                         String shields = String.valueOf((int) Math.round((double)innerMap.get("shields")));
-                        message += "    Shields: " + shields + " hits\n";
+                        message += "    Shields: " + shields + " hits left\n";
                     }
                     
 
@@ -274,4 +288,8 @@ public class ClientProtocol {
             return false;
         }
     }
+
+    
+
+    
 }

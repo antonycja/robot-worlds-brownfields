@@ -13,14 +13,11 @@ public class ForwardCommand extends Command {
     public boolean execute(Robot target) {
         int nrSteps = Integer.parseInt(getArgument());
 
-        // System.out.println("in forward");
-        // where towards is either "front" or "back"
-
         target.worldData.giveCurrentRobotInfo(target);
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> state = target.getRobotState();
         
-        IWorld.UpdateResponse responseGiven = target.worldData.updatePosition(nrSteps);
+        
 
         if (target.getStatus() == "REPAIR") {
             // repair
@@ -50,6 +47,8 @@ public class ForwardCommand extends Command {
             target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
+
+        IWorld.UpdateResponse responseGiven = target.worldData.updatePosition(nrSteps);
         
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
             // obstacle
@@ -63,6 +62,22 @@ public class ForwardCommand extends Command {
             state = target.getGUIRobotState();
             target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
+        }
+
+        else if (responseGiven == UpdateResponse.FAILED_DEAD) {
+            // if jumped into a pit
+            data.clear();
+            data.put("message", "Robot fell into a bottomless pit and died");
+            target.setDeadStatus();
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            target.previouPosition = target.position;
+            target.updatePosition(nrSteps, "front");
+            data.clear();
+            data.put("message", "FRONT");
+            state.clear();
+            state = target.getGUIRobotState();
+            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+            return false;
         }
 
         else if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED_BY_ROBOT) {

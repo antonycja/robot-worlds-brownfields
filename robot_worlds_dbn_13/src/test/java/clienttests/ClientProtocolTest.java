@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 
 import robot_worlds_13.client.*;
-import robot_worlds_13.server.robot.Command;
 
 public class ClientProtocolTest {
     @Test
@@ -38,14 +37,14 @@ public class ClientProtocolTest {
     public void testJsonResponseUnpackerOkResponse() {
         String jsonResponse = "{\"result\":\"OK\",\"data\":{\"message\":\"Operation successful\"}}";
         String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
-        assertEquals("{\"result\":\"OK\",\"data\":{\"message\":\"Operation successful\"}}", response);
+        assertEquals("Operation successful", response);
     }
 
     @Test
     public void testJsonResponseUnpackerErrorResponse() {
         String jsonResponse = "{\"result\":\"ERROR\",\"data\":{\"message\":\"Command not found\"}}";
         String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
-        assertEquals("ERROR: Command not found", response);
+        assertEquals("Command not found", response);
     }
 
     @Test

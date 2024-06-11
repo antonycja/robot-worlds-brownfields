@@ -22,7 +22,8 @@ public interface IWorld {
         SUCCESS, //position was updated successfully
         FAILED_OUTSIDE_WORLD, //robot will go outside world limits if allowed, so it failed to update the position
         FAILED_OBSTRUCTED, //robot obstructed by at least one obstacle, thus cannot proceed.
-        FAILED_OBSTRUCTED_BY_ROBOT
+        FAILED_OBSTRUCTED_BY_ROBOT,
+        FAILED_DEAD;
     }
 
     Position CENTRE = new Position(0,0);
@@ -81,6 +82,4 @@ public interface IWorld {
      * Gives opportunity to world to draw or list obstacles.
      */
     void showObstacles();
-
-    Object isHit(int i);
 }
