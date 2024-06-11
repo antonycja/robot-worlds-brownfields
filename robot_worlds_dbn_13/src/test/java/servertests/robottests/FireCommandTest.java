@@ -86,3 +86,20 @@ public class FireCommandTest {
             response.equals(ServerProtocol.buildResponse("OK", Map.of("message", "Miss"), Map.of("stateKey", "stateValue")))
         ));
     }
+    
+    @Test
+    public void testFireWithNonValidAffectedRobot() {
+        when(targetRobot.ammoAvailable()).thenReturn(1);
+        when(worldData.isHit(5)).thenReturn(affectedRobot);
+        when(affectedRobot.getName()).thenReturn("NonValid");
+        when(targetRobot.getRobotState()).thenReturn(Map.of("stateKey", "stateValue"));
+
+        boolean result = fireCommand.execute(targetRobot);
+
+        assertTrue(result);
+        verify(targetRobot).decreaseAmmo();
+        verify(targetRobot).setResponseToRobot(argThat(response ->
+            response.equals(ServerProtocol.buildResponse("OK", Map.of("message", "Miss"), Map.of("stateKey", "stateValue")))
+        ));
+    }
+
