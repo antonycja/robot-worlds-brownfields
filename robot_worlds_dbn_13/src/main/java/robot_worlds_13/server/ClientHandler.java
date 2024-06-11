@@ -5,23 +5,25 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import entity.Player;
-
-import java.io.*;
-import java.net.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import robot_worlds_13.server.robot.*;
-import robot_worlds_13.server.robot.maze.*;
-import robot_worlds_13.server.robot.world.*;
+import robot_worlds_13.server.robot.Command;
+import robot_worlds_13.server.robot.Position;
+import robot_worlds_13.server.robot.Robot;
+import robot_worlds_13.server.robot.maze.SimpleMaze;
+import robot_worlds_13.server.robot.world.AbstractWorld;
+import robot_worlds_13.server.robot.world.IWorld;
+import robot_worlds_13.server.robot.world.Obstacle;
+import robot_worlds_13.server.robot.world.TextWorld;
 
 /*
  * responsable for each thread
@@ -38,6 +40,8 @@ public class ClientHandler implements Runnable {
     Scanner commandLine;
     ServerProtocol serverProtocol;
     private static Gson gson = new Gson();
+    private Timer statusCheckTimer;
+    Robot robot;
 
     // loaded variables
     public AbstractWorld world;
@@ -65,6 +69,8 @@ public class ClientHandler implements Runnable {
             this.dos = new DataOutputStream(clientSocket.getOutputStream());
             this.clientIdentifier = getClientIdentifier(clientSocket);
             this.commandLine = new Scanner(System.in);
+
+            // startStatusCheck();
             
             // sendMessage("Connected");
             Map<String, Object> data = new HashMap<>();
@@ -76,6 +82,8 @@ public class ClientHandler implements Runnable {
             
             // luanch validation
             String potentialRobotName;
+            int maximumShieldStrength = 0;
+            int maximumShots = 0;
             while (true) {
                 String launchCommand = getCommand();
 
@@ -89,9 +97,48 @@ public class ClientHandler implements Runnable {
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
                     continue;
                 }
+
+                if (request.get("robot") == null || request.get("command") == null || request.get("arguments") == null) {
+                    data.clear();
+                    data.put("message", "Could not parse arguments");
+                    state.clear();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    continue;
+                }
+
+                potentialRobotName = (String) request.get("robot");
                 String requestedCommand = (String) request.get("command");
                 ArrayList arguments = (ArrayList) request.get("arguments");
                 
+                String make;
+                try {
+                    make = (String) arguments.get(2);
+                } catch (Exception e) {
+                    data.clear();
+                    data.put("message", "Could not parse arguments");
+                    state.clear();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                }
+
+                
+                try {
+                    maximumShieldStrength = (int) Math.round((double) arguments.get(0));
+                } catch (Exception e) {
+                    data.clear();
+                    data.put("message", "Could not parse arguments");
+                    state.clear();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                }
+
+                
+                try {
+                    maximumShots = (int) Math.round((double)arguments.get(1));
+                } catch (Exception e) {
+                    data.clear();
+                    data.put("message", "Could not parse arguments");
+                    state.clear();
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                }
 
                 if (!requestedCommand.equalsIgnoreCase("launch")) {
                     // "Unsupported command"
@@ -102,7 +149,7 @@ public class ClientHandler implements Runnable {
                     continue;
                 }
 
-                if (!NameChecker.isValidName(arguments)) {
+                if (!NameChecker.isValidName(potentialRobotName)) {
                     // "Unsuppotted name"
                     data.clear();
                     data.put("message", "Could not parse arguments");
@@ -110,8 +157,6 @@ public class ClientHandler implements Runnable {
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
                     continue;
                 }
-                
-                potentialRobotName = (String) arguments.get(0);
 
                 // if name already exists in world
                 if (world.serverObject.robotNames.contains(potentialRobotName)) {
@@ -142,7 +187,7 @@ public class ClientHandler implements Runnable {
                     try {
                         Thread.sleep(3000);
                     } catch (Exception e) {
-                        // TODO: handle exception
+                        System.out.println("Error encountered with sleep thread");
                     }
                     
                     break;
@@ -154,17 +199,8 @@ public class ClientHandler implements Runnable {
             // checker if position is available on the world
             Position start = world.generatePosition();
 
-            // mocking starting position of robot
-            // Position startPosition =  new Position(0, 0);
-            // if (!serverObject.robotNames.isEmpty()) {
-            //     startPosition =  new Position(0, 10);
-            // }
-
-            // load robots bulletDistance, shields, shots
-            
-            //
-            Map <String, ArrayList<Object>> robotMap = connectedServer.getNamesAndPositionsOnly();
-            
+            // show other robots on gui
+            Map <String, ArrayList<Object>> robotMap = connectedServer.nameAndPositionMap;
             Map <String, ArrayList<Object>> currentRobotMap = new HashMap<>();
             
             for (Map.Entry<String, ArrayList<Object>> entry: robotMap.entrySet()) {
@@ -177,19 +213,37 @@ public class ClientHandler implements Runnable {
                     states.add(thatRobotPosition);
                     states.add(thatRobotDirection);
                     currentRobotMap.put(robotName, states);
-
                 }
-
-            System.out.println();
+            
+            // System.out.println();
             data.clear();
             data.put("message", "OTHERCHARACTERS");
             state.clear();
             state.put("robots", currentRobotMap);
             Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
+            // load robots bulletDistance, shields, shots
+            int maxShields;
+            if (maximumShieldStrength >= world.maximumShieldStrength) {
+                maxShields = world.maximumShieldStrength;
+            } else {
+                maxShields = maximumShieldStrength;
+            }
+            int maxShots;
+            if (maximumShots >= world.maximumShieldStrength) {
+                maxShots = world.maximumShots;
+            } else {
+                maxShots = maximumShots;
+            }
+            Map<String, Integer> attributes = new HashMap<>();
+            attributes.put("shields", maxShields);
+            attributes.put("shots", maxShots);
+            attributes.put("visibility", world.visibility);
+            attributes.put("bulletDistance", 100);
+
             // make the robot itself
             this.name = potentialRobotName;
-            Robot robot = new Robot(this.name, this.world, start);
+            this.robot = new Robot(this.name, this.world, start, attributes);
             world.serverObject.robotNames.add(name);
             ArrayList<Object> currentRobotState = new ArrayList<>();
             currentRobotState.add(robot.getCurrentPosition());
@@ -236,6 +290,21 @@ public class ClientHandler implements Runnable {
             state.put("obstacles", obstacles);
             Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
+
+            List<Obstacle> lakes = world.getLakes();
+            data.clear();
+            data.put("message", "LAKES");
+            state.clear();
+            state.put("obstacles", lakes);
+            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+
+            List<Obstacle> pits = world.getBottomLessPits();
+            data.clear();
+            data.put("message", "PITS");
+            state.clear();
+            state.put("obstacles", pits);
+            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+
             // starting position
             data.clear();
             data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
@@ -267,7 +336,14 @@ public class ClientHandler implements Runnable {
                 instruction = getCommand();
                 
                 // unpack command
-                Map<String, Object> request = gson.fromJson(instruction, new TypeToken<Map<String, Object>>(){}.getType());
+                Map<String, Object> request;
+                try {
+                    request = gson.fromJson(instruction, new TypeToken<Map<String, Object>>(){}.getType());
+                } catch (Exception e) {
+                    break;
+                }
+                
+                
                 // String robot = (String) request.get("robot");
                 String requestedCommand = (String) request.get("command");
                 ArrayList arguments = (ArrayList) request.get("arguments");
@@ -275,9 +351,17 @@ public class ClientHandler implements Runnable {
                 if (requestedCommand.matches("ClientQuit")) {
                     break;
                 }
+
+                if (robot.shields < 0 || robot.getStatus() == "DEAD") {
+                    data.clear();
+                    data.put("message", "Your robot has died because it ran out of shields5");
+                    sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+                    break;
+                }
                 
                 // create the command, and execute it on the robot
                 try {
+                    robot.previouPosition = robot.getCurrentPosition();
                     command = Command.create(requestedCommand, arguments);
                     shouldContinue = robot.handleCommand(command);
                 } catch (IllegalArgumentException e) {
@@ -305,7 +389,15 @@ public class ClientHandler implements Runnable {
                 }
             }
 
+            // removing current robot from sever
+            connectedServer.removeRobot(name);
             world.serverObject.robotNames.remove(name);
+            world.serverObject.nameRobotMap.remove(name);
+            data.clear();
+            data.put("message", "REMOVE");
+            state.clear();
+            state.put("robots", name);
+            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
             currentRobotState = new ArrayList<>();
             currentRobotState.add(robot.getCurrentPosition());
             currentRobotState.add(robot.getCurrentDirection());
@@ -313,7 +405,12 @@ public class ClientHandler implements Runnable {
             System.out.println("Client " + clientIdentifier + " disconnected.");
             clientSocket.close();
         } catch (IOException e) {
-            // e.printStackTrace();
+            System.out.println("Your robot has died");
+            System.exit(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            stopStatusCheck();
         }
     }
 
@@ -350,6 +447,32 @@ public class ClientHandler implements Runnable {
             dos.flush();
         } catch (IOException e) {
             // e.printStackTrace();
+        }
+    }
+
+    private void startStatusCheck() {
+        statusCheckTimer = new Timer();
+        statusCheckTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                checkRobotStatus();
+            }
+        }, 0, 1000); // Check every 1000 milliseconds or 1 second
+    }
+
+    private void checkRobotStatus() {
+        if (robot != null && (robot.shields < 0 || "DEAD".equals(robot.getStatus()))) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("message", "Your robot has died because it ran out of shields");
+            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+            stopStatusCheck();
+        }
+    }
+
+    private void stopStatusCheck() {
+        if (statusCheckTimer != null) {
+            statusCheckTimer.cancel();
+            statusCheckTimer = null;
         }
     }
 

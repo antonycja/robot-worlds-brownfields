@@ -31,7 +31,7 @@ public class TerminalListener implements Runnable {
                     System.out.println("\nReceived quit command. Closing all clients and the server...");
                     closeAllClients();
                     closeServer();
-                    break;
+                    System.exit(0);
                 } 
                 
                 else if ("dump".equalsIgnoreCase(input)) {

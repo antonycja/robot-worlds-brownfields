@@ -4,13 +4,13 @@ import javax.swing.*;
 
 public class Main extends JFrame {
 
-    public Main(int widthGiven, int heightGiven) {
+    public Main(int width, int height, String address, int port) {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Robot World");
 
-        GamePanel gamePanel = new GamePanel(widthGiven, heightGiven);
+        GamePanel gamePanel = new GamePanel(width, height, address, port);
         window.add(gamePanel);
         window.pack(); // Ensure the window is sized correctly based on its content
 
@@ -19,6 +19,7 @@ public class Main extends JFrame {
 
         gamePanel.startGameThread();
     }
+
 
     public void showRobot(String robotName) {
         // Update GUI to show selected robot

@@ -86,7 +86,6 @@ public class GUIProtocol {
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             System.out.println("No json found");
             return commandMap;
         }

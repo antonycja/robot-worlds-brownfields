@@ -94,11 +94,11 @@ public class Robot {
         this.position = startingPosition;
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
-        this.maxAmmo = 5;
-        this.ammo = 5;
-        this.maxShields = 5;
-        this.shields = 5;
-        this.bulletDistance = 5;
+        this.maxShields = (robotConfigurable.get("shields") != null) ? robotConfigurable.get("shields") : 5;
+        this.maxAmmo = (robotConfigurable.get("shots") != null) ? robotConfigurable.get("shots") : 5;
+        this.ammo = maxAmmo;
+        this.shields = maxShields;
+        this.bulletDistance = (robotConfigurable.get("bulletDistance") != null) ? robotConfigurable.get("bulletDistance") : 5;;
         this.previouPosition = startingPosition;
     }
 
@@ -316,7 +316,12 @@ public class Robot {
 
     public void setReloadTime(int reloadTime) {
         this.reloadTime = reloadTime;
-
     }
+
+    public void setDeadStatus() {
+        this.status = "DEAD";
+    }
+
+    
 
 }

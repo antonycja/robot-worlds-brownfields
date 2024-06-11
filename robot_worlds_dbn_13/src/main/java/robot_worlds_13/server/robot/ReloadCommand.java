@@ -27,6 +27,12 @@ public class ReloadCommand extends Command{
         data.put("message", "Done");
         Map<String, Object> state = target.getRobotState();
         target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+
+        data.clear();
+        data.put("message", "NONE");
+        state.clear();
+        state = target.getGUIRobotState();
+        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
         
         return true;
     }

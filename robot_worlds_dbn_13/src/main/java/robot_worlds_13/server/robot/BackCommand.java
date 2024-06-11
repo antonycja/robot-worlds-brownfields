@@ -17,21 +17,20 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> state = target.getRobotState();
 
-        IWorld.UpdateResponse responseGiven = target.worldData.updatePosition(-nrSteps);
+        
 
         if (target.getStatus() == "REPAIR") {
             // repair
             data.clear();
             data.put("message", "Movement not allowed whilst repairing robot");
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            
             target.previouPosition = target.position;
             data.clear();
             data.put("message", "BACK");
             state.clear();
             state = target.getGUIRobotState();
             target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
-
-
             return true;
         }
 
@@ -49,6 +48,8 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
             return true;
         }
 
+        IWorld.UpdateResponse responseGiven = target.worldData.updatePosition(-nrSteps);
+
         // -nrsteps since the update in abstract world has no front vs back
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
             // obstacle
@@ -62,6 +63,22 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
             state = target.getGUIRobotState();
             target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
+        }
+
+        else if (responseGiven == UpdateResponse.FAILED_DEAD) {
+            // if jumped into a pit
+            data.clear();
+            data.put("message", "Robot fell into a bottomless pit and died");
+            target.setDeadStatus();
+            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            target.previouPosition = target.position;
+            target.updatePosition(nrSteps, "front");
+            data.clear();
+            data.put("message", "FRONT");
+            state.clear();
+            state = target.getGUIRobotState();
+            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+            return false;
         }
 
         else if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED_BY_ROBOT) {

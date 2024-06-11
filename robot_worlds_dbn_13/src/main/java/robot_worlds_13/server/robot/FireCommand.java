@@ -29,14 +29,16 @@ public class FireCommand extends Command {
     int robotBulletDistance = target.getBulletDistance();
 
     // this check for a respone of either hit or miss
-    
-    
     Robot affectedRobot = target.worldData.isHit(robotBulletDistance);
     if (affectedRobot.getName() != "NonValid"){
         // if its a hit then decrese the shield of the affected robot
+        int stepsAway = target.worldData.getStepsAway(target.getCurrentPosition(), affectedRobot.getCurrentPosition());
         data.put("message", "Hit");
-        data.put("distance", 5);
+        data.put("distance", stepsAway);
         data.put("robot", affectedRobot.getName());
+        if (affectedRobot.shields < 0) {
+            affectedRobot.setDeadStatus();
+        }
         data.put("state", affectedRobot.getRobotState());
         state = target.getRobotState();
         target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
@@ -47,28 +49,21 @@ public class FireCommand extends Command {
         target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
     }
 
-    int startX = target.position.getX();
-    int startY = target.position.getY();
-
-    // int endX = startX;
-    // int endY = startY;
-    // if (IWorld.Direction.NORTH.equals(target.getCurrentDirection())) {
-    //     endY = startY + robotBulletDistance;
-    // } else if (IWorld.Direction.SOUTH.equals(target.getCurrentDirection())) {
-    //     endY = startY - robotBulletDistance;
-    // } else if (IWorld.Direction.WEST.equals(target.getCurrentDirection())) {
-    //     endX = startX - robotBulletDistance;
-    // } else if (IWorld.Direction.EAST.equals(target.getCurrentDirection())) {
-    //     endX = startX + robotBulletDistance;
-    // }
+    data.clear();
+    data.put("message", "NONE");
+    state.clear();
+    state = target.getGUIRobotState();
+    target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
 
     data.clear();
     data.put("message", "FIRE");
     state.clear();
     state.put("name", "fireRobot");
-    state.put("previousPosition", new int[] {startX, startY});
-    state.put("position", new int[] {affectedRobot.getPosition().getX(), affectedRobot.getPosition().getX()});
+    state.put("previousPosition", new int[] {target.getPosition().getX(), target.getPosition().getY()});
+    state.put("position", new int[] {affectedRobot.getPosition().getX(), affectedRobot.getPosition().getY()});
+    state.put("direction", target.getCurrentDirection());
     Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+    
 
     return true;
     }

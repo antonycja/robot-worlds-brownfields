@@ -25,15 +25,23 @@ public class  RepairCommand extends Command {
 
             target.worldData.giveCurrentRobotInfo(target);
 
-            // do repair
-            int repairTime = target.worldData.shieldRepairTime;
-            target.repairShields(repairTime);
+        // do repair
+        int repairTime = target.worldData.shieldRepairTime;
+        target.repairShields(repairTime);
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("message", "Done");
-            Map<String, Object> state = target.getRobotState();
-            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
-            return true;
+        Map<String, Object> data = new HashMap<>();
+        data.put("message", "Done");
+        Map<String, Object> state = target.getRobotState();
+        target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+
+        data.clear();
+        data.put("message", "NONE");
+        state.clear();
+        state = target.getGUIRobotState();
+        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+        return true;
+
         }
 
-}
+    }
+

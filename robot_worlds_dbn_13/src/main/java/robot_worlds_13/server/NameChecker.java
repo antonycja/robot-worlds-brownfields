@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 public class NameChecker {
     
-    static boolean isValidName (ArrayList nameList) {
+    static boolean isValidName (String nameList) {
         if (nameList.isEmpty()){
             return false;
         }
 
-        String potentialName = (String) nameList.get(0);
-        if (potentialName == null || potentialName.trim() == "") {
+        if (nameList == null || nameList.trim() == "") {
             return false;
         }
 

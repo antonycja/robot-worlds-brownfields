@@ -5,17 +5,15 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import robot_worlds_13.server.robot.Position;
-import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.robot.maze.SimpleMaze;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.TextWorld;
@@ -36,29 +34,20 @@ public class Server {
     public HashMap<String, ArrayList<Object>> nameRobotMap = new HashMap<>();
     public HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
 
-    // configured data
-    //shields etc
-    
 
     public static void main(String[] args) throws Exception {
-        //
         System.out.println("Starting server...\n");
         
-        //
         String path = new File(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
         String otherFilePath = "/../src/main/java/robot_worlds_13/server/configuration/file.txt";
         String directoryPath = new File(path).getParent() + otherFilePath;
-        // System.out.println(directoryPath);
-
-        // load configured variables
-        // String filePath = "configuration/file.txt";  // Update this path to where your file is located
         String filePath = directoryPath;
 
         Map<String, Integer> dataMap = new HashMap<>();
         try {
             dataMap = parseFileToMap(filePath);
             System.out.println("Loading server data...");
-            dataMap.forEach((key, value) -> System.out.println("    " + key + ": " + value));
+            displayServerConfiguration(dataMap);
             System.out.println();
         } catch (IOException e) {
             System.err.println("    Error reading file: " + e.getMessage());
@@ -109,6 +98,7 @@ public class Server {
                     result.put(key, value);
                 } else {
                     System.err.println("Skipping malformed line: " + line);
+                    System.exit(0);
                 }
             }
         }
@@ -123,13 +113,77 @@ public class Server {
                 dos.flush();
 
             } catch (IOException e) {
-                System.err.println("Error broadcasting message to client: " + e.getMessage());
+                continue;
             }
         }
     }
 
-public Map <String, ArrayList<Object>> getNamesAndPositionsOnly () {
-    return nameAndPositionMap;
-}
+    public Map <String, ArrayList<Object>> getNamesAndPositionsOnly () {
+        return nameAndPositionMap;
+    }
+
+    public void removeRobot (String name) {
+        this.robotNames.remove(name);
+        
+        Iterator<Map.Entry<String, ArrayList<Object>>> iterator = nameRobotMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, ArrayList<Object>> entry = iterator.next();
+            if (entry.getKey().equals(name)) {
+                iterator.remove(); // Safe remove
+            }
+        }
+        
+        Iterator<Map.Entry<String, ArrayList<Object>>> iterator2 = nameAndPositionMap.entrySet().iterator();
+        while (iterator2.hasNext()) {
+            Map.Entry<String, ArrayList<Object>> entry = iterator2.next();
+            if (entry.getKey().equals(name)) {
+                iterator2.remove(); // Safe remove
+            }
+        }
+    }
+
+    static public void displayServerConfiguration(Map<String, Integer> dataMap) {
+        for (String attribute: dataMap.keySet()) {
+            switch (attribute) {
+                case "repair":
+                    System.out.println("    Repair: " + dataMap.get(attribute) + " seconds per robot");
+                    break;
+                case "shields":
+                    System.out.println("    Shield: " + dataMap.get(attribute) + " shields maximum");
+                    break;
+                case "reload":
+                    System.out.println("    Reload: " + dataMap.get(attribute) + " seconds per robot");
+                    break;
+                case "visibility":
+                    System.out.println("    Visibility: " + dataMap.get(attribute) + " steps forward");
+                    break;
+                case "bulletDistance":
+                    System.out.println("    Bullet Distance: " + dataMap.get(attribute) + " steps forward");
+                    break;
+                case "shots":
+                    System.out.println("    Shots: " + dataMap.get(attribute) + " shots maximum");
+                    break;
+                case "width":
+                    
+                    System.out.println("    Width: " + dataMap.get(attribute) + " kliks");
+                    if (dataMap.get(attribute) < 300) {
+                        System.out.println("Too small of a world size");
+                        System.exit(0);
+                    }
+                    break;
+                case "height":
+                    System.out.println("    Height: " + dataMap.get(attribute) + " kliks");
+                    if (dataMap.get(attribute) < 300) {
+                        System.out.println("Too small of a world size");
+                        System.exit(0);
+                    }
+                    break;
+                default:
+                    break;
+                
+            }
+            
+        }
+    }
 
 }
