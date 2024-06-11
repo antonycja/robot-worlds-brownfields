@@ -49,4 +49,40 @@ public class FireCommandTest {
             response.equals(ServerProtocol.buildResponse("ERROR", Map.of("message", "No shots available"), Map.of("stateKey", "stateValue")))
         ));
     }
-}
+
+    @Test
+    public void testFireHit() {
+        when(targetRobot.ammoAvailable()).thenReturn(1);
+        when(worldData.isHit(5)).thenReturn(affectedRobot);
+        when(affectedRobot.getName()).thenReturn("affectedRobot");
+        when(affectedRobot.getRobotState()).thenReturn(Map.of("affectedStateKey", "affectedStateValue"));
+        when(targetRobot.getRobotState()).thenReturn(Map.of("stateKey", "stateValue"));
+
+        boolean result = fireCommand.execute(targetRobot);
+
+        assertTrue(result);
+        verify(targetRobot).decreaseAmmo();
+        verify(targetRobot).setResponseToRobot(argThat(response ->
+            response.equals(ServerProtocol.buildResponse("OK", Map.of(
+                "message", "Hit",
+                "distance", 5,
+                "robot", "affectedRobot",
+                "state", Map.of("affectedStateKey", "affectedStateValue")
+            ), Map.of("stateKey", "stateValue")))
+        ));
+    }
+
+    @Test
+    public void testFireMiss() {
+        when(targetRobot.ammoAvailable()).thenReturn(1);
+        when(worldData.isHit(5)).thenReturn(null);
+        when(targetRobot.getRobotState()).thenReturn(Map.of("stateKey", "stateValue"));
+
+        boolean result = fireCommand.execute(targetRobot);
+
+        assertTrue(result);
+        verify(targetRobot).decreaseAmmo();
+        verify(targetRobot).setResponseToRobot(argThat(response ->
+            response.equals(ServerProtocol.buildResponse("OK", Map.of("message", "Miss"), Map.of("stateKey", "stateValue")))
+        ));
+    }
