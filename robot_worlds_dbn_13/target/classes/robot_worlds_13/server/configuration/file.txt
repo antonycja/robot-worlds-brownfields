@@ -1,6 +1,0 @@
-visibility 10
-reload 10
-repair 10
-shields 10
-width 1000
-height 300
