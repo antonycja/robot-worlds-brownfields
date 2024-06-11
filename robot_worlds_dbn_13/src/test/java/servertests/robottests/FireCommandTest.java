@@ -118,3 +118,22 @@ public class FireCommandTest {
         ));
     }
 
+    @Test
+    public void testFireWithNonZeroDistance() {
+        when(targetRobot.ammoAvailable()).thenReturn(1);
+        when(worldData.isHit(5)).thenReturn(null);
+        when(targetRobot.getBulletDistance()).thenReturn(10);
+        when(targetRobot.getRobotState()).thenReturn(Map.of("stateKey", "stateValue"));
+
+        boolean result = fireCommand.execute(targetRobot);
+
+        assertTrue(result);
+        verify(targetRobot).decreaseAmmo();
+        verify(targetRobot).setResponseToRobot(argThat(response ->
+            response.equals(ServerProtocol.buildResponse("OK", Map.of("message", "Miss"), Map.of("stateKey", "stateValue")))
+        ));
+    }
+}
+
+
+
