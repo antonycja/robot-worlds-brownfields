@@ -319,4 +319,9 @@ public class Robot {
 
     }
 
+    public Object getWorldData() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getWorldData'");
+    }
+
 }

@@ -11,56 +11,44 @@ import robot_worlds_13.server.robot.world.IWorld;
 public class FireCommand extends Command {
     
     @Override
-    public boolean execute(Robot target) {
-    target.worldData.giveCurrentRobotInfo(target);
+    public boolean execute(Object targetRobot) {
+    targetRobot.worldData.giveCurrentRobotInfo(targetRobot);
     Map<String, Object> data = new HashMap<>();
-    Map<String, Object> state = target.getRobotState();
+    Map<String, Object> state = targetRobot.getRobotState();
 
     // decrease the ammo of the current robot
-    if (target.ammoAvailable() <= 0) {
+    if (targetRobot.ammoAvailable() <= 0) {
         data.put("message", "No shots available");
-        target.setResponseToRobot(ServerProtocol.buildResponse("ERROR", data, state));
+        targetRobot.setResponseToRobot(ServerProtocol.buildResponse("ERROR", data, state));
         return true;
     }
-    target.decreaseAmmo();
+    targetRobot.decreaseAmmo();
 
 
     // bullet distance
-    int robotBulletDistance = target.getBulletDistance();
+    int robotBulletDistance = targetRobot.getBulletDistance();
 
     // this check for a respone of either hit or miss
     
     
-    Robot affectedRobot = target.worldData.isHit(robotBulletDistance);
+    Robot affectedRobot = targetRobot.worldData.isHit(robotBulletDistance);
     if (affectedRobot.getName() != "NonValid"){
         // if its a hit then decrese the shield of the affected robot
         data.put("message", "Hit");
         data.put("distance", 5);
         data.put("robot", affectedRobot.getName());
         data.put("state", affectedRobot.getRobotState());
-        state = target.getRobotState();
-        target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+        state = targetRobot.getRobotState();
+        targetRobot.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
     } else {
         // if its a miss then nothing
         data.put("message", "Miss");
-        state = target.getRobotState();
-        target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+        state = targetRobot.getRobotState();
+        targetRobot.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
     }
 
-    int startX = target.position.getX();
-    int startY = target.position.getY();
-
-    // int endX = startX;
-    // int endY = startY;
-    // if (IWorld.Direction.NORTH.equals(target.getCurrentDirection())) {
-    //     endY = startY + robotBulletDistance;
-    // } else if (IWorld.Direction.SOUTH.equals(target.getCurrentDirection())) {
-    //     endY = startY - robotBulletDistance;
-    // } else if (IWorld.Direction.WEST.equals(target.getCurrentDirection())) {
-    //     endX = startX - robotBulletDistance;
-    // } else if (IWorld.Direction.EAST.equals(target.getCurrentDirection())) {
-    //     endX = startX + robotBulletDistance;
-    // }
+    int startX = targetRobot.position.getX();
+    int startY = targetRobot.position.getY();
 
     data.clear();
     data.put("message", "FIRE");

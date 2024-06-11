@@ -81,4 +81,6 @@ public interface IWorld {
      * Gives opportunity to world to draw or list obstacles.
      */
     void showObstacles();
+
+    Object isHit(int i);
 }

@@ -14,7 +14,7 @@ public abstract class Command {
 
 
 
-    public abstract boolean execute(Robot target);
+    public abstract boolean execute(Object targetRobot);
 
     public Command(String name){
         this.name = name.trim().toLowerCase();
