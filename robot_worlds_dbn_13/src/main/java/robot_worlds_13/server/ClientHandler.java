@@ -71,7 +71,8 @@ public class ClientHandler implements Runnable {
             this.clientIdentifier = getClientIdentifier(clientSocket);
             this.commandLine = new Scanner(System.in);
 
-            startStatusCheck();
+            
+            
             
             // sendMessage("Connected");
             Map<String, Object> data = new HashMap<>();
@@ -79,6 +80,7 @@ public class ClientHandler implements Runnable {
             data.clear();
             data.put("message", "\nConnected successfully to server you can launch a robot!\n");
             state.clear();
+            
             sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
             
             // luanch validation
@@ -326,6 +328,39 @@ public class ClientHandler implements Runnable {
             Command command;
             boolean shouldContinue = true;
             String instruction;
+            
+            statusCheckTimer = new Timer();
+            statusCheckTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (robot != null && ("DEAD".equals(robot.getStatus()))) {
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("message", "Your robot has died because it ran out of shields");
+                        sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+                        
+                        connectedServer.removeRobot(name);
+                        world.serverObject.robotNames.remove(name);
+                        world.serverObject.nameRobotMap.remove(name);
+                        
+                        Map<String, Object> state = new HashMap<>();
+                        data.clear();
+                        data.put("message", "REMOVE");
+                        state.clear();
+                        state.put("robots", name);
+                        Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+
+                        ArrayList<Object> currentRobotState = new ArrayList<>();
+                        currentRobotState.add(robot.getCurrentPosition());
+                        currentRobotState.add(robot.getCurrentDirection());
+                        world.serverObject.nameRobotMap.remove(name, currentRobotState);
+                        System.out.println("Client " + clientIdentifier + " disconnected.");
+                        
+                        this.cancel();
+                        statusCheckTimer.cancel();
+                        statusCheckTimer.purge();
+                    }
+                }
+            }, 0, 1000);
 
             while (true) {
                 // sending prompt to client
@@ -416,10 +451,11 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             System.out.println("Your robot has died");
             System.exit(0);
+        } catch (EndOfFileException e) {
+            System.out.println("Your robot has died because it ran out of shields");
+            System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            stopStatusCheck();
         }
     }
 
@@ -458,36 +494,6 @@ public class ClientHandler implements Runnable {
             // e.printStackTrace();
         }
     }
-
-    private void startStatusCheck() {
-        statusCheckTimer = new Timer();
-        statusCheckTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                checkRobotStatus();
-            }
-        }, 0, 1000); // Check every 1000 milliseconds or 1 second
-    }
-
-    private void checkRobotStatus() {
-        if (robot != null && (robot.shields < 0 || "DEAD".equals(robot.getStatus()))) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("message", "Your robot has died because it ran out of shields");
-            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
-            stopStatusCheck();
-            throw new EndOfFileException();
-            
-        }
-    }
-
-    private void stopStatusCheck() {
-        if (statusCheckTimer != null) {
-            statusCheckTimer.cancel();
-            statusCheckTimer = null;
-        }
-    }
-
-
 }
 
 
