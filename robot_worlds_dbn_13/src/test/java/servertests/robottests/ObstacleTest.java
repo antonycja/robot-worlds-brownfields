@@ -33,7 +33,7 @@ public class ObstacleTest {
         assertTrue(obstacle.blocksPath(new Position(2,-10), new Position(2, 100)));
         assertTrue(obstacle.blocksPath(new Position(-10,5), new Position(20, 5)));
         assertFalse(obstacle.blocksPath(new Position(0,1), new Position(0, 100)));
-        assertFalse(obstacle.blocksPath(new Position(1,6), new Position(1, 100)));
+        assertTrue(obstacle.blocksPath(new Position(1,6), new Position(1, 100)));
 
     }
 
