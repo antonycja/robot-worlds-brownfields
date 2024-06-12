@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.jline.reader.EndOfFileException;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -70,7 +71,7 @@ public class ClientHandler implements Runnable {
             this.clientIdentifier = getClientIdentifier(clientSocket);
             this.commandLine = new Scanner(System.in);
 
-            // startStatusCheck();
+            startStatusCheck();
             
             // sendMessage("Connected");
             Map<String, Object> data = new HashMap<>();
@@ -474,6 +475,8 @@ public class ClientHandler implements Runnable {
             data.put("message", "Your robot has died because it ran out of shields");
             sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
             stopStatusCheck();
+            throw new EndOfFileException();
+            
         }
     }
 

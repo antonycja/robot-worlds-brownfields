@@ -404,6 +404,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
         
+        if (bullet != null) {
+            synchronized (bullet) {
+                bullet.draw(g);
+            }
+            
+        }
+
         if (players != null) {
             synchronized(players) {
                 for (Player player : players) {
@@ -428,28 +435,12 @@ public class GamePanel extends JPanel implements Runnable {
             }   
         }
 
-        // if (pits != null) {
-        //     for (int [] array: pits) {
-        //         drawPit(g2, array[0], array[1]);
-        //     }
-        // }
         if (pits != null) {
             synchronized (pits) {
                 for (int [] array: pits) {
                     drawPit(g2, array[0], array[1]);
                 }
             }
-        }
-
-        // if (bullet != null) {
-        //     bullet.draw(g);
-        // }
-
-        if (bullet != null) {
-            synchronized (bullet) {
-                bullet.draw(g);
-            }
-            
         }
 
         g2.dispose();
