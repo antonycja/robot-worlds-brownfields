@@ -18,7 +18,7 @@ class SimpleMazeTest {
     @Test
     void testSimpleMazeInCenter() {
         Maze maze = new SimpleMaze();
-        assertEquals(1, maze.getObstacles().get(0).getBottomLeftX());
-        assertEquals(1, maze.getObstacles().get(0).getBottomLeftY());
+        assertEquals(0, maze.getObstacles().get(0).getBottomLeftX());
+        assertEquals(0, maze.getObstacles().get(0).getBottomLeftY());
     }
 }
