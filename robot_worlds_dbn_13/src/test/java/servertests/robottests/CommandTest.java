@@ -14,14 +14,16 @@ class CommandTest {
         assertEquals("off", test.getName());
     }
 
-    @Test
-    void executeShutdown() {
-        Robot robot = new Robot("CrashTestDummy");
-        Command shutdown = Command.create("shutdown");
-        assertFalse(shutdown.execute(robot));
-        assertEquals("Shutting down...", robot.getStatus());
-    }
-
+    
+        @Test
+        void executeShutdown() {
+            Robot robot = new Robot("CrashTestDummy");
+            Command shutdown = Command.create("shutdown");
+            assertFalse(shutdown.execute(robot));
+            assertEquals("Shutting down...", robot.getStatus());
+        }
+    
+    
     @Test
     void getForwardName() {
         ForwardCommand test = new ForwardCommand("100");
