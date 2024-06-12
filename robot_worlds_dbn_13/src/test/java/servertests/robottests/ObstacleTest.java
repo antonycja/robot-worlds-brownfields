@@ -13,7 +13,7 @@ public class ObstacleTest {
         Obstacle obstacle = new SquareObstacle(1,1);
         assertEquals(1, obstacle.getBottomLeftX());
         assertEquals(1, obstacle.getBottomLeftY());
-        assertEquals(5, obstacle.getSize());
+        assertEquals(40, obstacle.getSize());
     }
 
     @Test
