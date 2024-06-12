@@ -25,7 +25,6 @@ public class GUIProtocol {
         
         Map<String, Object> commandMap =  new HashMap<>();
         if (jsonResponse.equals("{}")) {
-            
             return commandMap;
         }
 

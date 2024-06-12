@@ -335,12 +335,20 @@ public class ClientHandler implements Runnable {
                 // get command as json string
                 instruction = getCommand();
                 
+                if (instruction.equals("{}")) {
+                    break;
+                }
+                
                 // unpack command
-                Map<String, Object> request;
+                Map<String, Object> request = new HashMap<>();
                 try {
                     request = gson.fromJson(instruction, new TypeToken<Map<String, Object>>(){}.getType());
+                    
                 } catch (Exception e) {
-                    break;
+                    System.out.println(request);
+                    System.err.println("Failed to parse JSON: " + e.getMessage());
+                    e.printStackTrace();
+                    continue;
                 }
                 
                 

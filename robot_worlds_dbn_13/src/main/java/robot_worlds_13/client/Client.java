@@ -122,7 +122,6 @@ public class Client {
 
                 if (response.contains("Successfully launched")) {
                     robotName = potentialRobotName;
-                    System.out.println("resoltion found");
                     int width = Integer.parseInt(response.split(" ")[3]);
                     int height = Integer.parseInt(response.split(" ")[5]);
                     
@@ -169,20 +168,10 @@ public class Client {
                         sendJsonRequest(formattedCommand);
                         continue;
                     }
-                    
-                    System.out.println(formattedCommand);
-
-                    
                     // send to server as json
                     sendJsonRequest(formattedCommand);
                 }
             }
-
-            // Create a terminal
-            Terminal terminal = TerminalBuilder.builder().build();
-
-            // Create a LineReader
-            LineReader lineReader = LineReaderBuilder.builder().terminal(terminal).build();
 
             while (true) {
                 // get server messages
@@ -190,9 +179,6 @@ public class Client {
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
 
                 if (response.contains("GUI")) {
-                    if (response.contains("LAUNCH")) {
-                        
-                    }
                     continue;
                 }
                 
@@ -211,7 +197,6 @@ public class Client {
                 if (response.startsWith("What")) {
                     // get imput
                     String command = line.nextLine();
-                    
 
                     // format input
                     Map<String, Object> formattedCommand = ClientProtocol.jsonRequestBuilder(command);
@@ -222,6 +207,7 @@ public class Client {
             }
 
             // close this client
+            System.out.println("Client closed connection");
             dout.flush();
             dout.close();
             System.exit(0);
@@ -232,6 +218,7 @@ public class Client {
 
         }
         catch (Exception e) {
+            e.printStackTrace();
             try {
                 e.printStackTrace();
                 dout.writeUTF("off");

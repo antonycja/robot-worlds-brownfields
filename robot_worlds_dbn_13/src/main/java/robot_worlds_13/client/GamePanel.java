@@ -27,6 +27,7 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import com.google.gson.Gson;
 
@@ -47,8 +48,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int maxScreenRow = 12;
     final int screenWidth = tileSize * maxScreenCol; // 768 pixels
     final int screenHeight = tileSize * maxScreenRow; // 576 pixels
-    public ArrayList<Player> players = new ArrayList<>();
-    List<Player> bullets = new ArrayList<>();
+    public List<Player> players = new ArrayList<>();
+    List<Player> bullets = Collections.synchronizedList(new ArrayList<>());
 
     int FPS = 60;
 
@@ -67,12 +68,12 @@ public class GamePanel extends JPanel implements Runnable {
     Scanner line = new Scanner(System.in);
     String robotName = "";
     Gson gson = new Gson();
-    ArrayList<int []> obstacles = new ArrayList<>();
-    ArrayList<int []> lakes = new ArrayList<>();
-    ArrayList<int []> pits = new ArrayList<>();
+    List<int []> obstacles = Collections.synchronizedList(new ArrayList<>());
+    List<int []> lakes = Collections.synchronizedList(new ArrayList<>());
+    List<int []> pits = Collections.synchronizedList(new ArrayList<>());
 
-    Timer timer;
-Bullet bullet;
+    javax.swing.Timer timer;
+    Bullet bullet;
 
     public int height;
     public int width;
@@ -179,6 +180,17 @@ Bullet bullet;
                     Map<String, ArrayList<Object>> robotMap = ((Map<String, ArrayList<Object>>) response.get("robots"));
                     for (Map.Entry<String, ArrayList<Object>> entry: robotMap.entrySet()) {
                         String robotName = entry.getKey();
+                        
+                        boolean finishedForLoop = true;
+                        for (Player existingPlayer: players) {
+                            if (existingPlayer.characterName != robotName){
+                                finishedForLoop = false;
+                                break;
+                            }
+                        } if (finishedForLoop == false){
+                            continue;
+                        }
+
                         ArrayList<Object> list = entry.getValue();
                         Map positionMap = (Map) list.get(0); // This cast is safe because list.get(0) returns a LinkedTreeMap
                         int x = ((Number) positionMap.get("x")).intValue(); // Cast to Number first to avoid ClassCastException
@@ -393,39 +405,57 @@ Bullet bullet;
         Graphics2D g2 = (Graphics2D) g;
         
         if (players != null) {
-            for (Player player: players) {
-                player.draw(g2);
+            synchronized(players) {
+                for (Player player : players) {
+                    player.draw(g2);
+                }
             }
         }
 
         if (obstacles != null) {
-            for (int [] array: obstacles) {
-                drawSquare(g2, array[0], array[1]);
+            synchronized(obstacles) {
+                for (int[] obstacle : obstacles) {
+                    drawSquare(g2, obstacle[0], obstacle[1]);
+                }
             }
         }
 
         if (lakes != null) {
-            for (int [] array: lakes) {
-                drawLake(g2, array[0], array[1]);
-            }
+            synchronized (lakes) {
+                for (int [] array: lakes) {
+                    drawLake(g2, array[0], array[1]);
+                }
+            }   
         }
 
+        // if (pits != null) {
+        //     for (int [] array: pits) {
+        //         drawPit(g2, array[0], array[1]);
+        //     }
+        // }
         if (pits != null) {
-            for (int [] array: pits) {
-                drawPit(g2, array[0], array[1]);
+            synchronized (pits) {
+                for (int [] array: pits) {
+                    drawPit(g2, array[0], array[1]);
+                }
             }
         }
 
+        // if (bullet != null) {
+        //     bullet.draw(g);
+        // }
 
         if (bullet != null) {
-            bullet.draw(g);
+            synchronized (bullet) {
+                bullet.draw(g);
+            }
+            
         }
 
         g2.dispose();
-        }
-        
-        catch (Exception e) {
-            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Paint exception encountered");
+            e.printStackTrace();
         }
     }
 
