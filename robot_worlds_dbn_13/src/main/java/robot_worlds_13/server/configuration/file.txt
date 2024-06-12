@@ -3,6 +3,6 @@ reload 10
 repair 10
 shields 3
 shots 45
-width 300
-height 300
+width 500
+height 600
 bulletDistance 100
