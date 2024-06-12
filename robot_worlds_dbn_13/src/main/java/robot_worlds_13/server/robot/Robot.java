@@ -1,10 +1,13 @@
 package robot_worlds_13.server.robot;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
 
 import robot_worlds_13.server.robot.maze.*;
 import robot_worlds_13.server.robot.world.*;
@@ -13,7 +16,7 @@ public class Robot {
     private final Position TOP_LEFT;
     private final Position BOTTOM_RIGHT;
 
-    public static final Position CENTRE = new Position(0, 0);
+    public static final Position CENTRE = new Position(0,0);
 
     public Position position;
     private IWorld.Direction currentDirection;
@@ -33,7 +36,7 @@ public class Robot {
     private String responseGUIToClient = "{}";
 
     public Robot(String name) {
-        TOP_LEFT = new Position(-100, 200);
+        TOP_LEFT = new Position(-100,200);
         BOTTOM_RIGHT = new Position(100, -200);
         this.name = name;
         this.status = "NORMAL";
@@ -41,11 +44,10 @@ public class Robot {
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = new TextWorld(new SimpleMaze());
         this.reloadTime = 5;
-        this.previouPosition = CENTRE;
     }
 
     public Robot(String name, Position startPosition) {
-        TOP_LEFT = new Position(-100, 200);
+        TOP_LEFT = new Position(-100,200);
         BOTTOM_RIGHT = new Position(100, -200);
         this.name = name;
         this.status = "NORMAL";
@@ -53,7 +55,6 @@ public class Robot {
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = new TextWorld(new SimpleMaze());
         this.reloadTime = 5;
-        this.previouPosition = startPosition;
     }
 
     public Robot(String name, AbstractWorld worldObject) {
@@ -66,6 +67,7 @@ public class Robot {
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
         this.reloadTime = 5;
+
     }
 
     public Robot(String name, AbstractWorld worldObject, Position startingPosition) {
@@ -96,7 +98,7 @@ public class Robot {
         this.maxAmmo = (robotConfigurable.get("shots") != null) ? robotConfigurable.get("shots") : 5;
         this.ammo = maxAmmo;
         this.shields = maxShields;
-        this.bulletDistance = (robotConfigurable.get("bulletDistance") != null) ? robotConfigurable.get("bulletDistance") : 5;
+        this.bulletDistance = (robotConfigurable.get("bulletDistance") != null) ? robotConfigurable.get("bulletDistance") : 5;;
         this.previouPosition = startingPosition;
     }
 
@@ -116,55 +118,74 @@ public class Robot {
         return command.execute(this);
     }
 
-    public boolean updatePosition(int nrSteps, String towards) {
+    public boolean updatePosition(int nrSteps, String towards){
         int newX = this.position.getX();
         int newY = this.position.getY();
         this.previouPosition = new Position(newX, newY);
 
-        if (IWorld.Direction.NORTH.equals(this.currentDirection) && towards.equals("front")) {
+        // where towards is either "front" or "back"
+        // symbolising whether this function was called by forward / back command
+
+        if (IWorld.Direction.NORTH.equals(this.currentDirection) && towards == "front") {
             newY = newY + nrSteps;
-        } else if (IWorld.Direction.SOUTH.equals(this.currentDirection) && towards.equals("front")) {
+        }
+        else if (IWorld.Direction.SOUTH.equals(this.currentDirection) && towards == "front") {
             newY = newY - nrSteps;
-        } else if (IWorld.Direction.WEST.equals(this.currentDirection) && towards.equals("front")) {
+        }
+        else if (IWorld.Direction.WEST.equals(this.currentDirection) && towards == "front") {
             newX = newX - nrSteps;
-        } else if (IWorld.Direction.EAST.equals(this.currentDirection) && towards.equals("front")) {
+        }
+        else if (IWorld.Direction.EAST.equals(this.currentDirection) && towards == "front") {
             newX = newX + nrSteps;
         }
 
-        if (IWorld.Direction.NORTH.equals(this.currentDirection) && towards.equals("back")) {
+        if (IWorld.Direction.NORTH.equals(this.currentDirection) && towards == "back") {
             newY = newY - nrSteps;
-        } else if (IWorld.Direction.SOUTH.equals(this.currentDirection) && towards.equals("back")) {
+        }
+        else if (IWorld.Direction.SOUTH.equals(this.currentDirection) && towards == "back") {
             newY = newY + nrSteps;
-        } else if (IWorld.Direction.WEST.equals(this.currentDirection) && towards.equals("back")) {
+        }
+        else if (IWorld.Direction.WEST.equals(this.currentDirection) && towards == "back") {
             newX = newX + nrSteps;
-        } else if (IWorld.Direction.EAST.equals(this.currentDirection) && towards.equals("back")) {
+        }
+        else if (IWorld.Direction.EAST.equals(this.currentDirection) && towards == "back") {
             newX = newX - nrSteps;
         }
 
         Position newPosition = new Position(newX, newY);
-        if (newPosition.isIn(TOP_LEFT, BOTTOM_RIGHT)) {
+        if (newPosition.isIn(TOP_LEFT, BOTTOM_RIGHT)){
             this.position = newPosition;
             return true;
         }
         return false;
     }
-
+    
+    // added
     public boolean updateDirection(String turnTo) {
-        if (this.currentDirection == IWorld.Direction.NORTH && turnTo.equals("left")) {
+        // System.out.println(turnTo);
+
+        if (this.currentDirection == IWorld.Direction.NORTH && turnTo == "left") {
             this.currentDirection = IWorld.Direction.WEST;
-        } else if (this.currentDirection == IWorld.Direction.WEST && turnTo.equals("left")) {
+        }
+        else if (this.currentDirection == IWorld.Direction.WEST && turnTo == "left") {
             this.currentDirection = IWorld.Direction.SOUTH;
-        } else if (this.currentDirection == IWorld.Direction.SOUTH && turnTo.equals("left")) {
+        }
+        else if (this.currentDirection == IWorld.Direction.SOUTH && turnTo == "left") {
             this.currentDirection = IWorld.Direction.EAST;
-        } else if (this.currentDirection == IWorld.Direction.EAST && turnTo.equals("left")) {
+        }
+        else if (this.currentDirection == IWorld.Direction.EAST && turnTo == "left") {
             this.currentDirection = IWorld.Direction.NORTH;
-        } else if (this.currentDirection == IWorld.Direction.NORTH && turnTo.equals("right")) {
+        }
+        else if (this.currentDirection == IWorld.Direction.NORTH && turnTo == "right") {
             this.currentDirection = IWorld.Direction.EAST;
-        } else if (this.currentDirection == IWorld.Direction.EAST && turnTo.equals("right")) {
+        }
+        else if (this.currentDirection == IWorld.Direction.EAST && turnTo == "right") {
             this.currentDirection = IWorld.Direction.SOUTH;
-        } else if (this.currentDirection == IWorld.Direction.SOUTH && turnTo.equals("right")) {
+        }
+        else if (this.currentDirection == IWorld.Direction.SOUTH && turnTo == "right") {
             this.currentDirection = IWorld.Direction.WEST;
-        } else if (this.currentDirection == IWorld.Direction.WEST && turnTo.equals("right")) {
+        }
+        else if (this.currentDirection == IWorld.Direction.WEST && turnTo == "right") {
             this.currentDirection = IWorld.Direction.NORTH;
         }
 
@@ -174,7 +195,8 @@ public class Robot {
 
     @Override
     public String toString() {
-        return "[" + this.position.getX() + "," + this.position.getY() + "] " + this.name + "> " + this.status;
+       return "[" + this.position.getX() + "," + this.position.getY() + "] "
+                + this.name + "> " + this.status;
     }
 
     public Position getPosition() {
@@ -189,40 +211,41 @@ public class Robot {
         return name;
     }
 
-    public String getRobotStateString() {
+    public String getRobotStateString () {
         String stateMessage = "";
         stateMessage = stateMessage + getPosition().toString() + "\n" +
-                currentDirection.toString() + "\n" +
-                shields + "\n" +
-                ammo + "\n" +
-                status + "\n";
+            currentDirection.toString() + "\n" +
+            shields + "\n" +
+            ammo + "\n" +
+            status + "\n";
 
         return stateMessage;
     }
 
-    public void decreaseAmmo() {
+    // in relation to fire command
+    public void decreaseAmmo () {
         this.ammo -= 1;
     }
 
-    public int ammoAvailable() {
+    public int ammoAvailable () {
         return this.ammo;
     }
 
-    public void decreaseShields() {
+    public void decreaseShields () {
         this.shields -= 1;
     }
 
-    public void setResponseToRobot(String stateGiven) {
+    public void setResponseToRobot (String stateGiven) {
         this.responseToClient = stateGiven;
     }
 
-    public String getResponseToRobot() {
+    public String getResponseToRobot () {
         return this.responseToClient;
     }
 
-    public Map<String, Object> getRobotState() {
+    public Map<String, Object> getRobotState () {
         Map<String, Object> state = new HashMap<>();
-        state.put("position", new int[]{position.getX(), position.getY()});
+        state.put("position", new int[] {position.getX(), position.getY()});
         state.put("direction", getCurrentDirection());
         state.put("shields", shields);
         state.put("shots", ammo);
@@ -231,19 +254,19 @@ public class Robot {
         return state;
     }
 
-    public void setGUIResponseToRobot(String stateGiven) {
+    public void setGUIResponseToRobot (String stateGiven) {
         this.responseGUIToClient = stateGiven;
     }
 
-    public String getGUIResponseToRobot() {
+    public String getGUIResponseToRobot () {
         return this.responseGUIToClient;
     }
 
-    public Map<String, Object> getGUIRobotState() {
+    public Map<String, Object> getGUIRobotState () {
         Map<String, Object> state = new HashMap<>();
         state.put("name", this.name);
-        state.put("previousPosition", new int[]{previouPosition.getX(), previouPosition.getY()});
-        state.put("position", new int[]{position.getX(), position.getY()});
+        state.put("previousPosition", new int[] {previouPosition.getX(), previouPosition.getY()});
+        state.put("position", new int[] {position.getX(), position.getY()});
         state.put("direction", getCurrentDirection());
         state.put("shields", shields);
         state.put("shots", ammo);
@@ -252,7 +275,7 @@ public class Robot {
         return state;
     }
 
-    public int shieldsAvailable() {
+    public int shieldsAvailable () {
         return this.shields;
     }
 
@@ -260,27 +283,30 @@ public class Robot {
         return this.bulletDistance;
     }
 
-    public void repairShields(int repairTime) {
-        if (!repairing) {
+    public void repairShields(int repairTime){
+        if (!repairing){
             repairing = true;
             status = "REPAIR";
             scheduler.schedule(() -> {
                 this.shields = maxShields;
+                //Repair shields to max value
                 status = "NORMAL";
                 repairing = false;
-            }, repairTime, TimeUnit.SECONDS);
+            },repairTime, TimeUnit.SECONDS);
         }
     }
 
     public void reload(int reloadTime) {
         boolean reloading = false;
-        if (!reloading) {
+        if (!reloading){
             reloading = true;
             status = "RELOAD";
             scheduler.schedule(() -> {
                 this.ammo = maxAmmo;
+                //Repair shields to max value
                 status = "NORMAL";
-            }, reloadTime, TimeUnit.SECONDS);
+                
+            },reloadTime, TimeUnit.SECONDS);
         }
     }
 
@@ -295,4 +321,7 @@ public class Robot {
     public void setDeadStatus() {
         this.status = "DEAD";
     }
+
+    
+
 }
