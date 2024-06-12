@@ -172,13 +172,7 @@ public class GamePanel extends JPanel implements Runnable {
 
                 if (((String) response.get("message")).equalsIgnoreCase("REMOVE")) {
                     String robotToRemove = (String) response.get("robots");
-                    Iterator<Player> iterator = players.iterator();
-                    while (iterator.hasNext()) {
-                        Player player = iterator.next();
-                        if (player.characterName.equals(robotToRemove)) {
-                            iterator.remove();  // Safely remove the player
-                        }
-                    }
+                    players.removeIf(player -> player.characterName.equals(robotToRemove));
                 }
 
                 if (((String) response.get("message")).equalsIgnoreCase("OTHERCHARACTERS")) {

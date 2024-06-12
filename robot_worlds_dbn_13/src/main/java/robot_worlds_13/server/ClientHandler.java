@@ -72,8 +72,6 @@ public class ClientHandler implements Runnable {
             this.commandLine = new Scanner(System.in);
 
             
-            
-            
             // sendMessage("Connected");
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> state = new HashMap<>();
@@ -379,12 +377,11 @@ public class ClientHandler implements Runnable {
                 Map<String, Object> request = new HashMap<>();
                 try {
                     request = gson.fromJson(instruction, new TypeToken<Map<String, Object>>(){}.getType());
-                    
                 } catch (Exception e) {
                     System.out.println(request);
                     System.err.println("Failed to parse JSON: " + e.getMessage());
                     e.printStackTrace();
-                    continue;
+                    break;
                 }
                 
                 
@@ -468,12 +465,20 @@ public class ClientHandler implements Runnable {
         String message = "";
         try {
             message = dis.readUTF();
+            if (!isValidJson(message)) {
+                System.out.println("Invalid JSON received: " + message);
+                return "{}"; // Return empty JSON or handle appropriately
+            }
             System.out.println("Client " + clientIdentifier + " says: " + message);
-
         } catch (Exception e) {
-            return "ClientQuit";
+            return "{}"; // or handle error appropriately
         }
         return message;
+    }
+
+    public boolean isValidJson(String json) {
+        json = json.trim();
+        return (json.startsWith("{") && json.endsWith("}")) || (json.startsWith("[") && json.endsWith("]"));
     }
 
     public void sendMessage(String question) {
