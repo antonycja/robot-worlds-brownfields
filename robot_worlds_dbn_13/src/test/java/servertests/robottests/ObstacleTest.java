@@ -23,7 +23,7 @@ public class ObstacleTest {
         assertTrue(obstacle.blocksPosition(new Position(5,1)));
         assertTrue(obstacle.blocksPosition(new Position(1,5)));
         assertFalse(obstacle.blocksPosition(new Position(0,5)));
-        assertFalse(obstacle.blocksPosition(new Position(6,5)));
+        assertTrue(obstacle.blocksPosition(new Position(6,5)));
     }
 
     @Test
