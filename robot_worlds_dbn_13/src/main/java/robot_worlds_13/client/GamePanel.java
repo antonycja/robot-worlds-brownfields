@@ -53,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
 
+    // TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     // Set player's default position
@@ -403,6 +404,9 @@ public class GamePanel extends JPanel implements Runnable {
         g.drawLine((width / 2), 0, (width / 2), height); // Vertical line (y-axis)
 
         Graphics2D g2 = (Graphics2D) g;
+        //  tileM.draw(g2);
+        drawGrass(g2);
+
         
         if (players != null) {
             synchronized(players) {
@@ -455,6 +459,21 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
         } catch (Exception e) {
             System.out.println("Paint exception encountered");
+            e.printStackTrace();
+        }
+    }
+
+    public void drawGrass(Graphics2D g2) {
+        BufferedImage image;
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/grass.png"))); 
+            for (int x = 0; x < width; x += tileSize) {
+                for (int y = 0; y < height; y += tileSize) {
+                    g2.drawImage(image, x, y, tileSize, tileSize, null);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading grass image");
             e.printStackTrace();
         }
     }
