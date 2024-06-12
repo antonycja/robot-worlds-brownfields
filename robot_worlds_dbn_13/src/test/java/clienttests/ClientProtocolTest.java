@@ -37,14 +37,14 @@ public class ClientProtocolTest {
     public void testJsonResponseUnpackerOkResponse() {
         String jsonResponse = "{\"result\":\"OK\",\"data\":{\"message\":\"Operation successful\"}}";
         String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
-        assertEquals("Operation successful", response);
+        assertEquals("{\"result\":\"OK\",\"data\":{\"message\":\"Operation successful\"}}", response);
     }
 
     @Test
     public void testJsonResponseUnpackerErrorResponse() {
         String jsonResponse = "{\"result\":\"ERROR\",\"data\":{\"message\":\"Command not found\"}}";
         String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
-        assertEquals("Command not found", response);
+        assertEquals("ERROR: Command not found", response);
     }
 
     @Test

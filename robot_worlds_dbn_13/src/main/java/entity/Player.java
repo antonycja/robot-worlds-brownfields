@@ -181,9 +181,9 @@ public class Player extends Entity {
         switch (directionGiven) {
             case "NORTH":
                 return "up";
-            case "EAST":
-                return "left";
             case "WEST":
+                return "left";
+            case "EAST":
                 return "right";
             case "SOUTH":
                 return "down";

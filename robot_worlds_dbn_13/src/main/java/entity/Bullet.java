@@ -45,7 +45,7 @@ public class Bullet {
 
     public void draw(Graphics g) {
         g.setColor(Color.RED);
-        g.fillOval(x, y, 10, 10);  // Draw the bullet as a small red circle
+        g.fillOval(x - 4, y, 10 , 10);  // Draw the bullet as a small red circle
     }
 
     public boolean isAtDestination(int destX, int destY) {

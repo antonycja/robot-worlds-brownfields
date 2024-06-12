@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+
 
 import com.google.gson.Gson;
 
@@ -48,11 +51,13 @@ public class GamePanel extends JPanel implements Runnable {
     final int maxScreenRow = 12;
     final int screenWidth = tileSize * maxScreenCol; // 768 pixels
     final int screenHeight = tileSize * maxScreenRow; // 576 pixels
-    public List<Player> players = new ArrayList<>();
+    public List<Player> players = new CopyOnWriteArrayList<>();
+    
     List<Player> bullets = Collections.synchronizedList(new ArrayList<>());
 
     int FPS = 60;
 
+    // TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     // Set player's default position
@@ -180,16 +185,6 @@ public class GamePanel extends JPanel implements Runnable {
                     Map<String, ArrayList<Object>> robotMap = ((Map<String, ArrayList<Object>>) response.get("robots"));
                     for (Map.Entry<String, ArrayList<Object>> entry: robotMap.entrySet()) {
                         String robotName = entry.getKey();
-                        
-                        boolean finishedForLoop = true;
-                        for (Player existingPlayer: players) {
-                            if (existingPlayer.characterName != robotName){
-                                finishedForLoop = false;
-                                break;
-                            }
-                        } if (finishedForLoop == false){
-                            continue;
-                        }
 
                         ArrayList<Object> list = entry.getValue();
                         Map positionMap = (Map) list.get(0); // This cast is safe because list.get(0) returns a LinkedTreeMap
@@ -199,7 +194,9 @@ public class GamePanel extends JPanel implements Runnable {
                         String direction = (String) list.get(1);
                         Position thatRobotPosition = new Position(x, y);
                         Player thatPlayer = new Player (this, keyH, thatRobotPosition, direction, robotName);
-                        players.add(thatPlayer);
+                        synchronized (players) {
+                            players.add(thatPlayer);
+                        }
 
                     }
                 }
@@ -403,7 +400,17 @@ public class GamePanel extends JPanel implements Runnable {
         g.drawLine((width / 2), 0, (width / 2), height); // Vertical line (y-axis)
 
         Graphics2D g2 = (Graphics2D) g;
+        //  tileM.draw(g2);
+        drawGrass(g2);
+
         
+        if (bullet != null) {
+            synchronized (bullet) {
+                bullet.draw(g);
+            }
+            
+        }
+
         if (players != null) {
             synchronized(players) {
                 for (Player player : players) {
@@ -428,11 +435,6 @@ public class GamePanel extends JPanel implements Runnable {
             }   
         }
 
-        // if (pits != null) {
-        //     for (int [] array: pits) {
-        //         drawPit(g2, array[0], array[1]);
-        //     }
-        // }
         if (pits != null) {
             synchronized (pits) {
                 for (int [] array: pits) {
@@ -441,20 +443,24 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        // if (bullet != null) {
-        //     bullet.draw(g);
-        // }
-
-        if (bullet != null) {
-            synchronized (bullet) {
-                bullet.draw(g);
-            }
-            
-        }
-
         g2.dispose();
         } catch (Exception e) {
             System.out.println("Paint exception encountered");
+            e.printStackTrace();
+        }
+    }
+
+    public void drawGrass(Graphics2D g2) {
+        BufferedImage image;
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/grass.png"))); 
+            for (int x = 0; x < width; x += tileSize) {
+                for (int y = 0; y < height; y += tileSize) {
+                    g2.drawImage(image, x, y, tileSize, tileSize, null);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading grass image");
             e.printStackTrace();
         }
     }
