@@ -175,6 +175,16 @@ public class Player extends Entity {
                 break;
         }
             g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 12)); 
+
+            // Calculate the width of the name to center it above the player
+            int nameWidth = g2.getFontMetrics().stringWidth(characterName);
+            int nameX = x + (gp.tileSize - nameWidth) / 2;
+            int nameY = y - 5;
+
+            g2.drawString(characterName, nameX, nameY);
         }
 
     public String setDirection (String directionGiven) {
