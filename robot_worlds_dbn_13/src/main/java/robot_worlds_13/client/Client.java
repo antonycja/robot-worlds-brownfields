@@ -269,9 +269,11 @@ public class Client {
             String[] parts = commandGiven.trim().split("\\s+", 3);
             if (!parts[0].equalsIgnoreCase("launch")) {
                 return false;
-            } else if (!Arrays.asList("ranger", "assassin", "sagebot").contains(parts[1].toLowerCase())) {
+            }
+            if (!Arrays.asList("ranger", "assassin", "sagebot").contains(parts[1].toLowerCase())) {
                 return false;
-            } else if (parts[2] == null || parts[2].isEmpty()) {
+            }
+            if (parts[2] == null || parts[2].isEmpty()) {
                 return false;
             }
             return true;

@@ -43,6 +43,9 @@ public abstract class Command {
         //     args = new String[] {instruction, ""};
         // }
 
+        // Convert instruction to lowercase
+        instruction = instruction.toLowerCase();
+
         switch (instruction){
             case "shutdown":
             case "off":
@@ -101,6 +104,10 @@ public abstract class Command {
     public static Command create(String instruction) {
         //  The 2 parameter specifies that the split operation should be performed at most once, resulting in two parts.
         String[] args = instruction.toLowerCase().trim().split(" ", 2);
+
+        // Convert instruction to lowercase
+        //instruction = instruction.toLowerCase();
+
 
         // for replay
         if (args.length == 1) {
