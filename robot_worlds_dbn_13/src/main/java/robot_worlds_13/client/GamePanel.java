@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+
 
 import com.google.gson.Gson;
 
@@ -48,7 +51,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int maxScreenRow = 12;
     final int screenWidth = tileSize * maxScreenCol; // 768 pixels
     final int screenHeight = tileSize * maxScreenRow; // 576 pixels
-    public List<Player> players = new ArrayList<>();
+    public List<Player> players = new CopyOnWriteArrayList<>();
+    
     List<Player> bullets = Collections.synchronizedList(new ArrayList<>());
 
     int FPS = 60;
@@ -181,16 +185,6 @@ public class GamePanel extends JPanel implements Runnable {
                     Map<String, ArrayList<Object>> robotMap = ((Map<String, ArrayList<Object>>) response.get("robots"));
                     for (Map.Entry<String, ArrayList<Object>> entry: robotMap.entrySet()) {
                         String robotName = entry.getKey();
-                        
-                        boolean finishedForLoop = true;
-                        for (Player existingPlayer: players) {
-                            if (existingPlayer.characterName != robotName){
-                                finishedForLoop = false;
-                                break;
-                            }
-                        } if (finishedForLoop == false){
-                            continue;
-                        }
 
                         ArrayList<Object> list = entry.getValue();
                         Map positionMap = (Map) list.get(0); // This cast is safe because list.get(0) returns a LinkedTreeMap
@@ -200,7 +194,9 @@ public class GamePanel extends JPanel implements Runnable {
                         String direction = (String) list.get(1);
                         Position thatRobotPosition = new Position(x, y);
                         Player thatPlayer = new Player (this, keyH, thatRobotPosition, direction, robotName);
-                        players.add(thatPlayer);
+                        synchronized (players) {
+                            players.add(thatPlayer);
+                        }
 
                     }
                 }
