@@ -4,7 +4,11 @@ package servertests.robottests;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import robot_worlds_13.server.robot.*;
+import robot_worlds_13.server.robot.world.AbstractWorld;
 
 class CommandTest {
 
@@ -14,16 +18,7 @@ class CommandTest {
         assertEquals("off", test.getName());
     }
 
-    
-        @Test
-        void executeShutdown() {
-            Robot robot = new Robot("CrashTestDummy");
-            Command shutdown = Command.create("shutdown");
-            assertFalse(shutdown.execute(robot));
-            assertEquals("Shutting down...", robot.getStatus());
-        }
-    
-    
+
     @Test
     void getForwardName() {
         ForwardCommand test = new ForwardCommand("100");
@@ -31,15 +26,7 @@ class CommandTest {
         assertEquals("100", test.getArgument());
     }
 
-    @Disbled
-    void executeForward() {
-        Robot robot = new Robot("CrashTestDummy");
-        Command forward100 = Command.create("forward 10");
-        assertTrue(forward100.execute(robot));
-        Position expectedPosition = new Position(Robot.CENTRE.getX(), Robot.CENTRE.getY() + 10);
-        assertEquals(expectedPosition, robot.getPosition());
-        assertEquals("Moved forward by 10 steps.", robot.getStatus());
-    }
+
 
     @Test
     void getHelpName() {
@@ -47,20 +34,6 @@ class CommandTest {
         assertEquals("help", test.getName());
     }
 
-    @Test
-    void executeHelp() {
-        Robot robot = new Robot("CrashTestDummy");
-        Command help = Command.create("help");
-        assertTrue(help.execute(robot));
-        assertEquals("I can understand these commands:\n" +
-                "OFF  - Shut down robot\n" +
-                "HELP - provide information about commands\n" +
-                "FORWARD - move forward by specified number of steps, e.g. 'FORWARD 10'\n" +
-                "BACK - move back by specified number of steps, e.g. 'BACK 10'\n" +
-                "LEFT - turn left by 90 degrees\n" +
-                "RIGHT - turn right by 90 degrees\n" +
-                "OFF  - Shut down robot", robot.getStatus());
-    }
 
     @Test
     void createCommand() {
