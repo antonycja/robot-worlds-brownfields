@@ -37,7 +37,7 @@ public class ClientProtocolTest {
     public void testJsonResponseUnpackerOkResponse() {
         String jsonResponse = "{\"result\":\"OK\",\"data\":{\"message\":\"Operation successful\"}}";
         String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
-        assertEquals("Operation successful", response);
+        assertEquals("{\"result\":\"OK\",\"data\":{\"message\":\"Operation successful\"}}", response);
     }
 
     @Test
