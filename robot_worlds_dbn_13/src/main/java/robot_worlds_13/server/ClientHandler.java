@@ -72,8 +72,6 @@ public class ClientHandler implements Runnable {
             this.commandLine = new Scanner(System.in);
 
             
-            
-            
             // sendMessage("Connected");
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> state = new HashMap<>();
@@ -379,12 +377,11 @@ public class ClientHandler implements Runnable {
                 Map<String, Object> request = new HashMap<>();
                 try {
                     request = gson.fromJson(instruction, new TypeToken<Map<String, Object>>(){}.getType());
-                    
                 } catch (Exception e) {
                     System.out.println(request);
                     System.err.println("Failed to parse JSON: " + e.getMessage());
                     e.printStackTrace();
-                    continue;
+                    break;
                 }
                 
                 
