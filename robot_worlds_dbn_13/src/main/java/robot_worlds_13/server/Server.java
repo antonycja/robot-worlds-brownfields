@@ -24,6 +24,7 @@ public class Server {
     List<ClientHandler> clients = new ArrayList<>();
     private static List<Socket> clientConnections = new ArrayList<>();
     static DataOutputStream dos;
+    static int port = 2201;
 
     // random
     Random rand = new Random();
@@ -37,6 +38,10 @@ public class Server {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Starting server...\n");
+
+        System.out.println("Server address: " + NetworkInfo.main(args));
+        System.out.println("Port number: " + port + "\n");
+
         
         String path = new File(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
         String otherFilePath = "/../src/main/java/robot_worlds_13/server/configuration/file.txt";
@@ -59,7 +64,7 @@ public class Server {
         // maze loaded
         AbstractWorld world = new TextWorld(new SimpleMaze(), serverObject, dataMap);
 
-        try (ServerSocket serverSocket = new ServerSocket(2201)) {
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started. Listening for incoming connections...");
 
             // thread for listening to terminal commands
