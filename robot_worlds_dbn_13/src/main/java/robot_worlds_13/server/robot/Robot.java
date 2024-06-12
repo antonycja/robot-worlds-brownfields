@@ -100,6 +100,8 @@ public class Robot {
         this.shields = maxShields;
         this.bulletDistance = (robotConfigurable.get("bulletDistance") != null) ? robotConfigurable.get("bulletDistance") : 5;;
         this.previouPosition = startingPosition;
+        this.maxShields = (worldObject.hasShieldRepairTime()) ? worldObject.shieldRepairTime : 5;
+
     }
 
     public String getStatus() {

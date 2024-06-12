@@ -23,6 +23,7 @@ public class AbstractWorld implements IWorld {
     private static Gson gson = new Gson();
     public Server serverObject;
     public ArrayList<String> obstacleInStringFormat = new ArrayList<>();
+
     Random rand = new Random();
 
 
@@ -407,6 +408,11 @@ public class AbstractWorld implements IWorld {
     @Override
     public void showObstacles() {
         
+    }
+
+    public boolean hasShieldRepairTime(){
+        //Assuming shieldRepairTime is initialized to 0 by default
+        return shieldRepairTime != 0;
     }
     
     public List<String> getObstaclesAsString() {

@@ -23,7 +23,7 @@ public class  RepairCommand extends Command {
             return false;
             }
 
-            target.worldData.giveCurrentRobotInfo(target);
+        target.worldData.giveCurrentRobotInfo(target);
 
         // do repair
         int repairTime = target.worldData.shieldRepairTime;
