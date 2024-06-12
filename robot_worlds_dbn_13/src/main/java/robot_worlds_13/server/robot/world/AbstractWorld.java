@@ -299,21 +299,6 @@ public class AbstractWorld implements IWorld {
         return true; // No collision detected
     }
 
-    public boolean isPositionNotOccupiedByRobot1(Position position) {
-        for (String name: serverObject.nameRobotMap.keySet()) {
-            if (name.equals(this.curentRobotName)){
-                continue;
-            }
-
-            ArrayList<Object> currentState = serverObject.nameRobotMap.get(name);
-            Position thatRobotsPosition = (Position) currentState.get(0);
-            if (thatRobotsPosition.equals(position)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public boolean isPositionNotOccupiedByRobot(Position position) {
         int currentRobotX = position.getX();
         int currentRobotY = position.getY();
@@ -870,6 +855,8 @@ public class AbstractWorld implements IWorld {
         if (!isNewPositionAllowed(destinationPosition)) {
             return true;
         } else if (!isPositionNotOccupiedByRobot(destinationPosition)) {
+            return true;
+        } else if (isInBottomLessPit(destinationPosition)) {
             return true;
         }
         else {

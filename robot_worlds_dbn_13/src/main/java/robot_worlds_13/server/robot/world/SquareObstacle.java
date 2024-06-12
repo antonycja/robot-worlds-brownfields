@@ -99,4 +99,8 @@ public class SquareObstacle implements Obstacle {
         return coordinates;
     }
 
+    public Position getPosition() {
+        return new Position(x, y);
+    }
+
 }

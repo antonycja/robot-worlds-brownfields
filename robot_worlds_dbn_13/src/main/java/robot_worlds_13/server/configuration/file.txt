@@ -1,8 +1,8 @@
-visibility 10
+visibility 100
 reload 10
 repair 10
-shields 3
-shots 45
+shields 5
+shots 10
 width 500
 height 600
 bulletDistance 100

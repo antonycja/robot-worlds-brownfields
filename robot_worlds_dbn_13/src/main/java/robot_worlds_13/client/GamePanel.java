@@ -387,71 +387,71 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void paintComponent(Graphics g) {
         try {
-        super.paintComponent(g);
+            super.paintComponent(g);
 
-        // Draw Cartesian axes
-        g.drawLine(0, (height / 2), width, (height / 2)); // Horizontal line (x-axis)
-        g.drawLine((width / 2), 0, (width / 2), height); // Vertical line (y-axis)
+            // Draw Cartesian axes
+            g.drawLine(0, (height / 2), width, (height / 2)); // Horizontal line (x-axis)
+            g.drawLine((width / 2), 0, (width / 2), height); // Vertical line (y-axis)
 
-        Graphics2D g2 = (Graphics2D) g;
-        //  tileM.draw(g2);
-        drawGrass(g2);
- 
-        // Draw trees in the top left corner
-        int scaledTileSize = tileSize; // Adjusted size of the image to match the tile size
+            Graphics2D g2 = (Graphics2D) g;
+            //  tileM.draw(g2);
+            drawGrass(g2);
 
-    // Draw trees in the top left corner
-    drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, 0, 0, scaledTileSize, scaledTileSize, 10, 10);
+            // Draw trees in the top left corner
+            int scaledTileSize = tileSize; // Adjusted size of the image to match the tile size
 
-    // Draw trees in the top right corner
-    drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, width - 4 * scaledTileSize, 0, scaledTileSize, scaledTileSize, 10, 10);
+            // Draw trees in the top left corner
+            drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, 0, 0, scaledTileSize, scaledTileSize, 10, 10);
 
-    // Draw trees in the bottom left corner
-    drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, 0, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 10, 10);
+            // Draw trees in the top right corner
+            drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, width - 4 * scaledTileSize, 0, scaledTileSize, scaledTileSize, 10, 10);
 
-    // Draw trees in the bottom right corner
-    drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 10, 10);
-        
-        if (bullet != null) {
-            synchronized (bullet) {
-                bullet.draw(g);
-            }
+            // Draw trees in the bottom left corner
+            drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, 0, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 10, 10);
+
+            // Draw trees in the bottom right corner
+            drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 10, 10);
             
-        }
+            if (bullet != null) {
+                synchronized (bullet) {
+                    bullet.draw(g);
+                }
+                
+            }
 
-        if (players != null) {
-            synchronized(players) {
-                for (Player player : players) {
-                    player.draw(g2);
+            if (players != null) {
+                synchronized(players) {
+                    for (Player player : players) {
+                        player.draw(g2);
+                    }
                 }
             }
-        }
 
-        if (obstacles != null) {
-            synchronized(obstacles) {
-                for (int[] obstacle : obstacles) {
-                    drawSquare(g2, obstacle[0], obstacle[1]);
+            if (obstacles != null) {
+                synchronized(obstacles) {
+                    for (int[] obstacle : obstacles) {
+                        drawSquare(g2, obstacle[0], obstacle[1]);
+                    }
                 }
             }
-        }
 
-        if (lakes != null) {
-            synchronized (lakes) {
-                for (int [] array: lakes) {
-                    drawLake(g2, array[0], array[1]);
-                }
-            }   
-        }
+            if (lakes != null) {
+                synchronized (lakes) {
+                    for (int [] array: lakes) {
+                        drawLake(g2, array[0], array[1]);
+                    }
+                }   
+            }
 
-        if (pits != null) {
-            synchronized (pits) {
-                for (int [] array: pits) {
-                    drawPit(g2, array[0], array[1]);
+            if (pits != null) {
+                synchronized (pits) {
+                    for (int [] array: pits) {
+                        drawPit(g2, array[0], array[1]);
+                    }
                 }
             }
-        }
 
-        g2.dispose();
+            g2.dispose();
         } catch (Exception e) {
             System.out.println("Paint exception encountered");
             e.printStackTrace();
