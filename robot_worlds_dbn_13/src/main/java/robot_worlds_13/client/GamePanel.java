@@ -462,7 +462,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void drawSquare(Graphics2D g2, int obstX, int obstY) {
             BufferedImage image;
             try {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../player/New _obstacle.png")));
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/tree.png")));
                 g2.drawImage(image, obstX, obstY, tileSize, tileSize, null);
             } catch (IOException e) {
             }
@@ -471,7 +471,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void drawLake (Graphics2D g2, int obstX, int obstY) {
         BufferedImage image;
         try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../player/New _obstacle.png"))); // change image
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/water.png"))); // change image
             g2.drawImage(image, obstX, obstY, tileSize, tileSize, null);
         } catch (IOException e) {
         }
@@ -480,7 +480,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void drawPit(Graphics2D g2, int obstX, int obstY) {
         BufferedImage image;
         try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../player/New _obstacle.png"))); // change image
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/sand.png"))); // change image
             g2.drawImage(image, obstX, obstY, tileSize, tileSize, null);
         } catch (IOException e) {
         }
