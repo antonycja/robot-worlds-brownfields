@@ -402,7 +402,21 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
         //  tileM.draw(g2);
         drawGrass(g2);
+ 
+        // Draw trees in the top left corner
+        int scaledTileSize = tileSize; // Adjusted size of the image to match the tile size
 
+    // Draw trees in the top left corner
+    drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, 0, 0, scaledTileSize, scaledTileSize, 10, 10);
+
+    // Draw trees in the top right corner
+    drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, width - 4 * scaledTileSize, 0, scaledTileSize, scaledTileSize, 10, 10);
+
+    // Draw trees in the bottom left corner
+    drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, 0, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 10, 10);
+
+    // Draw trees in the bottom right corner
+    drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 10, 10);
         
         if (bullet != null) {
             synchronized (bullet) {
@@ -450,6 +464,30 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    private void drawImagesInCorner(Graphics2D g2, String imagePath, int imagesPerRow, int rows, int cornerX, int cornerY, int imageWidth, int imageHeight, int spacingX, int spacingY) {
+        BufferedImage image;
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+            image = scaleImage(image, imageWidth, imageHeight); // Scale the image to match the desired size
+    
+            for (int i = 0; i < rows; i++) { // Loop for each row
+                for (int j = 0; j < imagesPerRow; j++) { // Loop for each image in the row
+                    g2.drawImage(image, cornerX + (j * (imageWidth + spacingX)), cornerY + (i * (imageHeight + spacingY)), null);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private BufferedImage scaleImage(BufferedImage image, int width, int height) {
+        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = scaledImage.createGraphics();
+        g2.drawImage(image, 0, 0, width, height, null);
+        g2.dispose();
+        return scaledImage;
+    }
+        
     public void drawGrass(Graphics2D g2) {
         BufferedImage image;
         try {
@@ -474,20 +512,20 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-    public void drawLake (Graphics2D g2, int obstX, int obstY) {
-        BufferedImage image;
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/water.png"))); // change image
-            g2.drawImage(image, obstX, obstY, tileSize, tileSize, null);
-        } catch (IOException e) {
+        public void drawLake (Graphics2D g2, int obstX, int obstY) {
+            BufferedImage image;
+            try {
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/water.png"))); // change image
+                g2.drawImage(image, obstX, obstY, tileSize*2, tileSize*2, null);
+            } catch (IOException e) {
+            }
         }
-    }
 
     public void drawPit(Graphics2D g2, int obstX, int obstY) {
         BufferedImage image;
         try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/sand.png"))); // change image
-            g2.drawImage(image, obstX, obstY, tileSize, tileSize, null);
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/pit.png"))); // change image
+            g2.drawImage(image, obstX, obstY, tileSize*3, tileSize*3, null);
         } catch (IOException e) {
         }
     }
