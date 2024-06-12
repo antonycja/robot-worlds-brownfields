@@ -465,12 +465,20 @@ public class ClientHandler implements Runnable {
         String message = "";
         try {
             message = dis.readUTF();
+            if (!isValidJson(message)) {
+                System.out.println("Invalid JSON received: " + message);
+                return "{}"; // Return empty JSON or handle appropriately
+            }
             System.out.println("Client " + clientIdentifier + " says: " + message);
-
         } catch (Exception e) {
-            return "ClientQuit";
+            return "{}"; // or handle error appropriately
         }
         return message;
+    }
+
+    public boolean isValidJson(String json) {
+        json = json.trim();
+        return (json.startsWith("{") && json.endsWith("}")) || (json.startsWith("[") && json.endsWith("]"));
     }
 
     public void sendMessage(String question) {
