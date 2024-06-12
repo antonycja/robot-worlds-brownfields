@@ -106,7 +106,7 @@ public abstract class Command {
         String[] args = instruction.toLowerCase().trim().split(" ", 2);
 
         // Convert instruction to lowercase
-        //instruction = instruction.toLowerCase();
+        instruction = instruction.toLowerCase();
 
 
         // for replay

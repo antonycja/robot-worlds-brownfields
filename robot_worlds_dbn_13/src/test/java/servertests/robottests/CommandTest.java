@@ -57,4 +57,17 @@ class CommandTest {
             assertEquals("Unsupported command: say hello", e.getMessage());                             //<6>
         }
     }
+
+    @Test
+    void commandsAreCaseInsensitive() {
+        //Test if commands are case insensitive
+        Command shutdownUpperCase = Command.create("OFF");
+        assertEquals("off", shutdownUpperCase.getName());
+
+        Command forwardLowerCase = Command.create("FOrward");
+        assertEquals("forward", forwardLowerCase.getName());
+
+        Command helpMixedCase = Command.create("HeLp");
+        assertEquals("help", helpMixedCase.getName());
+    }
 }
