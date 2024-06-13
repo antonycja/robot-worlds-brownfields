@@ -2,7 +2,6 @@ package robot_worlds_13.server.robot;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import robot_worlds_13.server.ServerProtocol;
 import robot_worlds_13.server.robot.world.IWorld;
 import robot_worlds_13.server.robot.world.IWorld.UpdateResponse;
