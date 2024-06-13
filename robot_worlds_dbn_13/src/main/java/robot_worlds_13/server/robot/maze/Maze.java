@@ -2,7 +2,6 @@ package robot_worlds_13.server.robot.maze;
 
 import robot_worlds_13.server.robot.Position;
 import robot_worlds_13.server.robot.world.Obstacle;
-
 import java.util.List;
 
 /**
