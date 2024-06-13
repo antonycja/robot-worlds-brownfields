@@ -34,4 +34,20 @@ public class ServerProtocolTest{
 
     }
 
+    @Test
+
+    void testBuildResponseWithResultAndData() {
+
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("key", "value");
+
+
+        String response = ServerProtocol.buildResponse("OK", data);
+
+
+        assertEquals("{\"result\":\"OK\",\"data\":{\"key\":\"value\"}}", response);
+
+    }
+
 }
