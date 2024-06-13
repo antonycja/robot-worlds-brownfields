@@ -6,16 +6,24 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
-
 import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 
+/**
+ * This class listens for terminal commands and executes them accordingly.
+ */
 public class TerminalListener implements Runnable {
 
     private final ServerSocket server;
     private final Server serverObject;
     private final AbstractWorld world;
 
+    /**
+     * Constructs a TerminalListener object with the given parameters.
+     * @param serverSocket The server socket.
+     * @param serverObjectGiven The server object.
+     * @param worldGiven The world object.
+     */
     public TerminalListener(ServerSocket serverSocket, Server serverObjectGiven, AbstractWorld worldGiven) {
         this.server = serverSocket;
         this.serverObject = serverObjectGiven;
@@ -45,7 +53,6 @@ public class TerminalListener implements Runnable {
                     
                     getRobotsInWorld();
 
-
                 }
                 
                 else {
@@ -58,6 +65,10 @@ public class TerminalListener implements Runnable {
         }
     }
 
+
+    /**
+     * Closes all clients connected to the server.
+     */
     private void closeAllClients() {
         List<ClientHandler> clients = serverObject.clients;
         for (ClientHandler client : clients) {
@@ -72,6 +83,9 @@ public class TerminalListener implements Runnable {
         System.out.println("All clients closed...");
     }
 
+    /**
+     * Closes the server.
+     */
     private void closeServer() {
         try {
             server.close();
@@ -80,6 +94,9 @@ public class TerminalListener implements Runnable {
         }
     }
 
+    /**
+     * Prints information about the robots in the world.
+     */
     private void getRobotsInWorld () {
         if (serverObject.nameRobotMap.isEmpty()){
             System.out.println("No robots on world yet");
@@ -101,6 +118,9 @@ public class TerminalListener implements Runnable {
         }
     }
 
+    /**
+     * Prints information about the obstacles in the world.
+     */
     private void getObstaclesInWorld () {
         if (world.getObstaclesAsString().isEmpty()) {
             System.out.println("There are no obstacles in the world");
