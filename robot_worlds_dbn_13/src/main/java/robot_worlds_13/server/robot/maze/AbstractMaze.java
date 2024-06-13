@@ -1,10 +1,9 @@
 package robot_worlds_13.server.robot.maze;
 
-import java.util.List;
-
-import robot_worlds_13.server.robot.Position;
-import robot_worlds_13.server.robot.world.Obstacle;
-
+/**
+ * Represents an abstract implementation of a maze.
+ * Provides a common base for different maze implementations.
+ */
 abstract class AbstractMaze implements Maze {
     // 
 }
