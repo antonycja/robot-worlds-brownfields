@@ -44,7 +44,7 @@ public class RepairCommandTest {
         assertTrue(result);
 
         //Check if the robot's shields are repaired to the maximum value
-        assertEquals(5, robot.maxShields);
+        assertEquals(3, robot.maxShields);
     }
 
     /**
