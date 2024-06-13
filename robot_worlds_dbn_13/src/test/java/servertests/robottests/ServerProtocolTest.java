@@ -13,5 +13,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerProtocolTest{
-    
+    @Test
+
+    void testBuildResponseWithResultDataAndState() {
+
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("key", "value");
+
+
+        Map<String, Object> state = new HashMap<>();
+
+        state.put("stateKey", "stateValue");
+
+
+        String response = ServerProtocol.buildResponse("OK", data, state);
+
+
+        assertEquals("{\"result\":\"OK\",\"data\":{\"key\":\"value\"},\"state\":{\"stateKey\":\"stateValue\"}}", response);
+
+    }
+
 }
