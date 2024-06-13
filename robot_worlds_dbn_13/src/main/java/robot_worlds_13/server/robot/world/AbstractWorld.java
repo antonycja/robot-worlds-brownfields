@@ -23,10 +23,8 @@ public class AbstractWorld implements IWorld {
     private static Gson gson = new Gson();
     public Server serverObject;
     public ArrayList<String> obstacleInStringFormat = new ArrayList<>();
-
     Random rand = new Random();
-
-
+    
     private List<Obstacle> obstacles = new ArrayList<>();
     private List<Obstacle> bottomLessPits = new ArrayList<>();
     private List<Obstacle> lakes = new ArrayList<>();

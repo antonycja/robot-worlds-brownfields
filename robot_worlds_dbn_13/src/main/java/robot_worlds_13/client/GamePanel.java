@@ -1,15 +1,9 @@
 package robot_worlds_13.client;
 
-import entity.Bullet;
-import entity.Player;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -18,27 +12,23 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import com.google.gson.Gson;
 
-import robot_worlds_13.client.Main;
+import entity.Bullet;
+import entity.Player;
 import robot_worlds_13.server.robot.Direction;
 import robot_worlds_13.server.robot.Position;
-import robot_worlds_13.server.robot.world.*;
-import robot_worlds_13.server.robot.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -114,10 +104,18 @@ public class GamePanel extends JPanel implements Runnable {
         try {
             while (gameThread != null) {
                 // listen for command
+                
                 Map<String, Object> response;
-
+                String stringResponse = din.readUTF();
+                
+                if (stringResponse.contains("Shutting down")) {
+                    break;
+                } else if (stringResponse.contains("Server shutting down...")) {
+                    break;
+                }
+                
                 try {
-                    response = GUIProtocol.jsonResponseUnpacker(din.readUTF());
+                    response = GUIProtocol.jsonResponseUnpacker(stringResponse);
                     if (response == null || response.isEmpty() || response.size() == 0) {
                         continue;
                     }
@@ -128,7 +126,6 @@ public class GamePanel extends JPanel implements Runnable {
                 if (response.containsKey("message") && response.get("message").equals("LAKES")) {
                     List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("obstacles");
                     for (Map<String, Object> obstacle : obstaclesList) {
-                        int size = 20;
                         int x = (width/2) + ((int)((double) obstacle.get("x")));
                         int y = (height/2) - ((int)((double) obstacle.get("y"))) - tileSize;
                         lakes.add(new int[] {x, y});
@@ -225,39 +222,35 @@ public class GamePanel extends JPanel implements Runnable {
                     
                 }
 
-
-                // if response move
-                    // using the name, get player object
-                    // from and too position, move by one unit
                 if (((String) response.get("message")).equalsIgnoreCase("FRONT")) {
-                            for (Player player: players) {
-                                if (name.equals(player.characterName)){
+                        for (Player player: players) {
+                            if (name.equals(player.characterName)){
 
-                                int previousX = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(0)));
-                                int previousY = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(1)));
-                                if (startX == previousX && startY == previousY) {
-                                    continue;
+                            int previousX = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(0)));
+                            int previousY = (int) Math.round(( (double) ((ArrayList<Double>) response.get("previousPosition")).get(1)));
+                            if (startX == previousX && startY == previousY) {
+                                continue;
+                            }
+                            if (startX > previousX) {
+                                for (int step=previousX; step!=startX; step++) {
+                                    player.update(Direction.EAST);
                                 }
-                                if (startX > previousX) {
-                                    for (int step=previousX; step!=startX; step++) {
-                                        player.update(Direction.EAST);
-                                    }
+                            }
+                            if (startY > previousY) {
+                                for (int step=previousY; step != startY; step++){
+                                    player.update(Direction.NORTH);
                                 }
-                                if (startY > previousY) {
-                                    for (int step=previousY; step != startY; step++){
-                                        player.update(Direction.NORTH);
-                                    }
+                            }
+                            if (startX < previousX) {
+                                for (int step=startX; step!=previousX; step++) {
+                                    player.update(Direction.WEST);
                                 }
-                                if (startX < previousX) {
-                                    for (int step=startX; step!=previousX; step++) {
-                                        player.update(Direction.WEST);
-                                    }
+                            }
+                            if (startY < previousY) {
+                                for (int step=startY; step!=previousY; step++) {
+                                    player.update(Direction.SOUTH);
                                 }
-                                if (startY < previousY) {
-                                    for (int step=startY; step!=previousY; step++) {
-                                        player.update(Direction.SOUTH);
-                                    }
-                                }
+                            }
                         }
                     }
                 }
@@ -401,16 +394,16 @@ public class GamePanel extends JPanel implements Runnable {
             int scaledTileSize = tileSize; // Adjusted size of the image to match the tile size
 
             // Draw trees in the top left corner
-            drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, 0, 0, scaledTileSize, scaledTileSize, 10, 10);
+            drawImagesInCorner(g2, "../../obstacles/tree.png", 3, 3, 0, 0, scaledTileSize, scaledTileSize, 8, 8);
 
             // Draw trees in the top right corner
-            drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, width - 4 * scaledTileSize, 0, scaledTileSize, scaledTileSize, 10, 10);
+            drawImagesInCorner(g2, "../../obstacles/tree.png", 3, 3, width - 4 * scaledTileSize, 0, scaledTileSize, scaledTileSize, 8, 8);
 
             // Draw trees in the bottom left corner
-            drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, 0, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 10, 10);
+            drawImagesInCorner(g2, "../../obstacles/tree.png", 3, 3, 0, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 8, 8);
 
             // Draw trees in the bottom right corner
-            drawImagesInCorner(g2, "../../obstacles/tree.png", 4, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 10, 10);
+            drawImagesInCorner(g2, "../../obstacles/tree.png", 3, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 8, 8);
             
             if (bullet != null) {
                 synchronized (bullet) {
@@ -492,8 +485,8 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error loading grass image");
-            e.printStackTrace();
+            //java.io.IOException: closed
+
         }
     }
 
@@ -519,7 +512,7 @@ public class GamePanel extends JPanel implements Runnable {
         BufferedImage image;
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/pit.png"))); // change image
-            g2.drawImage(image, obstX, obstY, tileSize*3, tileSize*3, null);
+            g2.drawImage(image, obstX, obstY, tileSize*2, tileSize*2, null);
         } catch (IOException e) {
         }
     }

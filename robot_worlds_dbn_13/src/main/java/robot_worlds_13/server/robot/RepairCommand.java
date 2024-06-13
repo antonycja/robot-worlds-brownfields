@@ -26,7 +26,7 @@ public class  RepairCommand extends Command {
         target.worldData.giveCurrentRobotInfo(target);
 
         // do repair
-        int repairTime = target.worldData.shieldRepairTime;
+        int repairTime = target.getRepairTime();
         target.repairShields(repairTime);
 
         Map<String, Object> data = new HashMap<>();

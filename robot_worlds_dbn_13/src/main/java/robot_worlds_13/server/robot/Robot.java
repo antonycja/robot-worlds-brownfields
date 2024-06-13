@@ -30,8 +30,10 @@ public class Robot {
     public int bulletDistance;
     private String responseToClient = "{}";
     private boolean repairing = false;
+    private boolean reloading = false;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private int reloadTime;
+    private int repairingTime;
     public Position previouPosition;
     private String responseGUIToClient = "{}";
 
@@ -44,6 +46,7 @@ public class Robot {
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = new TextWorld(new SimpleMaze());
         this.reloadTime = 5;
+        this.repairingTime = 5;
     }
 
     public Robot(String name, Position startPosition) {
@@ -55,6 +58,7 @@ public class Robot {
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = new TextWorld(new SimpleMaze());
         this.reloadTime = 5;
+        this.repairingTime = 5;
     }
 
     public Robot(String name, AbstractWorld worldObject) {
@@ -67,6 +71,7 @@ public class Robot {
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
         this.reloadTime = 5;
+        this.repairingTime = 5;
 
     }
 
@@ -84,6 +89,7 @@ public class Robot {
         this.shields = 5;
         this.bulletDistance = 5;
         this.previouPosition = startingPosition;
+        this.repairingTime = 5;
     }
 
     public Robot(String name, AbstractWorld worldObject, Position startingPosition, Map<String, Integer> robotConfigurable) {
@@ -97,10 +103,13 @@ public class Robot {
         this.maxShields = (robotConfigurable.get("shields") != null) ? robotConfigurable.get("shields") : 5;
         this.maxAmmo = (robotConfigurable.get("shots") != null) ? robotConfigurable.get("shots") : 5;
         this.ammo = maxAmmo;
+        this.reloadTime = worldData.ammoReloadTime;
         this.shields = maxShields;
         this.bulletDistance = (robotConfigurable.get("bulletDistance") != null) ? robotConfigurable.get("bulletDistance") : 5;;
         this.previouPosition = startingPosition;
-        this.maxShields = (worldObject.hasShieldRepairTime()) ? worldObject.shieldRepairTime : 5;
+        this.repairingTime = (worldObject.hasShieldRepairTime()) ? worldObject.shieldRepairTime : 5;
+        
+        
 
     }
 
@@ -299,7 +308,6 @@ public class Robot {
     }
 
     public void reload(int reloadTime) {
-        boolean reloading = false;
         if (!reloading){
             reloading = true;
             status = "RELOAD";
@@ -307,7 +315,7 @@ public class Robot {
                 this.ammo = maxAmmo;
                 //Repair shields to max value
                 status = "NORMAL";
-                
+                reloading = false;
             },reloadTime, TimeUnit.SECONDS);
         }
     }
@@ -322,6 +330,10 @@ public class Robot {
 
     public void setDeadStatus() {
         this.status = "DEAD";
+    }
+
+    public int getRepairTime() {
+        return this.repairingTime;
     }
 
     

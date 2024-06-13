@@ -36,7 +36,7 @@ public class Client {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     
     private static final String PORT_REGEX = "\\b([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\\b";
@@ -53,7 +53,7 @@ public class Client {
     static private Gson gson = new Gson();
 
     public static void main(String[] args) {
-        System.out.println(ANSI_YELLOW + "       " +
+        System.out.println(ANSI_CYAN + "       " +
                 "  __\n" +
                 " _(\\    |@@|\n" +
                 "(__/\\__ \\--/ __\n" +
@@ -111,7 +111,6 @@ public class Client {
                 System.exit(0);
             }
         }
-        System.out.println(ANSI_RESET);
         
 
         try {
@@ -152,7 +151,7 @@ public class Client {
 
                 if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || 
                 response.contains("Connected successfully to") || response.contains("Too many of you in this world")) {
-                    System.out.println(ANSI_BLUE + "Launch a robot!, Hint use 'launch make robot_name'");
+                    System.out.println(ANSI_CYAN + "Launch a robot!, Hint use 'launch make robot_name'");
                     System.out.println(ANSI_GREEN + "Please enter a valid make. Options are: Ranger, Assasin, SageBot");
                     // get imput
                     String command = line.nextLine();
@@ -201,15 +200,13 @@ public class Client {
                 }
 
                 if (response.contains("ERROR")) {
-                    System.out.println(ANSI_RED + response + ANSI_RESET);
+                    System.out.println(ANSI_RED + response);
                 } else if (response.contains("What")) {
                     System.out.println(ANSI_GREEN + response);
                 } else {
-                    System.out.println(ANSI_BLUE + response + ANSI_RESET);
+                    System.out.println(ANSI_CYAN + response);
                 } 
 
-                
-                
                 if (response.contains("Shutting down")) {
                     break;
                 } else if (response.contains("Server shutting down...")) {
@@ -226,8 +223,6 @@ public class Client {
                     // send to server as json
                     sendJsonRequest(formattedCommand);
                 }
-
-                System.out.print(ANSI_RESET);
             }
 
             // close this client
@@ -265,7 +260,7 @@ public class Client {
         
         String jsonRequest = gson.toJson(commandDetails);
         
-        System.out.println("Sending command: " + jsonRequest + "\n");
+        System.out.println("Sending command: " + jsonRequest);
         System.out.println("--------------------------------------------------------------");
         
         try {

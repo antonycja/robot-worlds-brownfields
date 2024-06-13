@@ -1,6 +1,6 @@
 visibility 100
-reload 10
-repair 10
+reload 5
+repair 5
 shields 5
 shots 10
 width 500
