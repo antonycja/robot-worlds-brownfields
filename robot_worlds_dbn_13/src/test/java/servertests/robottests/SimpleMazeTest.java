@@ -14,14 +14,15 @@ class SimpleMazeTest {
         Maze maze = new SimpleMaze();
         assertEquals(5, maze.getObstacles().size());
     }
-}
 
-//     @Test
-//     void testSimpleMazeInCenter() {
-//         Maze maze = new SimpleMaze();
-//         assertEquals(0, maze.getObstacles().get(0).getBottomLeftX());
-//         assertEquals(0, maze.getObstacles().get(0).getBottomLeftY());
-//     }
+
+    // @Test
+    // void testSimpleMazeInCenter() {
+    //     Maze maze = new SimpleMaze();
+    //     assertEquals(200, maze.getObstacles().get(0).getBottomLeftX());
+    //     assertEquals(0, maze.getObstacles().get(0).getBottomLeftY());
+    // }
+
 
 //     @Test
 //     void testSimpleMazeObstacleWidth() {
@@ -74,11 +75,11 @@ class SimpleMazeTest {
 //         assertEquals(2, maze.getLakes().size());
 //     }
 
-//     @Test
-//     void testSimpleMazeBlocksPath() {
-//         Maze maze = new SimpleMaze();
-//         Position a = new Position(0, 0);
-//         Position b = new Position(1, 1);
-//         assertTrue(maze.blocksPath(a, b)); // This test will fail until you implement the blocksPath method
-//     }
-// }
+    @Test
+    void testSimpleMazeBlocksPath() {
+        Maze maze = new SimpleMaze();
+        Position a = new Position(0, 0);
+        Position b = new Position(1, 1);
+        assertFalse(maze.blocksPath(a, b)); // This test will fail until you implement the blocksPath method
+    }
+}
