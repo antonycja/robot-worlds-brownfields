@@ -2,12 +2,23 @@ package robot_worlds_13.server.robot;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import robot_worlds_13.server.ServerProtocol;
 import robot_worlds_13.server.robot.world.IWorld;
 import robot_worlds_13.server.robot.world.IWorld.UpdateResponse;
 
-public class BackCommand extends robot_worlds_13.server.robot.Command {
+/**
+ * Executes the "back" command for a robot, moving it backwards by the specified
+ * number of steps.
+ * If the robot is in the "REPAIR" or "RELOAD" status, movement is not allowed
+ * and a message is returned.
+ * If there is an obstacle, robot, or the robot would move outside the world, a
+ * message is returned.
+ * Otherwise, the robot is moved backwards and a "Done" message is returned.
+ *
+ * @param target the robot to execute the command on
+ * @return true if the command was executed successfully, false otherwise
+ */
+public class BackCommand extends Command {
 
     @Override
     public boolean execute(Robot target) {
@@ -17,14 +28,12 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> state = target.getRobotState();
 
-        
-
         if (target.getStatus() == "REPAIR") {
             // repair
             data.clear();
             data.put("message", "Movement not allowed whilst repairing robot");
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
-            
+
             target.previouPosition = target.position;
             data.clear();
             data.put("message", "BACK");
@@ -110,7 +119,7 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
         }
 
         // where towards is either "front" or "back"
-        if (target.updatePosition(nrSteps, "back")){
+        if (target.updatePosition(nrSteps, "back")) {
             data.clear();
             data.put("message", "Done");
             state.clear();
@@ -126,7 +135,7 @@ public class BackCommand extends robot_worlds_13.server.robot.Command {
         return true;
     }
 
-    public BackCommand (String argument) {
+    public BackCommand(String argument) {
         super("back", argument);
     }
 }

@@ -1,3 +1,8 @@
+/**
+ * This package contains the client-side implementation of the Robot Worlds game.
+ * It includes the main entry point for the client application, as well as various
+ * UI components and networking logic to interact with the game server.
+ */
 package robot_worlds_13.client;
 
 import java.awt.Color;

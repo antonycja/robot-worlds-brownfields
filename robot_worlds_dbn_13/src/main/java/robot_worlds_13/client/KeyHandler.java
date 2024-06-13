@@ -3,7 +3,13 @@ package robot_worlds_13.client;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * Handles keyboard input events for the game.
+ * Tracks the state of the arrow keys (up, down, left, right) and provides
+ * methods to check their current state.
+ */
 public class KeyHandler implements KeyListener {
+
     public boolean upPressed, downPressed, leftPressed, rightPressed;
 
     @Override

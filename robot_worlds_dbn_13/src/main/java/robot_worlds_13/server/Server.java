@@ -13,11 +13,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import robot_worlds_13.server.robot.maze.SimpleMaze;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.TextWorld;
 
+/**
+ * Class representing the server for the robot world.
+ */
 public class Server {
 
     // clients
@@ -35,19 +37,24 @@ public class Server {
     public HashMap<String, ArrayList<Object>> nameRobotMap = new HashMap<>();
     public HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
 
-
+    /**
+     * Main method to start the server.
+     * @param args Command line arguments.
+     * @throws Exception Throws an exception if an error occurs.
+     */
     public static void main(String[] args) throws Exception {
         System.out.println("Starting server...\n");
 
         System.out.println("Server address: " + NetworkInfo.main(args));
         System.out.println("Port number: " + port + "\n");
 
-        
+        // Path to configuration file
         String path = new File(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
         String otherFilePath = "/../src/main/java/robot_worlds_13/server/configuration/file.txt";
         String directoryPath = new File(path).getParent() + otherFilePath;
         String filePath = directoryPath;
 
+        // Load server configuration data from file
         Map<String, Integer> dataMap = new HashMap<>();
         try {
             dataMap = parseFileToMap(filePath);
@@ -58,25 +65,25 @@ public class Server {
             System.err.println("    Error reading file: " + e.getMessage());
         }
 
-        // this server
+        // This server
         Server serverObject = new Server();
         
-        // maze loaded
+        // Maze loaded
         AbstractWorld world = new TextWorld(new SimpleMaze(), serverObject, dataMap);
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started. Listening for incoming connections...");
 
-            // thread for listening to terminal commands
+            // Thread for listening to terminal commands
             Thread terminalListenerThread = new Thread(new TerminalListener(serverSocket, serverObject, world));
             terminalListenerThread.start();
 
             while (true) {
-                // accepting clients
+                // Accepting clients
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Incoming connection accepted");
 
-                // add client to connections
+                // Add client to connections
                 clientConnections.add(clientSocket);
 
                 // Create a new thread for each client
@@ -91,6 +98,12 @@ public class Server {
         }
     }
 
+    /**
+     * Parses a configuration file into a map.
+     * @param filePath The path to the configuration file.
+     * @return A map containing the configuration data.
+     * @throws IOException Throws an exception if an error occurs during file parsing.
+     */
     public static Map<String, Integer> parseFileToMap(String filePath) throws IOException {
         Map<String, Integer> result = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -110,6 +123,10 @@ public class Server {
         return result;
     }
 
+    /**
+     * Broadcasts a message to all connected clients.
+     * @param message The message to broadcast.
+     */
     public static void broadcastMessage(String message) {
         for (Socket client : clientConnections) {
             try {
@@ -123,10 +140,18 @@ public class Server {
         }
     }
 
+    /**
+     * Retrieves names and positions only.
+     * @return A map containing robot names and their positions.
+     */
     public Map <String, ArrayList<Object>> getNamesAndPositionsOnly () {
         return nameAndPositionMap;
     }
 
+    /**
+     * Removes a robot from the server.
+     * @param name The name of the robot to remove.
+     */
     public void removeRobot (String name) {
         this.robotNames.remove(name);
         
@@ -147,6 +172,10 @@ public class Server {
         }
     }
 
+    /**
+     * Displays the server configuration.
+     * @param dataMap The map containing the server configuration data.
+     */
     static public void displayServerConfiguration(Map<String, Integer> dataMap) {
         for (String attribute: dataMap.keySet()) {
             switch (attribute) {

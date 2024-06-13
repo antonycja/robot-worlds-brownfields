@@ -1,15 +1,12 @@
-package robot_worlds_13.client;
-
-/*
- * This class acts as the user's interface to the program
- * it will employ charecteristics from play
+/**
+ * This package contains the client-side implementation for the Robot Worlds application.
+ * The main entry point is the `Client` class, which handles the client-server communication
+ * and user interaction.
  */
+package robot_worlds_13.client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -289,11 +286,9 @@ public class Client {
             String[] parts = commandGiven.trim().split("\\s+", 3);
             if (!parts[0].equalsIgnoreCase("launch")) {
                 return false;
-            }
-            if (!Arrays.asList("ranger", "assassin", "sagebot").contains(parts[1].toLowerCase())) {
+            } else if (!Arrays.asList("ranger", "assassin", "sagebot").contains(parts[1].toLowerCase())) {
                 return false;
-            }
-            if (parts[2] == null || parts[2].isEmpty()) {
+            } else if (parts[2] == null || parts[2].isEmpty()) {
                 return false;
             }
             return true;

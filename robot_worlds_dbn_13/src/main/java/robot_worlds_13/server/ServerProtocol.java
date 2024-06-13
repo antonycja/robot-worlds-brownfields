@@ -2,13 +2,21 @@ package robot_worlds_13.server;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.google.gson.Gson;
 
+/**
+ * This class provides methods for building server responses in JSON format.
+ */
 public class ServerProtocol {
     private static Gson gson = new Gson();
-    
-    // forward, left, right, 
+
+    /**
+     * Builds a JSON response with a result, data, and state.
+     * @param result The result of the operation.
+     * @param data Additional data to include in the response.
+     * @param state The state of the operation.
+     * @return A JSON string representing the response.
+     */
     public static String buildResponse(String result, Map<String, Object> data, Map<String, Object> state) {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("result", result);
@@ -18,7 +26,12 @@ public class ServerProtocol {
         return gson.toJson(responseMap);
     }
 
-    // 
+    /**
+     * Builds a JSON response with a result and data.
+     * @param result The result of the operation.
+     * @param data Additional data to include in the response.
+     * @return A JSON string representing the response.
+     */
     public static String buildResponse(String result, Map<String, Object> data) {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("result", result);
@@ -26,7 +39,11 @@ public class ServerProtocol {
         return gson.toJson(responseMap);
     }
 
-    // for commands like state
+    /**
+     * Builds a JSON response with only the state.
+     * @param state The state of the operation.
+     * @return A JSON string representing the response.
+     */
     public static String buildResponse(Map<String, Object> state) {
         Map<String, Object> responseMap = new HashMap<>();
         if (state != null) {
@@ -35,7 +52,11 @@ public class ServerProtocol {
         return gson.toJson(responseMap);
     }
 
-    // for commands like "shutting down..."
+    /**
+     * Builds a JSON response with a command.
+     * @param response The command response.
+     * @return A JSON string representing the response.
+     */
     public static String buildResponse(String response) {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("command", response);

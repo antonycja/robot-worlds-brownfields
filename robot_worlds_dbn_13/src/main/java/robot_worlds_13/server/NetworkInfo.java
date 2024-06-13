@@ -6,8 +6,16 @@ import java.net.SocketException;
 import java.util.Collections;
 import java.util.Enumeration;
 
+
+/**
+ * Utility class to retrieve network information.
+ */
 public class NetworkInfo {
 
+    /**
+     * Retrieves the primary IPv4 address of the host machine.
+     * @return The primary IPv4 address as a string.
+     */
     public static String main(String[] args) {
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -21,7 +29,6 @@ public class NetworkInfo {
                     InetAddress addr = addresses.nextElement();
                     // Checks for IPv4 addresses only
                     if (addr.getAddress().length == 4) {
-                        // System.out.println(iface.getDisplayName() + " - " + addr.getHostAddress());
                         return addr.getHostAddress();
                     }
                 }
