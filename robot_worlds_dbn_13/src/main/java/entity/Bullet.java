@@ -10,9 +10,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Represents a bullet entity in the game world.
+ * Bullets can be fired by game entities and move in a straight line based on
+ * their direction.
+ * Bullets are responsible for their own movement and drawing on the game panel.
+ */
 public class Bullet {
+
     private int x, y;
-    private final int speed = 10;  // You can adjust the speed as necessary
+    private final int speed = 10; // You can adjust the speed as necessary
     private String direction;
     private GamePanel panel;
 
@@ -45,7 +52,7 @@ public class Bullet {
 
     public void draw(Graphics g) {
         g.setColor(Color.RED);
-        g.fillOval(x - 4, y, 10 , 10);  // Draw the bullet as a small red circle
+        g.fillOval(x - 4, y, 10, 10); // Draw the bullet as a small red circle
     }
 
     public boolean isAtDestination(int destX, int destY) {

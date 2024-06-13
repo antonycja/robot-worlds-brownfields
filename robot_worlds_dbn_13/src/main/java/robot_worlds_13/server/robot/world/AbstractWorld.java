@@ -15,6 +15,7 @@ import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.*;
 
 public class AbstractWorld implements IWorld {
+    
     public final Position TOP_LEFT;
     public final Position BOTTOM_RIGHT;
     public static final Position CENTRE = IWorld.CENTRE;

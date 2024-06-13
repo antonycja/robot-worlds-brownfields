@@ -10,6 +10,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Represents the player character in the game.
+ * The Player class extends the Entity class and handles the player's movement,
+ * image, and drawing.
+ */
 public class Player extends Entity {
 
     GamePanel gp;
@@ -67,8 +72,6 @@ public class Player extends Entity {
             right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_right_1.png")));
             right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_right_2.png")));
 
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,8 +93,8 @@ public class Player extends Entity {
         }
 
         spriteCounter++;
-        if(spriteCounter >10) {
-            if(spriteNum == 1) {
+        if (spriteCounter > 10) {
+            if (spriteNum == 1) {
                 spriteNum = 2;
             }
             spriteCounter = 0;
@@ -105,7 +108,7 @@ public class Player extends Entity {
     }
 
     public void update(Direction headingDirection) {
-        
+
         if (headingDirection == Direction.NORTH) {
             direction = "up";
             y -= speed;
@@ -121,8 +124,8 @@ public class Player extends Entity {
         }
 
         spriteCounter++;
-        if(spriteCounter >10) {
-            if(spriteNum == 1) {
+        if (spriteCounter > 10) {
+            if (spriteNum == 1) {
                 spriteNum = 2;
             }
             spriteCounter = 0;
@@ -130,7 +133,7 @@ public class Player extends Entity {
     }
 
     public void updateBack(Direction headingDirection) {
-        
+
         if (headingDirection == Direction.NORTH) {
             direction = "up";
             y += speed;
@@ -146,8 +149,8 @@ public class Player extends Entity {
         }
 
         spriteCounter++;
-        if(spriteCounter >10) {
-            if(spriteNum == 1) {
+        if (spriteCounter > 10) {
+            if (spriteNum == 1) {
                 spriteNum = 2;
             }
             spriteCounter = 0;
@@ -155,10 +158,9 @@ public class Player extends Entity {
     }
 
     public void draw(Graphics2D g2) {
-//        g2.setColor(Color.white);
-//        g2.fillRect(x, y, gp.tileSize, gp.tileSize);
+        // g2.setColor(Color.white);
+        // g2.fillRect(x, y, gp.tileSize, gp.tileSize);
         BufferedImage image = null;
-
 
         switch (direction) {
             case "up":
@@ -174,20 +176,20 @@ public class Player extends Entity {
                 image = right1;
                 break;
         }
-            g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
 
-            g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial", Font.BOLD, 12)); 
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 12));
 
-            // Calculate the width of the name to center it above the player
-            int nameWidth = g2.getFontMetrics().stringWidth(characterName);
-            int nameX = x + (gp.tileSize - nameWidth) / 2;
-            int nameY = y - 5;
+        // Calculate the width of the name to center it above the player
+        int nameWidth = g2.getFontMetrics().stringWidth(characterName);
+        int nameX = x + (gp.tileSize - nameWidth) / 2;
+        int nameY = y - 5;
 
-            g2.drawString(characterName, nameX, nameY);
-        }
+        g2.drawString(characterName, nameX, nameY);
+    }
 
-    public String setDirection (String directionGiven) {
+    public String setDirection(String directionGiven) {
         switch (directionGiven) {
             case "NORTH":
                 return "up";
@@ -206,13 +208,11 @@ public class Player extends Entity {
         this.destination = destination;
     }
 
-
     public boolean hasReachedDestination() {
         return position.equals(destination);
     }
 
-        
-    }
+}
 
 
 

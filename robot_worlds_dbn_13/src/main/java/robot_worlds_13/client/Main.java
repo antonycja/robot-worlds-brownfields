@@ -2,6 +2,10 @@ package robot_worlds_13.client;
 
 import javax.swing.*;
 
+/**
+ * The main entry point for the Robot World application.
+ * This class creates the main window and game panel for the application.
+ */
 public class Main extends JFrame {
 
     public Main(int width, int height, String address, int port) {
@@ -20,7 +24,6 @@ public class Main extends JFrame {
         gamePanel.startGameThread();
     }
 
-
     public void showRobot(String robotName) {
         // Update GUI to show selected robot
         System.out.println("Showing robot: " + robotName);
@@ -32,6 +35,6 @@ public class Main extends JFrame {
     }
 
     // public static void main(String[] args) {
-    //     new Main();
+    // new Main();
     // }
 }

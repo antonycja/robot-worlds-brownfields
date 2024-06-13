@@ -4,7 +4,14 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * The `TileManager` class is responsible for managing the tiles used in the
+ * game world.
+ * It loads the tile images from the resources and provides methods to draw the
+ * tiles on the game panel.
+ */
 public class TileManager {
+
     GamePanel gp;
     Tile[] tile;
 
@@ -13,8 +20,9 @@ public class TileManager {
         tile = new Tile[10];
         getTileImage();
     }
+
     public void getTileImage() {
-        try{
+        try {
             tile[0] = new Tile();
             tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));
 
@@ -23,7 +31,7 @@ public class TileManager {
 
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
-        }catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

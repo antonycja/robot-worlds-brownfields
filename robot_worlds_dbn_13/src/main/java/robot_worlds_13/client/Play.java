@@ -10,7 +10,24 @@ import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.TextWorld;
 
+/**
+ * The `Play` class is the main entry point for the robot worlds application. It
+ * handles the user interaction, creates the robot and world, and manages the
+ * game loop.
+ *
+ * The class provides the following functionality:
+ * - Prompts the user to name the robot
+ * - Creates a `TextWorld` with a `SimpleMaze` and a `Robot` instance
+ * - Displays the initial obstacles and robot status
+ * - Enters a game loop where the user can provide commands to the robot
+ * - Handles the robot's commands and updates the robot's status accordingly
+ * - Continues the game loop until the robot is unable to continue
+ *
+ * The `getInput()` method is a utility function that prompts the user for input
+ * and ensures a non-blank response is provided.
+ */
 public class Play {
+
     static Scanner scanner;
 
     //
@@ -34,7 +51,7 @@ public class Play {
         AbstractWorld world = new TextWorld(new SimpleMaze());
         Robot robot = new Robot(name, world);
 
-        //set and print obstacles
+        // set and print obstacles
         world.showObstacles();
 
         // print first status
