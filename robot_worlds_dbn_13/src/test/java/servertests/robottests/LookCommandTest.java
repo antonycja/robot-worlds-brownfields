@@ -1,4 +1,4 @@
-package servertests.robottests;//package robot_worlds_13.server.robot;
+//package robot_worlds_13.server.robot;
 //
 //import org.junit.jupiter.api.Test;
 //import robot_worlds_13.server.robot.world.AbstractWorld;
@@ -123,14 +123,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class LookCommandTest {
+//@ExtendWith(MockitoExtension.class)
+//public class LookCommandTest {
 
-    @Mock
-    private Robot robot;
-
-    @Mock
-    private WorldData worldData;
+//    @Mock
+//    private Robot robot;
+//
+//    @Mock
+//    private WorldData worldData;
 
 //    @Test
 //    public void testConstructor() {
@@ -158,5 +158,5 @@ public class LookCommandTest {
 //        verify(robot, times(1)).setResponseToRobot(any());
 //        verify(robot, times(1)).setGUIResponseToRobot(any());
 //    }
-}
+//}
 
