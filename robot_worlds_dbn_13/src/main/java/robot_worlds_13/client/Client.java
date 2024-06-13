@@ -36,11 +36,11 @@ public class Client {
     static String localAddress = "localhost";
     static String serverIpAddress = "20.20.15.94";
     static int portLocal = 2201;
-    protected static Socket sThisClient;
-    protected static DataOutputStream dout;
+    public static Socket sThisClient;
+    public static DataOutputStream dout;
     public static DataInputStream din;
     static Scanner line = new Scanner(System.in);
-    protected static String robotName;
+    public static String robotName;
 
     static private Gson gson = new Gson();
 
@@ -264,7 +264,7 @@ public class Client {
         return matcher.matches();
     }
 
-    static private boolean isValidLaunch (String commandGiven) {
+    static public boolean isValidLaunch (String commandGiven) {
         try {
             String[] parts = commandGiven.trim().split("\\s+", 3);
             if (!parts[0].equalsIgnoreCase("launch")) {
