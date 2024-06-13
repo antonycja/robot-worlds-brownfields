@@ -69,7 +69,7 @@ public class Server {
 
             // thread for listening to terminal commands
             Thread terminalListenerThread = new Thread(new TerminalListener(serverSocket, serverObject, world));
-            terminalListenerThread.start();;
+            terminalListenerThread.start();
 
             while (true) {
                 // accepting clients

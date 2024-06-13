@@ -31,6 +31,14 @@ import java.util.regex.Matcher;
 import com.google.gson.Gson;
 
 public class Client {
+    
+    // colors for the terminal
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    
     private static final String PORT_REGEX = "\\b([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\\b";
     private static final String IP_REGEX = "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b";
     static String localAddress = "localhost";
@@ -45,7 +53,7 @@ public class Client {
     static private Gson gson = new Gson();
 
     public static void main(String[] args) {
-        System.out.println("       " +
+        System.out.println(ANSI_YELLOW + "       " +
                 "  __\n" +
                 " _(\\    |@@|\n" +
                 "(__/\\__ \\--/ __\n" +
@@ -103,6 +111,7 @@ public class Client {
                 System.exit(0);
             }
         }
+        System.out.println(ANSI_RESET);
         
 
         try {
@@ -125,8 +134,10 @@ public class Client {
                     int width = Integer.parseInt(response.split(" ")[3]);
                     int height = Integer.parseInt(response.split(" ")[5]);
                     
-                    System.out.println("Launch GUI?");
+                    System.out.println(ANSI_GREEN + "Launch GUI?");
                     String guiResponse = line.nextLine();
+                    System.out.println("--------------------------------------------------------------\n");
+                    System.out.println(ANSI_RESET);
                     
                     if (guiResponse.toLowerCase().equals("yes") || guiResponse.toLowerCase().equals("y")) {
                         Main main = new Main(width, height, address, port);
@@ -136,12 +147,13 @@ public class Client {
                     break;
                 }
 
-                System.err.println(response);
+                System.out.println("--------------------------------------------------------------");
+                System.err.println(ANSI_GREEN + response );
 
                 if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || 
                 response.contains("Connected successfully to") || response.contains("Too many of you in this world")) {
-                    System.out.println("Launch a robot!, Hint use 'launch make robot_name'");
-                    System.out.println("Please enter a valid make. Options are: Ranger, Assasin, SageBot");
+                    System.out.println(ANSI_BLUE + "Launch a robot!, Hint use 'launch make robot_name'");
+                    System.out.println(ANSI_GREEN + "Please enter a valid make. Options are: Ranger, Assasin, SageBot");
                     // get imput
                     String command = line.nextLine();
 
@@ -166,10 +178,12 @@ public class Client {
                     } catch (Exception e) {
                         formattedCommand = ClientProtocol.jsonRequestBuilder("launch");
                         sendJsonRequest(formattedCommand);
+                        System.out.println(ANSI_RESET);
                         continue;
                     }
                     // send to server as json
                     sendJsonRequest(formattedCommand);
+                    System.out.println(ANSI_RESET);
                 }
             }
 
@@ -182,8 +196,19 @@ public class Client {
                     continue;
                 }
                 
-                // print message to this client
-                System.out.println(response);
+                if (response.startsWith("What")) {
+                    System.out.println("--------------------------------------------------------------");
+                }
+
+                if (response.contains("ERROR")) {
+                    System.out.println(ANSI_RED + response + ANSI_RESET);
+                } else if (response.contains("What")) {
+                    System.out.println(ANSI_GREEN + response);
+                } else {
+                    System.out.println(ANSI_BLUE + response + ANSI_RESET);
+                } 
+
+                
                 
                 if (response.contains("Shutting down")) {
                     break;
@@ -191,9 +216,6 @@ public class Client {
                     break;
                 }
                 
-                // if the message requires a response prompt current client for input
-                // and send the command
-                // (what do you want to name your robot / what do you want to do next)
                 if (response.startsWith("What")) {
                     // get imput
                     String command = line.nextLine();
@@ -204,6 +226,8 @@ public class Client {
                     // send to server as json
                     sendJsonRequest(formattedCommand);
                 }
+
+                System.out.print(ANSI_RESET);
             }
 
             // close this client
@@ -241,7 +265,8 @@ public class Client {
         
         String jsonRequest = gson.toJson(commandDetails);
         
-        System.out.println("Sending command: " + jsonRequest + "\n");  // For debug purposes
+        System.out.println("Sending command: " + jsonRequest + "\n");
+        System.out.println("--------------------------------------------------------------");
         
         try {
             dout.writeUTF(jsonRequest);
