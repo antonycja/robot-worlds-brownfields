@@ -66,5 +66,16 @@ public class ServerProtocolTest{
 
     }
 
+    @Test
+
+    void testBuildResponseWithString() {
+
+        String response = ServerProtocol.buildResponse("Shutting down...");
+
+
+        assertEquals("{\"command\":\"Shutting down...\"}", response);
+
+    }
+
 
 }
