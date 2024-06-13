@@ -101,6 +101,17 @@ public abstract class Command {
         }
     }
 
+    public static List<String> getCommandList() {
+        return commandList;
+    }
+
+    public static void setCommandList(List<String> commandList) {
+        Command.commandList = commandList;
+    }
+
+
+
+
     public static Command create(String instruction) {
         //  The 2 parameter specifies that the split operation should be performed at most once, resulting in two parts.
         String[] args = instruction.toLowerCase().trim().split(" ", 2);
@@ -142,13 +153,16 @@ public abstract class Command {
                 return new StateCommand(instruction);
             case "fire":
                 return new FireCommand();
+            case "orientation":
+                return new OrientationCommand();
+            case "repair":
+                return new RepairCommand("repair");
+            case "reload":
+                return new ReloadCommand();
+
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
-    }
-
-    public static List<String> getCommandList() {
-        return commandList;
     }
 
     static public boolean getReplayFlag () {
