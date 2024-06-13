@@ -1,17 +1,27 @@
 package robot_worlds_13.server.robot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import robot_worlds_13.server.Server;
 import robot_worlds_13.server.ServerProtocol;
-import robot_worlds_13.server.robot.world.IWorld;
 
+/**
+ * Represents a command to fire a shot from a robot.
+ * When executed, this command checks if the robot has sufficient ammo,
+ * then calculates the bullet distance based on the robot's attributes.
+ * It determines whether the shot hits another robot or not and updates their states accordingly.
+ * Additionally, it generates responses for the robot and GUI based on the outcome of the shot.
+ */
 public class FireCommand extends Command {
-    
+
+    /**
+     * Executes the fire command for the given target robot.
+     * @param target The robot executing the fire command.
+     * @return true if the command was executed successfully, false otherwise.
+     */
     @Override
     public boolean execute(Robot target) {
+        // Retrieve current robot information from the world data
     target.worldData.giveCurrentRobotInfo(target);
     Map<String, Object> data = new HashMap<>();
     Map<String, Object> state = target.getRobotState();
@@ -55,6 +65,7 @@ public class FireCommand extends Command {
     state = target.getGUIRobotState();
     target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
 
+    // Broadcast the fire action to the GUI
     data.clear();
     data.put("message", "FIRE");
     state.clear();
@@ -68,6 +79,10 @@ public class FireCommand extends Command {
     return true;
     }
 
+    /**
+     * Constructs a FireCommand object.
+     * Initializes the command name as "fire".
+     */
     public FireCommand() {
         super("fire");
     }
