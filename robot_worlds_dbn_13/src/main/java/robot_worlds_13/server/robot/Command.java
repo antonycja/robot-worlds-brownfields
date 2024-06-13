@@ -142,6 +142,12 @@ public abstract class Command {
                 return new StateCommand(instruction);
             case "fire":
                 return new FireCommand();
+            case "orientation":
+                return new OrientationCommand();
+            case "repair":
+                return new RepairCommand("repair");
+            case "reload":
+                return new ReloadCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
@@ -149,6 +155,10 @@ public abstract class Command {
 
     public static List<String> getCommandList() {
         return commandList;
+    }
+
+    public static void setCommandList(List<String> commandList) {
+        Command.commandList = commandList;
     }
 
     static public boolean getReplayFlag () {

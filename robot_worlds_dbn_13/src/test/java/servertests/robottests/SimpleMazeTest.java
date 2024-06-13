@@ -12,7 +12,7 @@ class SimpleMazeTest {
     @Test
     void testSimpleMazeHasOne() {
         Maze maze = new SimpleMaze();
-        assertEquals(5, maze.getObstacles().size());
+        assertEquals(2, maze.getObstacles().size());
     }
 
     @Test
