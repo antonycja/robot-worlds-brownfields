@@ -24,5 +24,8 @@ public interface Maze {
      * @return `true` if there is an obstacle is in the way
      */
     boolean blocksPath(Position a, Position b);
+    Integer getMazeSize();
+    Position getGoalPosition();
+    Position getRobotStartPosition();
 
 }
