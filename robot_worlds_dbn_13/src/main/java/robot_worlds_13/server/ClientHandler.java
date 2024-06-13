@@ -11,12 +11,9 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import org.jline.reader.EndOfFileException;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import robot_worlds_13.server.robot.Command;
 import robot_worlds_13.server.robot.Position;
 import robot_worlds_13.server.robot.Robot;
@@ -26,12 +23,12 @@ import robot_worlds_13.server.robot.world.IWorld;
 import robot_worlds_13.server.robot.world.Obstacle;
 import robot_worlds_13.server.robot.world.TextWorld;
 
-/*
- * responsable for each thread
+/**
+ * Responsible for handling communication with a client connected to the server.
  */
 public class ClientHandler implements Runnable {
     // This class by implementing the runnable interface, make each robot in the world
-    // it is responsible for giving the robot properties alread defined by the server's configuration
+    // it is responsible for giving the robot properties already defined by the server's configuration
 
     // socket variables
     final Socket clientSocket;
@@ -51,11 +48,21 @@ public class ClientHandler implements Runnable {
     // robot variables
     String name;
 
+    /**
+     * Constructs a ClientHandler instance with the given client socket.
+     * @param clientSocket The socket connected to the client.
+     */
     public ClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.world = new TextWorld(new SimpleMaze());
     }
 
+    /**
+     * Constructs a ClientHandler instance with the given client socket, world, and connected server.
+     * @param clientSocket The socket connected to the client.
+     * @param worldChosen The world associated with the client.
+     * @param currentConnectedServer The server to which the client is connected.
+     */
     public ClientHandler(Socket clientSocket, AbstractWorld worldChosen, Server currentConnectedServer) {
         this.clientSocket = clientSocket;
         this.world = worldChosen;
@@ -63,16 +70,20 @@ public class ClientHandler implements Runnable {
 
     }
 
+    /**
+     * Handles the communication with the client.
+     */
     @Override
     public void run() {
         try {
+            // Initialization
             this.dis = new DataInputStream(clientSocket.getInputStream());
             this.dos = new DataOutputStream(clientSocket.getOutputStream());
             this.clientIdentifier = getClientIdentifier(clientSocket);
             this.commandLine = new Scanner(System.in);
 
-            
-            // sendMessage("Connected");
+
+            // Inform client of successful connection
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> state = new HashMap<>();
             data.clear();
@@ -99,6 +110,7 @@ public class ClientHandler implements Runnable {
                     continue;
                 }
 
+                // Parsing command
                 if (request.get("robot") == null || request.get("command") == null || request.get("arguments") == null) {
                     data.clear();
                     data.put("message", "Could not parse arguments");
@@ -141,6 +153,7 @@ public class ClientHandler implements Runnable {
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
                 }
 
+                // Validating command and arguments
                 if (!requestedCommand.equalsIgnoreCase("launch")) {
                     // "Unsupported command"
                     data = new HashMap<>();
@@ -176,10 +189,8 @@ public class ClientHandler implements Runnable {
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
                     continue;
                 }
-                
 
-
-
+                // Launching the robot
                 if (requestedCommand.equalsIgnoreCase("launch") && !world.serverObject.robotNames.contains(potentialRobotName)) {
                     
                     data.clear();
@@ -321,8 +332,6 @@ public class ClientHandler implements Runnable {
             state.clear();
             state = robot.getGUIRobotState();
             Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
-
-            
             Command command;
             boolean shouldContinue = true;
             String instruction;
@@ -383,8 +392,7 @@ public class ClientHandler implements Runnable {
                     e.printStackTrace();
                     break;
                 }
-                
-                
+
                 // String robot = (String) request.get("robot");
                 String requestedCommand = (String) request.get("command");
                 ArrayList arguments = (ArrayList) request.get("arguments");
@@ -445,6 +453,7 @@ public class ClientHandler implements Runnable {
             world.serverObject.nameRobotMap.remove(name, currentRobotState);
             System.out.println("Client " + clientIdentifier + " disconnected.");
             clientSocket.close();
+            // Cleanup after client disconnects...
         } catch (IOException e) {
             System.out.println("Your robot has died");
             System.exit(0);
@@ -461,6 +470,10 @@ public class ClientHandler implements Runnable {
         return clientSocket.getInetAddress().getHostAddress();
     }
 
+    /**
+     * Retrieves a command from the client.
+     * @return The command received from the client.
+     */
     public String getCommand(){
         String message = "";
         try {
@@ -476,11 +489,20 @@ public class ClientHandler implements Runnable {
         return message;
     }
 
+    /**
+     * Checks if a given string is a valid JSON.
+     * @param json The string to be checked.
+     * @return True if the string is a valid JSON, otherwise false.
+     */
     public boolean isValidJson(String json) {
         json = json.trim();
         return (json.startsWith("{") && json.endsWith("}")) || (json.startsWith("[") && json.endsWith("]"));
     }
 
+    /**
+     * Sends a message to the client.
+     * @param question The message to be sent.
+     */
     public void sendMessage(String question) {
         try {
             dos.writeUTF(question);
@@ -490,6 +512,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Sends a message to the client.
+     * @param target The robot to send the message to.
+     */
     public void sendMessage(Robot target) {
         String response = target.toString();
         try {
