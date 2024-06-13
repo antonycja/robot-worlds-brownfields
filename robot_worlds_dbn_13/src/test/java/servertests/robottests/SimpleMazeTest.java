@@ -69,11 +69,11 @@ class SimpleMazeTest {
 //         assertEquals(3, maze.getBottomLessPits().size());
 //     }
 
-//     @Test
-//     void testSimpleMazeGetLakes() {
-//         Maze maze = new SimpleMaze();
-//         assertEquals(2, maze.getLakes().size());
-//     }
+    @Test
+    void testSimpleMazeGetLakes() {
+        Maze maze = new SimpleMaze();
+        assertEquals(2, maze.getLakes().size());
+    }
 
     @Test
     void testSimpleMazeBlocksPath() {
