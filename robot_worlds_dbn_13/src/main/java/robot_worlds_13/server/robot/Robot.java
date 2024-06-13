@@ -47,6 +47,11 @@ public class Robot {
         this.worldData = new TextWorld(new SimpleMaze());
         this.reloadTime = 5;
         this.repairingTime = 5;
+        this.maxAmmo = 5;
+        this.ammo = 5;
+        this.maxShields = 5;
+        this.shields = 5;
+        this.bulletDistance = 5;
     }
 
     public Robot(String name, Position startPosition) {
@@ -57,8 +62,13 @@ public class Robot {
         this.position = startPosition;
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = new TextWorld(new SimpleMaze());
-        this.reloadTime = 5;
+        this.maxAmmo = 5;
+        this.ammo = 5;
+        this.reloadTime = worldData.ammoReloadTime;
+        this.maxShields = 5;
+        this.shields = 5;
         this.repairingTime = 5;
+        this.bulletDistance = 5;
     }
 
     public Robot(String name, AbstractWorld worldObject) {
@@ -70,8 +80,13 @@ public class Robot {
         this.previouPosition = CENTRE;
         this.currentDirection = IWorld.Direction.NORTH;
         this.worldData = worldObject;
-        this.reloadTime = 5;
+        this.maxAmmo = 5;
+        this.ammo = 5;
+        this.reloadTime = worldData.ammoReloadTime;
+        this.maxShields = 5;
+        this.shields = 5;
         this.repairingTime = 5;
+        this.bulletDistance = 5;
 
     }
 
@@ -85,11 +100,12 @@ public class Robot {
         this.worldData = worldObject;
         this.maxAmmo = 5;
         this.ammo = 5;
+        this.reloadTime = worldData.ammoReloadTime;
         this.maxShields = 5;
         this.shields = 5;
+        this.repairingTime = 5;
         this.bulletDistance = 5;
         this.previouPosition = startingPosition;
-        this.repairingTime = 5;
     }
 
     public Robot(String name, AbstractWorld worldObject, Position startingPosition, Map<String, Integer> robotConfigurable) {
@@ -105,12 +121,9 @@ public class Robot {
         this.ammo = maxAmmo;
         this.reloadTime = worldData.ammoReloadTime;
         this.shields = maxShields;
-        this.bulletDistance = (robotConfigurable.get("bulletDistance") != null) ? robotConfigurable.get("bulletDistance") : 5;;
+        this.bulletDistance = (robotConfigurable.get("bulletDistance") != null) ? robotConfigurable.get("bulletDistance") : 5;
         this.previouPosition = startingPosition;
         this.repairingTime = (worldObject.hasShieldRepairTime()) ? worldObject.shieldRepairTime : 5;
-        
-        
-
     }
 
     public String getStatus() {
