@@ -1,4 +1,4 @@
-package robot_worlds_13.server.robot;
+package servertests.robottests;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -12,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import robot_worlds_13.server.ServerProtocol;
+import robot_worlds_13.server.robot.ReloadCommand;
+import robot_worlds_13.server.robot.Robot;
 
 /**
  * Unit test class for testing the ReloadCommand class.

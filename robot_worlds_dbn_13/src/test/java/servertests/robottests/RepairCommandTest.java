@@ -1,10 +1,13 @@
-package robot_worlds_13.server.robot;
+package servertests.robottests;
 
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import robot_worlds_13.server.robot.Position;
+import robot_worlds_13.server.robot.RepairCommand;
+import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.robot.maze.SimpleMaze;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 
