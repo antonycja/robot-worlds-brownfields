@@ -50,4 +50,21 @@ public class ServerProtocolTest{
 
     }
 
+    @Test
+
+    void testBuildResponseWithState() {
+
+        Map<String, Object> state = new HashMap<>();
+
+        state.put("stateKey", "stateValue");
+
+
+        String response = ServerProtocol.buildResponse(state);
+
+
+        assertEquals("{\"state\":{\"stateKey\":\"stateValue\"}}", response);
+
+    }
+
+
 }
