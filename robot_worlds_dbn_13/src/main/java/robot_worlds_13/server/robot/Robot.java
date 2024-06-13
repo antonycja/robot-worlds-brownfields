@@ -54,22 +54,12 @@ public class Robot {
 
     /** Indicates if the robot is currently undergoing repairs. */
     private boolean repairing = false;
-<<<<<<< HEAD
     private boolean reloading = false;
-=======
-
-    /** The scheduler for managing repair and reload tasks. */
->>>>>>> JavaDocs
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /** The reload time for the robot's ammunition. */
     private int reloadTime;
-<<<<<<< HEAD
     private int repairingTime;
-=======
-
-    /** The previous position of the robot. */
->>>>>>> JavaDocs
     public Position previouPosition;
 
     /** The response to be sent to the GUI client. */

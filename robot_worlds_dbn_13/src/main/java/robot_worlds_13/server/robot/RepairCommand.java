@@ -34,13 +34,8 @@ public class  RepairCommand extends Command {
         // Retrieve current robot information from the world data
         target.worldData.giveCurrentRobotInfo(target);
 
-<<<<<<< HEAD
         // do repair
         int repairTime = target.getRepairTime();
-=======
-        // Perform repair operation
-        int repairTime = target.worldData.shieldRepairTime;
->>>>>>> JavaDocs
         target.repairShields(repairTime);
 
         // Construct response data and state

@@ -34,12 +34,7 @@ public class ReloadCommand extends Command{
      */
     @Override
     public boolean execute(Robot target) {
-<<<<<<< HEAD
         target.worldData.giveCurrentRobotInfo(target);
-=======
-        // Simulate reload time and replenish ammunition
-        
->>>>>>> JavaDocs
         int reloadTime = target.getReloadTime();
         target.reload(reloadTime);
 
