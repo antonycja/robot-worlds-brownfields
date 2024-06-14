@@ -541,8 +541,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void drawSquare(Graphics2D g2, int obstX, int obstY) {
             BufferedImage image;
             try {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/tree.png")));
-                g2.drawImage(image, obstX, obstY, tileSize, tileSize, null);
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/mountain.png")));
+                g2.drawImage(image, obstX, obstY, tileSize* 3, tileSize * 3, null);
             } catch (IOException e) {
             }
         }
