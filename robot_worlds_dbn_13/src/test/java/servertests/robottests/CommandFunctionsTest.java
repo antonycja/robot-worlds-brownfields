@@ -33,6 +33,10 @@ public class CommandFunctionsTest {
         assertEquals(0, Command.getCommandList().size());
     }
 
+    /**
+    * Tests the creation of a HelpCommand.
+    */
+
     @Test
     void testCreateHelpCommand() {
         Command command = Command.create("help");
