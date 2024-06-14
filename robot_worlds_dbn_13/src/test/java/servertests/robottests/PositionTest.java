@@ -43,4 +43,11 @@ public class PositionTest {
         assertTrue((new Position(20, 20)).isIn(topLeft, bottomRight), "should be on the top-right boundary");
     }
 
+    @Test
+    public void negativeCoordinates() {
+        Position p = new Position(-10, -20);
+        assertEquals(-10, p.getX());
+        assertEquals(-20, p.getY());
+    }
+
 }
