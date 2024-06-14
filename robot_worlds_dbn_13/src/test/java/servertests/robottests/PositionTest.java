@@ -20,6 +20,7 @@ public class PositionTest {
         assertNotEquals(new Position(-44, 63), new Position(0, 63));
         assertNotEquals(new Position(-44, 63), new Position(-44, 0));
         assertNotEquals(new Position(-44, 63), new Position(0, 0));
+
     }
     @Test
     public void insideRectangularRegion() {
@@ -31,4 +32,15 @@ public class PositionTest {
         assertFalse((new Position(30,10)).isIn(topLeft, bottomRight), "should be beyond right boundary");
         assertFalse((new Position(-30,10)).isIn(topLeft, bottomRight), "should be beyond left boundary");
     }
+
+    @Test
+    public void boundaryCasesInsideRectangularRegion() {
+        Position topLeft = new Position(-20, 20);
+        Position bottomRight = new Position(20, -20);
+        assertTrue((new Position(-20, 20)).isIn(topLeft, bottomRight), "should be on the top-left boundary");
+        assertTrue((new Position(20, -20)).isIn(topLeft, bottomRight), "should be on the bottom-right boundary");
+        assertTrue((new Position(-20, -20)).isIn(topLeft, bottomRight), "should be on the bottom-left boundary");
+        assertTrue((new Position(20, 20)).isIn(topLeft, bottomRight), "should be on the top-right boundary");
+    }
+
 }
