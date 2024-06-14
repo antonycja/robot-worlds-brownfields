@@ -1,4 +1,4 @@
-package robot_worlds_13.client.entity;
+package entity;
 
 import java.awt.image.BufferedImage;
 

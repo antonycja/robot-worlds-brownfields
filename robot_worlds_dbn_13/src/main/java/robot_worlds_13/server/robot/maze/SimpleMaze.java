@@ -17,8 +17,8 @@ public class SimpleMaze extends AbstractMaze {
     private List<Obstacle> bottomLessPits;
     private List<Obstacle> lakes;
     private Random random;
-    private int minCoordinate = 0; // Minimum coordinate value
-    private int maxCoordinate = 0; // Maximum coordinate value
+    private int minCoordinate = -200; // Minimum coordinate value
+    private int maxCoordinate = 200; // Maximum coordinate value
     private int step = 40; // Step for multiples of 40
 
     /**
@@ -30,6 +30,8 @@ public class SimpleMaze extends AbstractMaze {
         this.bottomLessPits = new ArrayList<>();
         this.lakes = new ArrayList<>();
         this.random = new Random();
+
+        generateRandomObstacles();
     }
 
     /**
@@ -64,23 +66,20 @@ public class SimpleMaze extends AbstractMaze {
         return false;
     }
 
-    public void generateRandomObstacles() {
+    private void generateRandomObstacles() {
         // Generate obstacles
         for (int i = 0; i < 5; i++) {
-            Position uniquePos = generateUniquePosition();
-            obstacles.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY()));
+            obstacles.add(new SquareObstacle(generateUniquePosition().getX(), generateUniquePosition().getY()));
         }
 
         // Generate bottomless pits
         for (int i = 0; i < 3; i++) {
-            Position uniquePos = generateUniquePosition();
-            bottomLessPits.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY()));
+            bottomLessPits.add(new SquareObstacle(generateUniquePosition().getX(), generateUniquePosition().getY()));
         }
 
         // Generate lakes
         for (int i = 0; i < 2; i++) {
-            Position uniquePos = generateUniquePosition();
-            lakes.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY()));
+            lakes.add(new SquareObstacle(generateUniquePosition().getX(), generateUniquePosition().getY()));
         }
     }
 
@@ -102,13 +101,5 @@ public class SimpleMaze extends AbstractMaze {
         // Implement logic to determine if any obstacle blocks the path from Position a
         // to Position b
         return false;
-    }
-
-    public void setMinCoordinate(int minCoordinate) {
-        this.minCoordinate = - minCoordinate;
-    }
-
-    public void setMaxCoordinate(int maxCoordinate) {
-        this.maxCoordinate = maxCoordinate;
     }
 }
