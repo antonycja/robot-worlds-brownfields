@@ -51,6 +51,12 @@ public class ClientTest {
         assertFalse(Client.isValidIPAddress("abc.def.ghi.jkl"));
     }
 
+     /**
+     * Tests the isValidLaunch method of the Client class.
+     * Method validates launch commands for correctness.
+     * Tests a valid launch command and various invalid launch commands.
+     */
+
     @Test
     public void testIsValidLaunch() {
         assertTrue(Client.isValidLaunch("launch ranger robot1"));
