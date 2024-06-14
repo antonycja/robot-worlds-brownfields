@@ -110,6 +110,10 @@ public class CommandFunctionsTest {
         assertEquals("Unsupported command: invalid", exception.getMessage());
     }
 
+    /**
+     * Tests setting and getting the replay flag.
+     */
+
     @Test
     void testSetAndGetReplayFlag() {
         Command.setReplayFlag(true);
@@ -122,7 +126,9 @@ public class CommandFunctionsTest {
      * Tests setting and getting the reverse flag.
      */
 
-    @Test
+    @Test    /**
+    * Tests setting and getting the reverse flag.
+    */
     void testSetAndGetReverseFlag() {
         Command.setReverseFlag(true);
         assertTrue(Command.getReverseFlag());
