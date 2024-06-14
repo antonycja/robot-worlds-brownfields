@@ -374,7 +374,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("GUI portal closed");
             System.exit(0);
         }
@@ -420,16 +420,16 @@ public class GamePanel extends JPanel implements Runnable {
             int scaledTileSize = tileSize; // Adjusted size of the image to match the tile size
 
             // Draw trees in the top left corner
-            drawImagesInCorner(g2, "/obstacles/tree.png", 3, 3, 0, 0, scaledTileSize, scaledTileSize, 8, 8);
+            drawImagesInCorner(g2, "/robot_worlds_13/client/obstacles/tree.png", 3, 3, 0, 0, scaledTileSize, scaledTileSize, 8, 8);
 
             // Draw trees in the top right corner
-            drawImagesInCorner(g2, "/obstacles/tree.png", 3, 3, width - 4 * scaledTileSize, 0, scaledTileSize, scaledTileSize, 8, 8);
+            drawImagesInCorner(g2, "/robot_worlds_13/client/obstacles/tree.png", 3, 3, width - 4 * scaledTileSize, 0, scaledTileSize, scaledTileSize, 8, 8);
 
             // Draw trees in the bottom left corner
-            drawImagesInCorner(g2, "/obstacles/tree.png", 3, 3, 0, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 8, 8);
+            drawImagesInCorner(g2, "/robot_worlds_13/client/obstacles/tree.png", 3, 3, 0, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 8, 8);
 
             // Draw trees in the bottom right corner
-            drawImagesInCorner(g2, "/obstacles/tree.png", 3, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 8, 8);
+            drawImagesInCorner(g2, "/robot_worlds_13/client/obstacles/tree.png", 3, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 8, 8);
             
             if (bullet != null) {
                 synchronized (bullet) {

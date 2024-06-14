@@ -16,6 +16,7 @@ import java.util.Random;
 import robot_worlds_13.server.robot.maze.SimpleMaze;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.TextWorld;
+import robot_worlds_13.server.robot.maze.Maze;
 
 /**
  * Class representing the server for the robot world.
@@ -63,13 +64,19 @@ public class Server {
             System.out.println();
         } catch (IOException e) {
             System.err.println("    Error reading file: " + e.getMessage());
+            System.exit(0);
         }
 
         // This server
         Server serverObject = new Server();
         
         // Maze loaded
-        AbstractWorld world = new TextWorld(new SimpleMaze(), serverObject, dataMap);
+        SimpleMaze mazeGenerated = new SimpleMaze();
+        mazeGenerated.setMinCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
+        mazeGenerated.setMaxCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
+        mazeGenerated.generateRandomObstacles();
+        
+        AbstractWorld world = new TextWorld(mazeGenerated, serverObject, dataMap);
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started. Listening for incoming connections...");
@@ -200,14 +207,14 @@ public class Server {
                 case "width":
                     
                     System.out.println("    Width: " + dataMap.get(attribute) + " kliks");
-                    if (dataMap.get(attribute) < 300) {
+                    if (dataMap.get(attribute) < 500) {
                         System.out.println("Too small of a world size");
                         System.exit(0);
                     }
                     break;
                 case "height":
                     System.out.println("    Height: " + dataMap.get(attribute) + " kliks");
-                    if (dataMap.get(attribute) < 300) {
+                    if (dataMap.get(attribute) < 500) {
                         System.out.println("Too small of a world size");
                         System.exit(0);
                     }

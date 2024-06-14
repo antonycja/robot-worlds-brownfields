@@ -17,8 +17,8 @@ public class SimpleMaze extends AbstractMaze {
     private List<Obstacle> bottomLessPits;
     private List<Obstacle> lakes;
     private Random random;
-    private int minCoordinate = -200; // Minimum coordinate value
-    private int maxCoordinate = 200; // Maximum coordinate value
+    private int minCoordinate = 0; // Minimum coordinate value
+    private int maxCoordinate = 0; // Maximum coordinate value
     private int step = 40; // Step for multiples of 40
 
     /**
@@ -30,8 +30,6 @@ public class SimpleMaze extends AbstractMaze {
         this.bottomLessPits = new ArrayList<>();
         this.lakes = new ArrayList<>();
         this.random = new Random();
-
-        generateRandomObstacles();
     }
 
     /**
@@ -66,7 +64,7 @@ public class SimpleMaze extends AbstractMaze {
         return false;
     }
 
-    private void generateRandomObstacles() {
+    public void generateRandomObstacles() {
         // Generate obstacles
         for (int i = 0; i < 5; i++) {
             obstacles.add(new SquareObstacle(generateUniquePosition().getX(), generateUniquePosition().getY()));
@@ -101,5 +99,13 @@ public class SimpleMaze extends AbstractMaze {
         // Implement logic to determine if any obstacle blocks the path from Position a
         // to Position b
         return false;
+    }
+
+    public void setMinCoordinate(int minCoordinate) {
+        this.minCoordinate = - minCoordinate;
+    }
+
+    public void setMaxCoordinate(int maxCoordinate) {
+        this.maxCoordinate = maxCoordinate;
     }
 }
