@@ -30,8 +30,8 @@ import javax.swing.Timer;
 
 import com.google.gson.Gson;
 
-import entity.Bullet;
-import entity.Player;
+import robot_worlds_13.client.entity.Bullet;
+import robot_worlds_13.client.entity.Player;
 import robot_worlds_13.server.robot.Direction;
 import robot_worlds_13.server.robot.Position;
 
@@ -148,7 +148,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
 
                 if (response.containsKey("message") && response.get("message").equals("LAKES")) {
-                    List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("obstacles");
+                    List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("robot_worlds_13/client/obstacles");
                     for (Map<String, Object> obstacle : obstaclesList) {
                         int x = (width/2) + ((int)((double) obstacle.get("x")));
                         int y = (height/2) - ((int)((double) obstacle.get("y"))) - tileSize;
@@ -158,7 +158,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
 
                 if (response.containsKey("message") && response.get("message").equals("OBSTACLES")) {
-                    List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("obstacles");
+                    List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("robot_worlds_13/client/obstacles");
                     for (Map<String, Object> obstacle : obstaclesList) {
                         int size = 20;
                         int x = (width/2) + ((int)((double) obstacle.get("x")));
@@ -171,7 +171,7 @@ public class GamePanel extends JPanel implements Runnable {
                 
 
                 if (response.containsKey("message") && response.get("message").equals("PITS")) {
-                    List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("obstacles");
+                    List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("robot_worlds_13/client/obstacles");
                     for (Map<String, Object> obstacle : obstaclesList) {
                         int size = 20;
                         int x = (width/2) + ((int)((double) obstacle.get("x")));

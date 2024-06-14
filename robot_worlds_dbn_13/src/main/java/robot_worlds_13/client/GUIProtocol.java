@@ -1,13 +1,10 @@
 package robot_worlds_13.client;
 
-import java.awt.List;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import robot_worlds_13.server.ServerProtocol;
 
 /**
  * Unpacks a JSON response and extracts relevant data into a map.
@@ -59,9 +56,9 @@ public class GUIProtocol {
             if (responseMap.get("state") != null) {
                 if (responseMap.get("state") instanceof Map) {
                     Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("state");
-                    if (innerMap.get("obstacles") != null) {
-                        Object obstacles = (Object) innerMap.get("obstacles");
-                        commandMap.put("obstacles", obstacles);
+                    if (innerMap.get("robot_worlds_13/client/obstacles") != null) {
+                        Object obstacles = (Object) innerMap.get("robot_worlds_13/client/obstacles");
+                        commandMap.put("robot_worlds_13/client/obstacles", obstacles);
                         return commandMap;
                     }
                     if (innerMap.get("name") != null) {

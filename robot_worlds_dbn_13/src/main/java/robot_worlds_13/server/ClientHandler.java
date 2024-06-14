@@ -299,7 +299,7 @@ public class ClientHandler implements Runnable {
             data.clear();
             data.put("message", "OBSTACLES");
             state.clear();
-            state.put("obstacles", obstacles);
+            state.put("robot_worlds_13/client/obstacles", obstacles);
             Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
 
@@ -307,14 +307,14 @@ public class ClientHandler implements Runnable {
             data.clear();
             data.put("message", "LAKES");
             state.clear();
-            state.put("obstacles", lakes);
+            state.put("robot_worlds_13/client/obstacles", lakes);
             Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             List<Obstacle> pits = world.getBottomLessPits();
             data.clear();
             data.put("message", "PITS");
             state.clear();
-            state.put("obstacles", pits);
+            state.put("robot_worlds_13/client/obstacles", pits);
             Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             // starting position
