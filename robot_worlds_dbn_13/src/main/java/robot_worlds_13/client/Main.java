@@ -34,7 +34,5 @@ public class Main extends JFrame {
         super.setVisible(visible);
     }
 
-    // public static void main(String[] args) {
-    // new Main();
-    // }
+    
 }
