@@ -65,6 +65,12 @@ public class ClientTest {
         assertFalse(Client.isValidLaunch("launch ranger"));
     }
 
+    /**
+     * Tests the getAttributes method of the Client class.
+     * This method retrieves attributes of a robot based on its make.
+     * It tests retrieval of attributes for a valid make and an invalid make.
+     */
+
     @Test
     public void testGetAttributes() {
         ArrayList<Object> attributes = Client.getAttributes("sagebot");
