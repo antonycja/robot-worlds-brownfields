@@ -27,16 +27,20 @@ public class HelpCommand extends Command {
     public boolean execute(Robot target) {
         // Help message providing information about available commands
         String message = "I can understand these commands:\n" +
-                "OFF  - Shut down robot\n" +
-                "HELP - provide information about commands\n" +
-                "FORWARD - move forward by specified number of steps, e.g. 'FORWARD 10'\n" +
-                "BACK - move back by specified number of steps, e.g. 'BACK 10'\n" +
-                "LEFT - turn left by 90 degrees\n"+
-                "RIGHT - turn right by 90 degrees\n" +
-                "OFF  - Shut down robot\n" +
-                "quit - disconnects all robots and ends the world.\n" +
-                "robots - lists all robots in the world including the robot’s name and state\n" +
-                "dump - displays a representation of the world’s state showing robots, obstacles, and anything else in the world that you programmed";
+                "        OFF - Shut down robot\n" +
+                "        HELP - provide information about commands\n" +
+                "        FORWARD - move forward by specified number of steps, e.g. 'FORWARD 10'\n" +
+                "        BACK - move back by specified number of steps, e.g. 'BACK 10'\n" +
+                "        LEFT - turn left by 90 degrees\n"+
+                "        RIGHT - turn right by 90 degrees\n" +
+                "        RELOAD - reloads the robot's shots\n" +
+                "        LOOK - looks around the world\n" +
+                "        REPAIR - repairs the robot's shields\n" +
+                "        ORIENTATION - returns the robot's current direction\n" +
+                "        QUIT - disconnects all robots and ends the world.\n" +
+                "        ROBOTS - lists all robots in the world including the robot’s name and state\n" +
+                "        DUMP - displays a representation of the world’s state showing robots, obstacles, and anything else in the world that you programmed\n" + //
+                                        "";
 
         // Construct response data and state
         Map<String, Object> data = new HashMap<>();

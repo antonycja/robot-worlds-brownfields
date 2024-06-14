@@ -373,7 +373,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("GUI portal closed");
             System.exit(0);
         }
@@ -542,7 +542,7 @@ public class GamePanel extends JPanel implements Runnable {
             BufferedImage image;
             try {
                 image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("../../obstacles/mountain.png")));
-                g2.drawImage(image, obstX, obstY, tileSize* 3, tileSize * 3, null);
+                g2.drawImage(image, obstX, obstY, tileSize * 2, tileSize * 2, null);
             } catch (IOException e) {
             }
         }
