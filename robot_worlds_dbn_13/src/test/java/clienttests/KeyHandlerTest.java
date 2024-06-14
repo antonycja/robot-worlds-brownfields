@@ -37,12 +37,20 @@ class KeyHandlerTest {
         assertTrue(keyHandler.downPressed, "The down key should be marked as pressed.");
     }
 
+    /**
+    * Tests that releasing the LEFT key sets the leftPressed flag to false.
+    */
+
     @Test
     void testKeyPressedLeft() {
         KeyEvent keyEvent = new KeyEvent(new java.awt.Label(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, KeyEvent.CHAR_UNDEFINED);
         keyHandler.keyPressed(keyEvent);
         assertTrue(keyHandler.leftPressed, "The left key should be marked as pressed.");
     }
+
+    /**
+    * Tests that releasing the RIGHT key sets the rightPressed flag to false.
+    */
 
     @Test
     void testKeyPressedRight() {
@@ -51,6 +59,10 @@ class KeyHandlerTest {
         assertTrue(keyHandler.rightPressed, "The right key should be marked as pressed.");
     }
 
+    /**
+    * Tests that releasing the UP key sets the upPressed flag to false.
+    */
+
     @Test
     void testKeyReleasedUp() {
         keyHandler.upPressed = true;
@@ -58,6 +70,11 @@ class KeyHandlerTest {
         keyHandler.keyReleased(keyEvent);
         assertFalse(keyHandler.upPressed, "The up key should be marked as released.");
     }
+
+
+    /**
+    * Tests that releasing the DOWN key sets the downPressed flag to false.
+    */
 
     @Test
     void testKeyReleasedDown() {
