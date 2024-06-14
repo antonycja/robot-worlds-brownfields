@@ -66,6 +66,10 @@ public class CommandFunctionsTest {
         assertEquals(1, Command.getCommandList().size());
     }
 
+    /**
+    * Tests the creation of a LookCommand.
+    */
+
     @Test
     void testCreateLookCommand() {
         Command command = Command.create("look");
