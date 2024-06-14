@@ -1,4 +1,6 @@
-//package robot_worlds_13.server.robot;
+package servertests.robottests;
+
+
 //
 //import org.junit.jupiter.api.Test;
 //import robot_worlds_13.server.robot.world.AbstractWorld;
