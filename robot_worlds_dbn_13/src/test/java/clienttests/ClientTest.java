@@ -82,6 +82,15 @@ public class ClientTest {
         assertEquals(0, attributes.size());
     }
 
+    /**
+     * Tests the sendJsonRequest method of the Client class.
+     * Method sends a JSON request to the server.
+     * Uses Mockito to mock the Socket and DataOutputStream and verifies 
+     * if the correct JSON string is sent.
+     * 
+     * @throws IOException if an I/O error occurs
+     */
+
     @Test
     public void testSendJsonRequest() throws IOException {
         // Mocking Socket and DataOutputStream
