@@ -67,17 +67,20 @@ public class SimpleMaze extends AbstractMaze {
     public void generateRandomObstacles() {
         // Generate obstacles
         for (int i = 0; i < 5; i++) {
-            obstacles.add(new SquareObstacle(generateUniquePosition().getX(), generateUniquePosition().getY()));
+            Position uniquePos = generateUniquePosition();
+            obstacles.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY()));
         }
 
         // Generate bottomless pits
         for (int i = 0; i < 3; i++) {
-            bottomLessPits.add(new SquareObstacle(generateUniquePosition().getX(), generateUniquePosition().getY()));
+            Position uniquePos = generateUniquePosition();
+            bottomLessPits.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY()));
         }
 
         // Generate lakes
         for (int i = 0; i < 2; i++) {
-            lakes.add(new SquareObstacle(generateUniquePosition().getX(), generateUniquePosition().getY()));
+            Position uniquePos = generateUniquePosition();
+            lakes.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY()));
         }
     }
 
