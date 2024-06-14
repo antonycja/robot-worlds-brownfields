@@ -28,7 +28,12 @@ public class RepairCommandTest {
     public void testExecute() {
 
         //Create a mock Robot object with configuration
-       AbstractWorld worldObject = new AbstractWorld(new SimpleMaze());
+        SimpleMaze mazeGenerated = new SimpleMaze();
+        mazeGenerated.setMinCoordinate(500 / 3);
+        mazeGenerated.setMaxCoordinate(500 / 3);
+        mazeGenerated.generateRandomObstacles();
+        AbstractWorld worldObject = new AbstractWorld(mazeGenerated);
+
 
 
 

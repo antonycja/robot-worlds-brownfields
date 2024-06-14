@@ -69,7 +69,13 @@ public class Server {
         Server serverObject = new Server();
         
         // Maze loaded
-        AbstractWorld world = new TextWorld(new SimpleMaze(), serverObject, dataMap);
+        SimpleMaze mazeGenerated = new SimpleMaze();
+        mazeGenerated.setMinCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
+        mazeGenerated.setMaxCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
+        mazeGenerated.generateRandomObstacles();
+        
+        AbstractWorld world = new TextWorld(mazeGenerated, serverObject, dataMap);
+
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started. Listening for incoming connections...");
@@ -200,14 +206,14 @@ public class Server {
                 case "width":
                     
                     System.out.println("    Width: " + dataMap.get(attribute) + " kliks");
-                    if (dataMap.get(attribute) < 300) {
+                    if (dataMap.get(attribute) < 500) {
                         System.out.println("Too small of a world size");
                         System.exit(0);
                     }
                     break;
                 case "height":
                     System.out.println("    Height: " + dataMap.get(attribute) + " kliks");
-                    if (dataMap.get(attribute) < 300) {
+                    if (dataMap.get(attribute) < 500) {
                         System.out.println("Too small of a world size");
                         System.exit(0);
                     }
