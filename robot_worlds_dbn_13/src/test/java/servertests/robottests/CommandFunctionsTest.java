@@ -58,6 +58,10 @@ public class CommandFunctionsTest {
         assertEquals(1, Command.getCommandList().size());
     }
 
+    /**
+    * Tests the creation of a LeftCommand and verifies the command list size.
+    */
+
     @Test
     void testCreateLeftCommand() {
         Command command = Command.create("left");
@@ -65,7 +69,10 @@ public class CommandFunctionsTest {
         assertEquals(1, Command.getCommandList().size());
     }
 
-    
+    /**
+    * Tests the creation of a RightCommand and verifies the command list size.
+    */
+
 
     @Test
     void testCreateRightCommand() {
@@ -73,7 +80,6 @@ public class CommandFunctionsTest {
         assertTrue(command instanceof RightCommand);
         assertEquals(1, Command.getCommandList().size());
     }
-
 
 
     @Test
