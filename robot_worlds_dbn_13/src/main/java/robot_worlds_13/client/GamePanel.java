@@ -35,6 +35,12 @@ import entity.Player;
 import robot_worlds_13.server.robot.Direction;
 import robot_worlds_13.server.robot.Position;
 
+/**
+ * GamePanel class represents the main game screen, handling rendering and updating
+ * of game entities like players, obstacles, lakes, and pits. It also manages the 
+ * connection to the game server for receiving updates and sending commands.
+ */
+
 public class GamePanel extends JPanel implements Runnable {
 
     // Screen settings
@@ -78,6 +84,15 @@ public class GamePanel extends JPanel implements Runnable {
     public int height;
     public int width;
 
+    /**
+     * Constructs a GamePanel with the specified width, height, server address, and port.
+     * 
+     * @param widthGiven the width of the game panel
+     * @param heightGiven the height of the game panel
+     * @param addressGiven the server address
+     * @param portGiven the server port
+     */
+
     public GamePanel(int widthGiven, int heightGiven, String addressGiven, int portGiven) {
         this.width = widthGiven;
         this.height = heightGiven;
@@ -89,6 +104,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
     }
+   
+    /**
+     * Starts the game thread.
+     */
 
     public void startGameThread() {
         
@@ -367,6 +386,10 @@ public class GamePanel extends JPanel implements Runnable {
     System.exit(0);
     }
 
+     /**
+     * Updates the game state.
+     */
+
     public void update() {
         
         if (players == null) {
@@ -453,6 +476,21 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Draws multiple images in a specified corner of the game panel.
+     *
+     * @param g2 the Graphics2D object used for drawing
+     * @param imagePath the path to the image file
+     * @param imagesPerRow the number of images per row
+     * @param imagesPerCol the number of images per column
+     * @param startX the starting X coordinate for the images
+     * @param startY the starting Y coordinate for the images
+     * @param scaledWidth the width to scale the images to
+     * @param scaledHeight the height to scale the images to
+     * @param maxImagesPerRow the maximum number of images per row
+     * @param maxImagesPerCol the maximum number of images per column
+     */
+
     private void drawImagesInCorner(Graphics2D g2, String imagePath, int imagesPerRow, int rows, int cornerX, int cornerY, int imageWidth, int imageHeight, int spacingX, int spacingY) {
         BufferedImage image;
         try {
@@ -492,6 +530,14 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Draws a square obstacle at the specified grid coordinates.
+     *
+     * @param g2 the Graphics2D object used for drawing
+     * @param gridX the X coordinate of the grid
+     * @param gridY the Y coordinate of the grid
+     */
+
     public void drawSquare(Graphics2D g2, int obstX, int obstY) {
             BufferedImage image;
             try {
@@ -501,6 +547,14 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
+         /**
+     * Draws a lake at the specified grid coordinates.
+     *
+     * @param g2 the Graphics2D object used for drawing
+     * @param gridX the X coordinate of the grid
+     * @param gridY the Y coordinate of the grid
+     */
+
         public void drawLake (Graphics2D g2, int obstX, int obstY) {
             BufferedImage image;
             try {
@@ -509,6 +563,14 @@ public class GamePanel extends JPanel implements Runnable {
             } catch (IOException e) {
             }
         }
+
+        /**
+     * Draws a pit at the specified grid coordinates.
+     *
+     * @param g2 the Graphics2D object used for drawing
+     * @param gridX the X coordinate of the grid
+     * @param gridY the Y coordinate of the grid
+     */
 
     public void drawPit(Graphics2D g2, int obstX, int obstY) {
         BufferedImage image;
