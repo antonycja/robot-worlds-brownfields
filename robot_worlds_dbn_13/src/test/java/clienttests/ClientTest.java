@@ -36,6 +36,12 @@ public class ClientTest {
         assertFalse(Client.isValidPortNumber("70000"));
         assertFalse(Client.isValidPortNumber("abc"));
     }
+    
+    /**
+     * Tests the isValidIPAddress method of the Client class.
+     * This method verifies if a given IP address string is valid.
+     * It tests valid IP addresses and invalid IP addresses.
+     */
 
     @Test
     public void testIsValidIPAddress() {
