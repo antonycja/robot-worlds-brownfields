@@ -96,11 +96,20 @@ public class CommandFunctionsTest {
         assertTrue(command instanceof RepairCommand);
     }
 
+    /**
+    * Tests the creation of a ReloadCommand.
+    */
+
     @Test
     void testCreateReloadCommand() {
         Command command = Command.create("reload");
         assertTrue(command instanceof ReloadCommand);
     }
+
+    /**
+    * Tests the creation of an invalid command and verifies that an IllegalArgumentException is thrown.
+    */
+
 
     @Test
     void testCreateInvalidCommand() {
@@ -111,8 +120,8 @@ public class CommandFunctionsTest {
     }
 
     /**
-     * Tests setting and getting the replay flag.
-     */
+    * Tests setting and getting the reverse flag.
+    */
 
     @Test
     void testSetAndGetReplayFlag() {
@@ -123,12 +132,10 @@ public class CommandFunctionsTest {
     }
 
     /**
-     * Tests setting and getting the reverse flag.
-     */
-
-    @Test    /**
     * Tests setting and getting the reverse flag.
     */
+
+    @Test  
     void testSetAndGetReverseFlag() {
         Command.setReverseFlag(true);
         assertTrue(Command.getReverseFlag());
