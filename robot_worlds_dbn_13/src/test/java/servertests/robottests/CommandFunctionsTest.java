@@ -84,6 +84,10 @@ public class CommandFunctionsTest {
         assertTrue(command instanceof FireCommand);
     }
 
+    /**
+    * Tests the creation of an OrientationCommand.
+    */
+
     @Test
     void testCreateOrientationCommand() {
         Command command = Command.create("orientation");
