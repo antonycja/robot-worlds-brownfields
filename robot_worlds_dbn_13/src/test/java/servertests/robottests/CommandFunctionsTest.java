@@ -43,6 +43,10 @@ public class CommandFunctionsTest {
         assertTrue(command instanceof HelpCommand);
     }
 
+    /**
+    * Tests the creation of a ForwardCommand with an argument and verifies the command properties.
+    */
+
     @Test
     void testCreateForwardCommandWithArgument() {
         ArrayList<String> arguments = new ArrayList<>();
