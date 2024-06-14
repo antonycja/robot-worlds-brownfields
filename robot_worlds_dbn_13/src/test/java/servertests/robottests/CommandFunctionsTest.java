@@ -118,6 +118,10 @@ public class CommandFunctionsTest {
         assertFalse(Command.getReplayFlag());
     }
 
+    /**
+     * Tests setting and getting the reverse flag.
+     */
+
     @Test
     void testSetAndGetReverseFlag() {
         Command.setReverseFlag(true);
