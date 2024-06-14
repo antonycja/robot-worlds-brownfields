@@ -90,6 +90,10 @@ public class CommandFunctionsTest {
         assertTrue(command instanceof OrientationCommand);
     }
 
+    /**
+    * Tests the creation of a RepairCommand.
+    */
+
     @Test
     void testCreateRepairCommand() {
         Command command = Command.create("repair");
