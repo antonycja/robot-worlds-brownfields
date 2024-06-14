@@ -15,12 +15,20 @@ class KeyHandlerTest {
         keyHandler = new KeyHandler();
     }
 
+    /**
+    * Tests that pressing the UP key sets the upPressed flag to true.
+    */
+
     @Test
     void testKeyPressedUp() {
         KeyEvent keyEvent = new KeyEvent(new java.awt.Label(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_UP, KeyEvent.CHAR_UNDEFINED);
         keyHandler.keyPressed(keyEvent);
         assertTrue(keyHandler.upPressed, "The up key should be marked as pressed.");
     }
+
+    /**
+    * Tests that pressing the DOWN key sets the downPressed flag to true.
+    */
 
     @Test
     void testKeyPressedDown() {
