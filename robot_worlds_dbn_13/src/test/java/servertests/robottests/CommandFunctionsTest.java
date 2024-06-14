@@ -81,6 +81,9 @@ public class CommandFunctionsTest {
         assertEquals(1, Command.getCommandList().size());
     }
 
+    /**
+    * Tests the creation of a BackCommand with an argument and verifies the command properties.
+    */
 
     @Test
     void testCreateBackCommand() {
