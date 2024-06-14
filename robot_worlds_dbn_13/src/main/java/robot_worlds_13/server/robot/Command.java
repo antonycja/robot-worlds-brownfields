@@ -39,7 +39,7 @@ public abstract class Command {
         this.argument = argument.trim();
     }
 
-    public String getName() { // <2>
+    public String getName() { 
         return name;
     }
 

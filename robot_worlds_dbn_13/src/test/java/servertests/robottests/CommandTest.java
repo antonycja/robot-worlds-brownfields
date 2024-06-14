@@ -1,14 +1,14 @@
 package servertests.robottests;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import robot_worlds_13.server.robot.*;
-import robot_worlds_13.server.robot.world.AbstractWorld;
+import robot_worlds_13.server.robot.Command;
+import robot_worlds_13.server.robot.ForwardCommand;
+import robot_worlds_13.server.robot.HelpCommand;
+import robot_worlds_13.server.robot.ShutdownCommand;
 
 class CommandTest {
 
@@ -30,31 +30,31 @@ class CommandTest {
 
     @Test
     void getHelpName() {
-        Command test = new HelpCommand();                                                               //<1>
+        Command test = new HelpCommand();                                                               
         assertEquals("help", test.getName());
     }
 
 
     @Test
     void createCommand() {
-        // Command forward = Command.create("forward 10");                                                 //<1>
+        // Command forward = Command.create("forward 10");                                                
         // assertEquals("forward", forward.getName());
         // assertEquals("10", forward.getArgument());
 
-        Command shutdown = Command.create("shutdown");                                                  //<2>
+        Command shutdown = Command.create("shutdown");                                                  
         assertEquals("off", shutdown.getName());
 
-        Command help = Command.create("help");                                                          //<3>
+        Command help = Command.create("help");                                                          
         assertEquals("help", help.getName());
     }
 
     @Test
     void createInvalidCommand() {
         try {
-            Command forward = Command.create("say hello");                                              //<4>
-            fail("Should have thrown an exception");                                                    //<5>
+            Command forward = Command.create("say hello");                                              
+            fail("Should have thrown an exception");                                                    
         } catch (IllegalArgumentException e) {
-            assertEquals("Unsupported command: say hello", e.getMessage());                             //<6>
+            assertEquals("Unsupported command: say hello", e.getMessage());                             
         }
     }
 
