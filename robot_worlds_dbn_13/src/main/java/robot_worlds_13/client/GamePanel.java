@@ -52,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
 
-    // TileManager tileM = new TileManager(this);
+    
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     // Set player's default position
@@ -333,10 +333,7 @@ public class GamePanel extends JPanel implements Runnable {
 
                 long currentTime = System.nanoTime();
 
-                // 1 UPDATE: update information such as character positions
-                // update();
-                // 2 DRAW: draw screen with the updated information
-                // update();
+                
                 repaint();
 
                 try {
@@ -490,7 +487,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         } catch (IOException e) {
-            //java.io.IOException: closed
+            
 
         }
     }
