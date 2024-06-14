@@ -10,12 +10,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandFunctionsTest {
 
+    /**
+    * Sets up the environment for each test by resetting the Command replay and reverse flags
+    * and clearing the command list.
+    */
+
     @BeforeEach
     void setUp() {
         Command.setReplayFlag(false);
         Command.setReverseFlag(false);
         Command.setCommandList(new ArrayList<>());
     }
+
+    /**
+    * Tests the creation of a ShutdownCommand and verifies the command list remains empty.
+    */
 
     @Test
     void testCreateShutdownCommand() {
@@ -48,12 +57,16 @@ public class CommandFunctionsTest {
         assertEquals(1, Command.getCommandList().size());
     }
 
+    
+
     @Test
     void testCreateRightCommand() {
         Command command = Command.create("right");
         assertTrue(command instanceof RightCommand);
         assertEquals(1, Command.getCommandList().size());
     }
+
+
 
     @Test
     void testCreateBackCommand() {
