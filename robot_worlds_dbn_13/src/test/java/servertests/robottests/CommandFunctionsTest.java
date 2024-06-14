@@ -72,6 +72,10 @@ public class CommandFunctionsTest {
         assertTrue(command instanceof LookCommand);
     }
 
+    /**
+    * Tests the creation of a StateCommand.
+    */
+
     @Test
     void testCreateStateCommand() {
         Command command = Command.create("state");
