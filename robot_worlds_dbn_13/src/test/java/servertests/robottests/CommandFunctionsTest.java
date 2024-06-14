@@ -78,6 +78,10 @@ public class CommandFunctionsTest {
         assertTrue(command instanceof StateCommand);
     }
 
+    /**
+    * Tests the creation of a FireCommand.
+    */
+
     @Test
     void testCreateFireCommand() {
         Command command = Command.create("fire");
