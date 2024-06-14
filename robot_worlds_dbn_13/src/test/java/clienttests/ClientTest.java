@@ -15,11 +15,20 @@ import java.net.Socket;
 public class ClientTest {
 
     private Client client;
-
+    /**
+     * Sets up the test environment before each test.
+     * This method initializes the Client instance.
+     */
     @BeforeEach
     public void setUp() {
         client = new Client();
     }
+
+    /**
+     * Tests the isValidPortNumber method of the Client class.
+     * Method checks if a given port number string is valid.
+     * Tests valid port number, invalid port number (out of range), and non-numeric port number.
+     */
 
     @Test
     public void testIsValidPortNumber() {
