@@ -113,10 +113,6 @@ public class ClientProtocol {
             }
 
             String message = "";
-            // if (responseMap.containsKey("result")) {
-            //     String resultOfCommand = (String) responseMap.get("result");
-            //     // message += resultOfCommand;
-            // }
             
             if (responseMap.get("data") != null) {
                 if (responseMap.get("data") instanceof Map) {
@@ -127,7 +123,6 @@ public class ClientProtocol {
                         message += "    Message: " + messageResponse + "\n";
                     }
                     if (innerMap.get("distance") != null) { // robots steps away
-                        // (String.valueOf((int) Math.round((double) innerMap.get("distance"))))
                         String distance = (String.valueOf((int) Math.round((double) innerMap.get("distance"))));
                         message += "    Distance: " + distance  + " steps away\n";
                     }
@@ -158,7 +153,6 @@ public class ClientProtocol {
                             message += direction;
                             String type = "        Type: " + obstacleMap.get("type") + "\n";
                             message += type;
-                            // (String.valueOf((int) Math.round((double) obstacleMap.get("distance"))))
                             String distance = "        Distance: " + (String.valueOf((int) Math.round((double) obstacleMap.get("distance")))) + " steps away\n";
                             message += distance;
                             message += "\n";
