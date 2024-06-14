@@ -29,7 +29,9 @@ import com.google.gson.Gson;
 
 public class Client {
     
-    // colors for the terminal
+    /**
+     * Colors for the terminal.
+     */
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -48,6 +50,11 @@ public class Client {
     public static String robotName;
 
     static private Gson gson = new Gson();
+
+    /**
+     * The main method is the entry point of the application.
+     * @param args the command line arguments
+     */
 
     public static void main(String[] args) {
         System.out.println(ANSI_CYAN + "       " +
@@ -118,7 +125,7 @@ public class Client {
             String potentialRobotName = "";
 
             
-            // main.showRobot(robotName); // Pass the robot name to the showRobot method
+         // Pass the robot name to the showRobot method
             
 
             while (true) {
@@ -150,7 +157,7 @@ public class Client {
                 response.contains("Connected successfully to") || response.contains("Too many of you in this world")) {
                     System.out.println(ANSI_CYAN + "Launch a robot!, Hint use 'launch make robot_name'");
                     System.out.println(ANSI_GREEN + "Please enter a valid make. Options are: Ranger, Assasin, SageBot");
-                    // get imput
+                    // get input
                     String command = line.nextLine();
 
                     // save name
@@ -185,7 +192,7 @@ public class Client {
 
             while (true) {
                 // get server messages
-                // String robotPosition = 
+                
                 response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
 
                 if (response.contains("GUI")) {
@@ -240,7 +247,7 @@ public class Client {
                 dout.writeUTF("off");
                 dout.flush();
                 dout.close();
-                // sThisClient.close();
+                
             } catch (Exception i) {
                 System.out.println("Connection problem encountered: Server is down or you do not an active internet connection");
                 System.exit(0);
