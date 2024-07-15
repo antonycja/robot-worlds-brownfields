@@ -1,5 +1,7 @@
 package AcceptanceTests;
 
+import AcceptanceTests.RobotWorldClient.RobotWorldClient;
+import AcceptanceTests.RobotWorldClient.RobotWorldJsonClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.*;
 
