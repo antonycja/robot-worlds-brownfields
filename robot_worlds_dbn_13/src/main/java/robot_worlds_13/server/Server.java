@@ -19,7 +19,7 @@ public class Server {
     List<ClientHandler> clients = new ArrayList<>();
     private static List<Socket> clientConnections = new ArrayList<>();
     static DataOutputStream dos;
-    public static int port = ServerConfiguration.portNum;
+    public static int port;
 
     // random
     Random rand = new Random();
@@ -41,7 +41,7 @@ public class Server {
 //        System.out.print("Welcome, would you like to Configure your own server or use previous Configurations? (y/n): ");
 //        String configure = scanner.nextLine().toLowerCase().trim();
         ServerConfiguration serverConfiguration = new ServerConfiguration();
-
+        port = serverConfiguration.portNum;
 
         System.out.println("Starting server...\n");
 

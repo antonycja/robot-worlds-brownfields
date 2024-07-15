@@ -10,15 +10,14 @@ public class ServerConfiguration {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
-    public static int portNum;
+    public int portNum;
 
     public ServerConfiguration() {
         Scanner scanner = new Scanner(System.in);
-        int portNum = getIntInput(scanner, ANSI_CYAN + "Enter the PORT number you want to host your server: ", 1024, 65535);
-
+        portNum = getIntInput(scanner, ANSI_CYAN + "Enter the PORT number you want to host your server: ", 1024, 65535);
     }
 
-    private static int getIntInput(Scanner scanner, String prompt, int min, int max) {
+    public static int getIntInput(Scanner scanner, String prompt, int min, int max) {
         int value;
         while (true) {
             System.out.print(prompt);
