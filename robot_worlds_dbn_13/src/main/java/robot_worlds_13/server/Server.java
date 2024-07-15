@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 
-import robot_worlds_13.server.configuration.SeverConfiguration;
+import robot_worlds_13.server.configuration.ServerConfiguration;
 import robot_worlds_13.server.robot.maze.SimpleMaze;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.TextWorld;
@@ -19,7 +19,7 @@ public class Server {
     List<ClientHandler> clients = new ArrayList<>();
     private static List<Socket> clientConnections = new ArrayList<>();
     static DataOutputStream dos;
-    static int port = SeverConfiguration.portNum;
+    static int port = ServerConfiguration.portNum;
 
     // random
     Random rand = new Random();
@@ -40,7 +40,7 @@ public class Server {
 //        // Ask the Admin if they want to configure
 //        System.out.print("Welcome, would you like to Configure your own server or use previous Configurations? (y/n): ");
 //        String configure = scanner.nextLine().toLowerCase().trim();
-        SeverConfiguration serverConfiguration = new SeverConfiguration();
+        ServerConfiguration serverConfiguration = new ServerConfiguration();
 
 
         System.out.println("Starting server...\n");
