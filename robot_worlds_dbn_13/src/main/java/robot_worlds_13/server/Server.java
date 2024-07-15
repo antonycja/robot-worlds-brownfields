@@ -19,7 +19,7 @@ public class Server {
     List<ClientHandler> clients = new ArrayList<>();
     private static List<Socket> clientConnections = new ArrayList<>();
     static DataOutputStream dos;
-    static int port = ServerConfiguration.portNum;
+    public static int port = ServerConfiguration.portNum;
 
     // random
     Random rand = new Random();

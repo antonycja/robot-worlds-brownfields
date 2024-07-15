@@ -27,6 +27,8 @@ import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
 
+import static robot_worlds_13.server.Server.port;
+
 public class Client {
     
     /**
@@ -42,7 +44,7 @@ public class Client {
     private static final String IP_REGEX = "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b";
     static String localAddress = "localhost";
     static String serverIpAddress = "20.20.15.94";
-    static int portLocal = 2201;
+    static int portLocal = port;
     public static Socket sThisClient;
     public static DataOutputStream dout;
     public static DataInputStream din;
@@ -69,7 +71,6 @@ public class Client {
                 "     `---''---`");
 
         // connecting to server
-        int port = 0;
         String address = "";
         if (args.length == 0) {
             address = localAddress;
