@@ -1,6 +1,6 @@
 package robot_worlds_13.client;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 /**
  * The main entry point for the Robot World application.

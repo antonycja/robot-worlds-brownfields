@@ -65,6 +65,7 @@ public class ForwardCommand extends Command {
         if (responseGiven == UpdateResponse.FAILED_OBSTRUCTED) {
             // Obstructed by an obstacle
             data.clear();
+
             data.put("message", "Obstructed - There is an obstacle in the way");
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
             target.previouPosition = target.position;
