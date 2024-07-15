@@ -21,6 +21,7 @@ public class FireCommand extends Command {
      */
     @Override
     public boolean execute(Robot target) {
+
         // Retrieve current robot information from the world data
     target.worldData.giveCurrentRobotInfo(target);
     Map<String, Object> data = new HashMap<>();
@@ -40,6 +41,7 @@ public class FireCommand extends Command {
 
     // this check for a respone of either hit or miss
     Robot affectedRobot = target.worldData.isHit(robotBulletDistance);
+    System.out.println(affectedRobot.getName());
     if (affectedRobot.getName() != "NonValid"){
         // if its a hit then decrese the shield of the affected robot
         int stepsAway = target.worldData.getStepsAway(target.getCurrentPosition(), affectedRobot.getCurrentPosition());
@@ -54,6 +56,7 @@ public class FireCommand extends Command {
         target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
     } else {
         // if its a miss then nothing
+
         data.put("message", "Miss");
         state = target.getRobotState();
         target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));

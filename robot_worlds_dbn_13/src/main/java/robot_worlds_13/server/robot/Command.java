@@ -39,7 +39,7 @@ public abstract class Command {
         this.argument = argument.trim();
     }
 
-    public String getName() { 
+    public String getName() {
         return name;
     }
 
@@ -62,7 +62,7 @@ public abstract class Command {
      * @return a new `Command` instance based on the instruction
      * @throws IllegalArgumentException if the instruction is not supported
      */
-    public static Command create(String instruction, ArrayList arguments) {
+    public static Command create(String instruction, ArrayList<String> arguments) {
 
         // Convert instruction to lowercase
         instruction = instruction.toLowerCase();
@@ -75,42 +75,6 @@ public abstract class Command {
                 return new ShutdownCommand();
             case "help":
                 return new HelpCommand();
-            case "forward":
-                if (!replayFlag) {
-                    commandList.add(instruction);
-                }
-                return new ForwardCommand((String) arguments.get(0));
-            case "[A":
-                return new ForwardCommand("10");
-            case "[D":
-                return new LeftCommand();
-            case "[C":
-                return new RightCommand();
-            case "[B":
-                return new BackCommand("10");
-
-            // ADDED
-            case "left":
-                if (!replayFlag) {
-                    commandList.add(instruction);
-                }
-                return new LeftCommand();
-            case "turn":
-                if (((String) arguments.get(0)).equalsIgnoreCase("left")) {
-                    return new LeftCommand();
-                } else if (((String) arguments.get(0)).equalsIgnoreCase("right")) {
-                    return new RightCommand();
-                }
-            case "right":
-                if (!replayFlag) {
-                    commandList.add(instruction);
-                }
-                return new RightCommand();
-            case "back":
-                if (!replayFlag) {
-                    commandList.add(instruction);
-                }
-                return new BackCommand((String) arguments.get(0));
             case "look":
                 return new LookCommand();
             case "state":
@@ -123,11 +87,50 @@ public abstract class Command {
                 return new RepairCommand("repair");
             case "reload":
                 return new ReloadCommand();
-
+            case "[A":
+                return new ForwardCommand("10");
+            case "[D":
+                return new LeftCommand();
+            case "[C":
+                return new RightCommand();
+            case "[B":
+                return new BackCommand("10");
+            case "left":
+                if (!replayFlag) {
+                    commandList.add(instruction);
+                }
+                return new LeftCommand();
+            case "right":
+                if (!replayFlag) {
+                    commandList.add(instruction);
+                }
+                return new RightCommand();
+            case "forward":
+                if (!replayFlag) {
+                    commandList.add(instruction);
+                }
+                return new ForwardCommand(arguments.isEmpty() ? "10" : arguments.get(0));
+            case "back":
+                if (!replayFlag) {
+                    commandList.add(instruction);
+                }
+                return new BackCommand(arguments.isEmpty() ? "10" : arguments.get(0));
+            case "turn":
+                if (arguments.isEmpty()) {
+                    throw new IllegalArgumentException("Missing argument for turn command");
+                }
+                if (arguments.get(0).equalsIgnoreCase("left")) {
+                    return new LeftCommand();
+                } else if (arguments.get(0).equalsIgnoreCase("right")) {
+                    return new RightCommand();
+                } else {
+                    throw new IllegalArgumentException("Invalid argument for turn command: " + arguments.get(0));
+                }
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
     }
+
 
     public static List<String> getCommandList() {
         return commandList;

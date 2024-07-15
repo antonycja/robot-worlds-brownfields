@@ -95,11 +95,17 @@ public class Robot {
         TOP_LEFT = new Position(-100,200);
         BOTTOM_RIGHT = new Position(100, -200);
         // Initialize robot properties
+        System.out.println(name + " is starting at " + startPosition);
         this.name = name;
+        System.out.println(name + " is starting at " + startPosition);
         this.status = "NORMAL";
+        System.out.println(this.status + " is starting at " + startPosition);
         this.position = startPosition;
+        System.out.println(this.position + " is starting at " + startPosition);
         this.currentDirection = IWorld.Direction.NORTH;
+        System.out.println(this.currentDirection + " is starting at " + startPosition);
         this.worldData = new TextWorld(new SimpleMaze());
+        System.out.println(this.worldData + " is starting at " + startPosition);
         this.maxAmmo = 5;
         this.ammo = 5;
         this.reloadTime = worldData.ammoReloadTime;
@@ -107,6 +113,7 @@ public class Robot {
         this.shields = 5;
         this.repairingTime = 5;
         this.bulletDistance = 5;
+
     }
 
     public Robot(String name, AbstractWorld worldObject) {
