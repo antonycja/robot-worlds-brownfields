@@ -59,9 +59,9 @@ public class ClientTest {
 
     @Test
     public void testIsValidLaunch() {
-        assertTrue(Client.isValidLaunch("launch ranger robot1"));
+        assertTrue(Client.isValidLaunch("launch pistol robot1"));
         assertFalse(Client.isValidLaunch("launch invalid_make robot1"));
-        assertFalse(Client.isValidLaunch("start ranger robot1"));
+        assertFalse(Client.isValidLaunch("start pistol robot1"));
         assertFalse(Client.isValidLaunch("launch ranger"));
     }
 
@@ -73,7 +73,7 @@ public class ClientTest {
 
     @Test
     public void testGetAttributes() {
-        ArrayList<Object> attributes = Client.getAttributes("sagebot");
+        ArrayList<Object> attributes = Client.getAttributes("pistol");
         assertEquals(2, attributes.size());
         assertEquals(50, attributes.get(0));
         assertEquals(50, attributes.get(1));

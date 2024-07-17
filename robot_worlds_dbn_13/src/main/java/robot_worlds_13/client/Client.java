@@ -166,7 +166,7 @@ public class Client {
                 if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || 
                 response.contains("Connected successfully to") || response.contains("Too many of you in this world")) {
                     System.out.println(ANSI_CYAN + "Launch a robot!, Hint use 'launch make robot_name'");
-                    System.out.println(ANSI_GREEN + "Please enter a valid make. Options are: Ranger, Assasin, SageBot");
+                    System.out.println(ANSI_GREEN + "Please enter a valid make. Options are: Pistol, Riffle, Sniper");
                     // get input
                     String command = line.nextLine();
 
@@ -303,7 +303,7 @@ public class Client {
             String[] parts = commandGiven.trim().split("\\s+", 3);
             if (!parts[0].equalsIgnoreCase("launch")) {
                 return false;
-            } else if (!Arrays.asList("ranger", "assassin", "sagebot").contains(parts[1].toLowerCase())) {
+            } else if (!Arrays.asList("pistol", "riffle", "sniper").contains(parts[1].toLowerCase())) {
                 return false;
             } else if (parts[2] == null || parts[2].isEmpty()) {
                 return false;
@@ -317,19 +317,18 @@ public class Client {
     static public ArrayList<Object> getAttributes (String make) {
         ArrayList<Object> attributes = new ArrayList<>();
         switch (make.toLowerCase()) {
-            case "sagebot":
+            case "pistol":
                 attributes.add(50);
                 attributes.add(50);
                 break;
-            case "assassin":
-                attributes.add(50);
-                attributes.add(50);
+            case "riffle":
+                attributes.add(200);
+                attributes.add(200);
                 break;
-            case "ranger":
-                attributes.add(50);
-                attributes.add(50);
+            case "sniper":
+                attributes.add(3);
+                attributes.add(5);
                 break;
-        
             default:
                 break;
         }

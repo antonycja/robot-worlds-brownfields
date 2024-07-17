@@ -330,6 +330,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }}
 
                 if (((String) response.get("message")).equalsIgnoreCase("LEFT")) {
+                    repaint();
                     for (Player player: players) {
                         if (name.equals(player.characterName)){
                     switch ( player.direction) {
@@ -428,12 +429,7 @@ public class GamePanel extends JPanel implements Runnable {
             // Draw trees in the bottom right corner
             drawImagesInCorner(g2, "../../obstacles/tree.png", 3, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 8, 8);
             
-            if (bullet != null) {
-                synchronized (bullet) {
-                    bullet.draw(g);
-                }
-                
-            }
+
 
             if (players != null) {
                 synchronized(players) {
@@ -465,6 +461,13 @@ public class GamePanel extends JPanel implements Runnable {
                         drawPit(g2, array[0], array[1]);
                     }
                 }
+            }
+
+            if (bullet != null) {
+                synchronized (bullet) {
+                    bullet.draw(g);
+                }
+
             }
 
             g2.dispose();
