@@ -437,7 +437,7 @@ public class ClientHandler implements Runnable {
                     break;
                 }
             }
-
+            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
             // removing current robot from sever
             connectedServer.removeRobot(name);
             world.serverObject.robotNames.remove(name);

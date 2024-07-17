@@ -55,8 +55,15 @@ public class Bullet {
         g.fillOval(x - 4, y, 10, 10); // Draw the bullet as a small red circle
     }
 
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
     public boolean isAtDestination(int destX, int destY) {
-        return x == destX && y == destY;
+        return this.x == destX && this.y == destY;
     }
 }
 
