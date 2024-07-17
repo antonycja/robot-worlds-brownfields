@@ -27,8 +27,11 @@ import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
 
+import static robot_worlds_13.server.configuration.ServerConfiguration.getIntInput;
+
+//import static robot_worlds_13.server.Server.port;
+
 public class Client {
-    
     /**
      * Colors for the terminal.
      */
@@ -42,7 +45,6 @@ public class Client {
     private static final String IP_REGEX = "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b";
     static String localAddress = "localhost";
     static String serverIpAddress = "20.20.15.94";
-    static int portLocal = 2201;
     public static Socket sThisClient;
     public static DataOutputStream dout;
     public static DataInputStream din;
@@ -57,6 +59,8 @@ public class Client {
      */
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         System.out.println(ANSI_CYAN + "       " +
                 "  __\n" +
                 " _(\\    |@@|\n" +
@@ -68,12 +72,13 @@ public class Client {
                 "      _)(  )(_\n" +
                 "     `---''---`");
 
+        int port = getIntInput(scanner, "Port Number of Server: ", 1024, 65535);
+        System.out.println("Here is the port: " + port);
         // connecting to server
-        int port = 0;
         String address = "";
         if (args.length == 0) {
             address = localAddress;
-            port = portLocal;
+//            port = portLocal;
             try {
                 sThisClient = new Socket(address, port);
             } catch (Exception ex) {
@@ -110,7 +115,9 @@ public class Client {
             address =args[0].toLowerCase();
             try {
                 sThisClient = new Socket(address, port);
+
             } catch (Exception ex) {
+                System.out.println(port);
                 System.out.println("Failed to connect to the server using the specified IP address.");
                 System.exit(0);
             }

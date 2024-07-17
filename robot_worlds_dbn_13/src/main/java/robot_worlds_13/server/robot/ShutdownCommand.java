@@ -13,7 +13,7 @@ public class ShutdownCommand extends Command {
      * Initializes the shutdown command.
      */
     public ShutdownCommand() {
-        super("off");
+        super("quit");
     }
 
     /**

@@ -1,14 +1,9 @@
 package entity;
 
-import robot_worlds_13.client.GamePanel;
-import robot_worlds_13.client.KeyHandler;
-import robot_worlds_13.server.robot.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
+import robot_worlds_13.client.GamePanel;
 
 /**
  * Represents a bullet entity in the game world.

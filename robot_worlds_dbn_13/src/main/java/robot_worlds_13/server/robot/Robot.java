@@ -499,6 +499,9 @@ public class Robot {
         return this.repairingTime;
     }
 
-    
+    public String look(){
+        // In an empty world, the robot sees nothing
+        return "There is nothing here.";
+    }
 
 }
