@@ -1,6 +1,9 @@
 package AcceptanceTests;
 
 
+import AcceptanceTests.RobotWorldClient.RobotWorldClient;
+import AcceptanceTests.RobotWorldClient.RobotWorldJsonClient;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,6 +19,18 @@ import java.util.Map;
 import static org.mockito.Mockito.when;
 
 public class LookCommandTest {
+    private final static int DEFAULT_PORT = 5000;
+    private final static String DEFAULT_IP = "localhost";
+    private final RobotWorldClient serverClient = new RobotWorldJsonClient();
+
+    @BeforeEach
+    void connectToServer(){
+        serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
+    }
+    @AfterEach
+    void disconnectFromServer(){
+        serverClient.disconnect();
+    }
     @Mock
     private Robot mockRobot;
     @Mock
@@ -28,7 +43,7 @@ public class LookCommandTest {
         lookCommand = new LookCommand();
 
         try {
-            // Use reflection to set the private field worldData in the mockRobot
+
             Field worldDataField = Robot.class.getDeclaredField("worldData");
             worldDataField.setAccessible(true);
             worldDataField.set(mockRobot, mockWorldData);
