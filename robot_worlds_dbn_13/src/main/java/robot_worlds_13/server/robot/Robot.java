@@ -107,6 +107,7 @@ public class Robot {
         this.shields = 5;
         this.repairingTime = 5;
         this.bulletDistance = 5;
+
     }
 
     public Robot(String name, AbstractWorld worldObject) {

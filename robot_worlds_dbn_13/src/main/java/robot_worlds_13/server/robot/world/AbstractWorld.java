@@ -80,7 +80,7 @@ public class AbstractWorld implements IWorld {
         this.bottomLessPits = mazeChosen.getBottomLessPits();
         this.lakes = mazeChosen.getLakes();
         
-        this.robotHitBoxFromCenter = obstacles.get(0).getSize() / 2;
+        this.robotHitBoxFromCenter = 10;
         this.maze = mazeChosen;
         this.position = IWorld.CENTRE;
         this.currentDirection = Direction.NORTH;
@@ -831,6 +831,7 @@ public class AbstractWorld implements IWorld {
                 }
             }
         }
+
         return new Robot("NonValid", endPosition);
     }
 

@@ -131,7 +131,7 @@ public class GamePanel extends JPanel implements Runnable {
                 
                 Map<String, Object> response;
                 String stringResponse = din.readUTF();
-                
+
                 if (stringResponse.contains("Shutting down")) {
                     break;
                 } else if (stringResponse.contains("Server shutting down...")) {
@@ -167,8 +167,6 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                     continue;
                 }
-
-                
 
                 if (response.containsKey("message") && response.get("message").equals("PITS")) {
                     List<Map<String, Object>> obstaclesList = (List<Map<String, Object>>) response.get("obstacles");
@@ -230,7 +228,7 @@ public class GamePanel extends JPanel implements Runnable {
                     int destXSwing = (width/2) + destX;
                     int destYSwing = (height/2) - destY;
 
-                    
+
                     if (destX > previousX) {
                             fireBullet(previousXSwing, previousYSwing, destXSwing, destYSwing, "EAST");
                     }
@@ -332,6 +330,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }}
 
                 if (((String) response.get("message")).equalsIgnoreCase("LEFT")) {
+                    repaint();
                     for (Player player: players) {
                         if (name.equals(player.characterName)){
                     switch ( player.direction) {
@@ -430,12 +429,7 @@ public class GamePanel extends JPanel implements Runnable {
             // Draw trees in the bottom right corner
             drawImagesInCorner(g2, "../../obstacles/tree.png", 3, 3, width - 4 * scaledTileSize, height - 3 * scaledTileSize, scaledTileSize, scaledTileSize, 8, 8);
             
-            if (bullet != null) {
-                synchronized (bullet) {
-                    bullet.draw(g);
-                }
-                
-            }
+
 
             if (players != null) {
                 synchronized(players) {
@@ -467,6 +461,13 @@ public class GamePanel extends JPanel implements Runnable {
                         drawPit(g2, array[0], array[1]);
                     }
                 }
+            }
+
+            if (bullet != null) {
+                synchronized (bullet) {
+                    bullet.draw(g);
+                }
+
             }
 
             g2.dispose();
@@ -582,19 +583,33 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void fireBullet(int startX, int startY, int destX, int destY, String direction) {
+
+        if(startX % 10 != destX % 10){
+            startX = startX - (startX % 10)+ destX%10;
+        }
+        if(startY % 10 != destY % 10){
+            startY = startY - (startY % 10)+ destY%10;
+        }
+
         bullet = new Bullet(this, startX, startY, direction); // Create a new bullet instance
-        timer = new Timer(100, new ActionListener() {
+        Timer timer = new Timer(100, null); // Create a Timer with no initial ActionListener
+        timer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Check if bullet has reached close to destination considering its speed
-                if (!bullet.isAtDestination(destX, destY)) {
-                    bullet.move();
+                if (bullet != null) { // Check if the bullet is not null
+                    // Check if bullet has reached close to destination considering its speed
+                    if (!bullet.isAtDestination(destX, destY)) {
+                        bullet.move();
+                    } else {
+                        timer.stop(); // Stop the timer when destination is reached
+                        bullet = null; // Optionally remove the bullet or mark as inactive
+                    }
+                    repaint(); // Ensure the panel is repainted to update bullet position
                 } else {
-                    timer.stop(); // Stop the timer when destination is reached
-                    bullet = null; // Optionally remove the bullet or mark as inactive
+                    timer.stop(); // Stop the timer if bullet is null
                 }
-                repaint(); // Ensure the panel is repainted to update bullet position
             }
         });
         timer.start(); // Start the timer to begin bullet movement
     }
+
 }
