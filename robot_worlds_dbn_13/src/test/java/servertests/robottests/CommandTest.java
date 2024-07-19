@@ -15,7 +15,7 @@ class CommandTest {
     @Test
     void getShutdownName() {
         Command test = new ShutdownCommand();
-        assertEquals("off", test.getName());
+        assertEquals("quit", test.getName());
     }
 
 
