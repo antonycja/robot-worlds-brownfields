@@ -1,4 +1,4 @@
-package robot_wolrds_13.entity;
+package robot_worlds_13.entity;
 
 import robot_worlds_13.client.GamePanel;
 import robot_worlds_13.client.KeyHandler;

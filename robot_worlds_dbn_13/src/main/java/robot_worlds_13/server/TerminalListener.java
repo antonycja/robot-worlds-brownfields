@@ -3,11 +3,12 @@ package robot_worlds_13.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.List;
+
 import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.robot.world.AbstractWorld;
+import java.net.ServerSocket;
+import java.util.List;
 
 /**
  * This class listens for terminal commands and executes them accordingly.
