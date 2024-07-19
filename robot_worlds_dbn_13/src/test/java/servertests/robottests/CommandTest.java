@@ -42,7 +42,7 @@ class CommandTest {
         // assertEquals("10", forward.getArgument());
 
         Command shutdown = Command.create("shutdown");                                                  
-        assertEquals("off", shutdown.getName());
+        assertEquals("quit", shutdown.getName());
 
         Command help = Command.create("help");                                                          
         assertEquals("help", help.getName());
