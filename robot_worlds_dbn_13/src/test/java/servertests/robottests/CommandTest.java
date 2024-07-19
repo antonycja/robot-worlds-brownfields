@@ -62,7 +62,7 @@ class CommandTest {
     void commandsAreCaseInsensitive() {
         //Test if commands are case insensitive
         Command shutdownUpperCase = Command.create("OFF");
-        assertEquals("off", shutdownUpperCase.getName());
+        assertEquals("quit", shutdownUpperCase.getName());
 
         Command forwardLowerCase = Command.create("FOrward");
         assertEquals("forward", forwardLowerCase.getName());
