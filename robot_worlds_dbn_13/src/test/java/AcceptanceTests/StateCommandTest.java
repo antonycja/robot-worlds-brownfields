@@ -74,4 +74,27 @@ public class StateCommandTest {
         assertNotNull(response.get("data").get("message"));
         assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
     }
+
+    @Test
+    void validStateShouldPass() {
+        assertTrue(serverClient.isConnected());
+        // Given that I have a launched robot in the world
+        serverClient.sendRequest(launchRequest);
+
+        // When I send a valid state request
+        String request = "{" +
+                "\"robot\": \"HAL\"," +
+                "\"command\": \"state\"," +
+                "\"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get a valid response
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+
+        // And the state should be valid
+        assertNotNull(response.get("state"));
+    }
 }
+
