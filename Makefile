@@ -1,69 +1,92 @@
 # Define variables
-JAVAC = javac
-JAR = jar
-JAVA = java
-PROJECT_DIR = robot_worlds_dbn_13
-SRC_DIR = $(PROJECT_DIR)/src/main/java
-TEST_DIR = $(PROJECT_DIR)/src/test/java
-BIN_DIR = bin
-BUILD_DIR = build
-LIB_DIR = libs
-MAIN_CLASS = robot_worlds_13.server.Server
-VERSION = 1.0.0
-JAR_NAME = brownies-$(VERSION).jar
-TEST_SERVER = libs/reference-server-0.1.0.jar
+VERSION := $(shell mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+RELEASE_VERSION := $(subst -SNAPSHOT,,$(VERSION))
+BUILD_TYPE := development # default build type
+POM_FILE := robot_worlds_dbn_13/pom.xml
+REF_SERVER := $(shell pgrep -f runRefServer.sh)
+#OWN_SERVER := $(shell pgrep -f runServer.sh)
 
-# Classpath for external libraries
-CLASSPATH = $(BIN_DIR):$(SRC_DIR):$(PROJECT_DIR)/libs/*
-
-# mvn commands
-MVN = mvn -f $(PROJECT_DIR)/pom.xml
+.PHONY: all compile test_ref test_own version release_version package tag clean run_ref_server stop_ref_server run_own_server stop_own_server
 
 # Default target
-#all: build
+all: compile test_ref stop_servers
+#all: compile test_ref test_own stop_servers
 
-# Build all steps in sequence
-#build: check-dependencies compile jar test package
+compile:
+	mvn compile -f $(POM_FILE)
 
-# Check dependencies
-check-dependencies:
-	@echo "Checking dependencies..."
-	$(MVN) dependency:analyze
-	@echo "All dependencies are satisfied."
 
-# Compile all Java files
-#compile:
-#	mkdir -p $(BIN_DIR)
-#	$(JAVAC) -cp $(CLASSPATH) -d $(BIN_DIR) $(shell find $(SRC_DIR) -name "*.java")
+stop_ref_server:
+	@echo "Stopping reference server if running"
+	-kill $(REF_SERVER) || true
 
-# Create the JAR file
-#jar: compile
-#	mkdir -p $(BUILD_DIR)
-#	$(JAR) cfe $(BUILD_DIR)/$(JAR_NAME) $(MAIN_CLASS) -C $(BIN_DIR) .
+run_ref_server:
+	@if lsof -i :5001 > /dev/null ; then \
+		echo "Port 5001 is already in use. Killing the process..."; \
+		kill $$(lsof -t -i:5001) || true; \
+		sleep 2; \
+	fi
+	bash runRefServer.sh -a &
+	sleep 5  # Give the server more time to start
 
-# Run the server
-run-server:
-	@echo "Running server..."
-	$(JAVA) -jar $(TEST_SERVER)
+test_ref: stop_ref_server run_ref_server
+    # Wait for the server to start if necessary
+	sleep 2
+	cd robot_worlds_dbn_13 && mvn test -Dserver=reference
+    # Stop the reference server after tests
+	make stop_ref_server
 
-# Run all tests
-test:
-	@echo "Running tests..."
-	$(MVN) test
-	@echo "All tests completed."
+run_own_server:
+	./runServer.sh &
 
-# Launch the application
-#run: compile
-#	$(JAVA) -cp $(CLASSPATH):$(BIN_DIR) $(MAIN_CLASS)
+stop_own_server:
+	@echo "Stopping own server if running"
+	-kill $(OWN_SERVER_PID) || true
 
-# Package the application for deployment
-#package: jar
-#	@echo "Packaging application..."
-#	@echo "Application packaged as $(BUILD_DIR)/$(JAR_NAME)."
+test_own: stop_own_server run_own_server
+    # Wait for the server to start if necessary
+	sleep 10
+	mvn test -Dserver=own
+    # Stop your own server after tests
+	make stop_own_server
 
-# Clean build artifacts
+stop_servers: stop_ref_server #stop_own_server
+	@echo "All servers stopped"
+
+version:
+    @echo "Current version: $(VERSION)"
+    @echo "Release version: $(RELEASE_VERSION)"
+    @echo "Build type: $(BUILD_TYPE)"
+
+release_version:
+	@echo "Preparing release version"
+	sed -i 's/$(VERSION)/$(RELEASE_VERSION)/' $(POM_FILE)
+	@echo "Version updated to $(RELEASE_VERSION) in $(POM_FILE)"
+
+package: test_ref #test_own
+ifeq ($(BUILD_TYPE), release)
+	@echo "Packaging for release"
+	mvn package
+else
+	@echo "Skipping packaging for development build"
+endif
+
+tag: package
+ifeq ($(BUILD_TYPE), release)
+	@echo "Tagging release version"
+	git tag release-$(RELEASE_VERSION)
+	git push origin release-$(RELEASE_VERSION)
+else
+	@echo "Skipping tagging for development build"
+endif
+
 clean:
-	rm -rf $(BIN_DIR) $(BUILD_DIR)
+	mvn clean -f $(POM_FILE)
 
-# Phony targets
-.PHONY: all build check-dependencies clean test run package run-server compile jar
+.PHONY: release
+release: BUILD_TYPE := release
+release: clean release_version compile package tag
+
+.PHONY: development
+development: BUILD_TYPE := development
+development: clean compile package
