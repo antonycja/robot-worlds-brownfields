@@ -14,6 +14,11 @@ public class StateCommandTest {
     private final static int DEFAULT_PORT = 5000;
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
+    private final String launchRequest = "{" +
+            "  \"robot\": \"HAL\"," +
+            "  \"command\": \"launch\"," +
+            "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+            "}";
 
     @BeforeEach
     void connectToServer(){
@@ -27,40 +32,32 @@ public class StateCommandTest {
 
     @Test
     void robotExitsInWorldShouldFail(){
-        // Given that the robot is in the world
-        // And is ready for the next command
-        // When the player sends state command
-        // Then the robot should return a state containing the status of normal
-        // And the response message should be ok
-        // And the full state information should be returned.
         assertTrue(serverClient.isConnected());
-
+        // Given that the robot does not exist in the world
+        serverClient.sendRequest(launchRequest);
         // When I send a valid state request to the server
         String request = "{" +
-                "  \"robot\": \"HAL\"," +
+                "  \"robot\": \"TOM\"," +
                 "  \"command\": \"state\"," +
                 "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
 
-        // Then I should get a valid response from the server
+        // Then I should get an error response from the server
         assertNotNull(response.get("result"));
         assertEquals("ERROR", response.get("result").asText());
 
-        // And I should get the state of the robot
+        // And I should get a message stating that the robot doesn't exist
         assertNotNull(response.get("data").get("message"));
         assertEquals(response.get("data").get("message").asText(), "Robot does not exist");
-
-//        assertEquals(0, response.get("data").get("position").get(0).asInt());
-//        assertEquals(0, response.get("data").get("position").get(1).asInt());
-
     }
+
     @Test
     void invalidStateShouldFail(){
-        // Given that I have a launched robot in the world
         assertTrue(serverClient.isConnected());
-
-        // When I send an invalid state request with the command "sate" instead of "launch"
+        // Given that I have a launched robot in the world
+        serverClient.sendRequest(launchRequest);
+        // When I send an invalid state request with the command "sate" instead of "state"
         String request = "{" +
                 "\"robot\": \"HAL\"," +
                 "\"command\": \"sate\"," +
@@ -77,4 +74,27 @@ public class StateCommandTest {
         assertNotNull(response.get("data").get("message"));
         assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
     }
+
+    @Test
+    void validStateShouldPass() {
+        assertTrue(serverClient.isConnected());
+        // Given that I have a launched robot in the world
+        serverClient.sendRequest(launchRequest);
+
+        // When I send a valid state request
+        String request = "{" +
+                "\"robot\": \"HAL\"," +
+                "\"command\": \"state\"," +
+                "\"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get a valid response
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+
+        // And the state should be valid
+        assertNotNull(response.get("state"));
+    }
 }
+

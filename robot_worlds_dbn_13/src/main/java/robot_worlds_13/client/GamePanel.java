@@ -30,8 +30,8 @@ import javax.swing.Timer;
 
 import com.google.gson.Gson;
 
-import entity.Bullet;
-import entity.Player;
+import robot_worlds_13.entity.Bullet;
+import robot_worlds_13.entity.Player;
 import robot_worlds_13.server.robot.Direction;
 import robot_worlds_13.server.robot.Position;
 

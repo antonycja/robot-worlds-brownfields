@@ -15,7 +15,7 @@ class CommandTest {
     @Test
     void getShutdownName() {
         Command test = new ShutdownCommand();
-        assertEquals("off", test.getName());
+        assertEquals("quit", test.getName());
     }
 
 
@@ -42,7 +42,7 @@ class CommandTest {
         // assertEquals("10", forward.getArgument());
 
         Command shutdown = Command.create("shutdown");                                                  
-        assertEquals("off", shutdown.getName());
+        assertEquals("quit", shutdown.getName());
 
         Command help = Command.create("help");                                                          
         assertEquals("help", help.getName());
@@ -62,7 +62,7 @@ class CommandTest {
     void commandsAreCaseInsensitive() {
         //Test if commands are case insensitive
         Command shutdownUpperCase = Command.create("OFF");
-        assertEquals("off", shutdownUpperCase.getName());
+        assertEquals("quit", shutdownUpperCase.getName());
 
         Command forwardLowerCase = Command.create("FOrward");
         assertEquals("forward", forwardLowerCase.getName());
