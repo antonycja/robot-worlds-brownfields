@@ -152,7 +152,7 @@ public class Client {
                     if (guiResponse.toLowerCase().equals("yes") || guiResponse.toLowerCase().equals("y")) {
                         Main main = new Main(width, height, address, port);
                         main.setVisible(true);
-                     }
+                    }
                     
                     break;
                 }
