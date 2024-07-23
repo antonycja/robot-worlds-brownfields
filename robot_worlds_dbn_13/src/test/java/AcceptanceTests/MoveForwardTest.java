@@ -83,5 +83,28 @@ public class MoveForwardTest {
         assertEquals("[0,0]", response.get("data").get("position").toString());
     }
 
+    @Test
+    void ForwardWithInvalidStepsShouldFail() {
+        // Given that I am connected to a running Robot Worlds server
+        assertTrue(serverClient.isConnected());
 
+        // And a robot called "HAL" is already connected and launched
+        serverClient.sendRequest(launchRequest);
+
+        // When I send a command for "HAL" to move forward without specifying steps
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"forward\"," +
+                "  \"arguments\": [\"\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get an "ERROR" response with the message "Invalid argument"
+        assertNotNull(response.get("result"));
+        assertEquals("ERROR", response.get("result").asText());
+        assertNotNull(response.get("data"));
+        assertNotNull(response.get("data").get("message"));
+        assertEquals("Error while executing command", response.get("data").get("message").asText());
+
+    }
 }
