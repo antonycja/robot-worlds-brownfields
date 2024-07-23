@@ -77,10 +77,22 @@ class LaunchRobotTests {
     }
     @Test
     void LaunchARobotWorldOfSize2x2(){
-        //Given I am connected to the Robot World server
         //Given a world of size 2x2
         assertTrue(serverClient.isConnected());
+        //Hal is connected
 
+        // Given that I have a launched robot in the world
+        serverClient.sendRequest(launchRequest);
+
+        // When I send a valid robot launch request
+        String request = "{" +
+                "\"robot\": \"Ben\"," +
+                }";
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get a valid response
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
 
     }
 }
