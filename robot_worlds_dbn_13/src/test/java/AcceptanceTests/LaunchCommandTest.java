@@ -75,4 +75,7 @@ class LaunchRobotTests {
         assertNotNull(response.get("data").get("message"));
         assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
     }
+    @Test LaunchAnotherRobot(){
+
+    }
 }
