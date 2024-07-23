@@ -75,7 +75,12 @@ class LaunchRobotTests {
         assertNotNull(response.get("data").get("message"));
         assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
     }
-    @Test LaunchAnotherRobot(){
+    @Test
+    void LaunchARobotWorldOfSize2x2(){
+        //Given I am connected to the Robot World server
+        //Given a world of size 2x2
+        assertTrue(serverClient.isConnected());
+
 
     }
 }
