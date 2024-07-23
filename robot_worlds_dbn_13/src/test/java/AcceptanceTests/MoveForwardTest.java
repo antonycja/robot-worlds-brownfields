@@ -52,4 +52,36 @@ public class MoveForwardTest {
         assertEquals("Robot does not exist", response.get("data").get("message").asText());
     }
 
+    @Test
+    void MovingToEdgeIn1x1WorldShouldPass(){
+        // Given that I am connected to a running Robot Worlds server
+        assertTrue(serverClient.isConnected());
+
+        // And the world is of size 1x1 with no obstacles or pits
+        // TODO
+
+        // And a robot called "HAL" is already connected and launched
+        serverClient.sendRequest(launchRequest);
+
+        // When I send a command for "HAL" to move forward by 5 steps
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"forward\"," +
+                "  \"arguments\": [\"5\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get an "OK" response with the message "At the NORTH edge"
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+        assertNotNull(response.get("data"));
+        assertNotNull(response.get("data").get("message"));
+        assertEquals("At the NORTH edge", response.get("data").get("message").asText());
+
+        // and the position information returned should be at co-ordinates [0,0]
+        assertNotNull(response.get("data").get("position"));
+        assertEquals("[0,0]", response.get("data").get("position").toString());
+    }
+
+
 }
