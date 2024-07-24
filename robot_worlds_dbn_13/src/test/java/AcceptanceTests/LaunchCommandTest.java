@@ -150,6 +150,15 @@ class LaunchRobotTests {
     //Given a world of size 2x2
         assertTrue(serverClient.isConnected());
 
+        // I have successfully launched 9 robots into the world
+        for (int i = 1; i <= 9; i++) {
+            String launchRequest = "{" +
+                    "  \"robot\": \"HAL" + i + "\"," +
+                    "  \"command\": \"launch\"," +
+                    "  \"arguments\": [1, 1]" +
+                    "}";
+
+
     }
 
 
