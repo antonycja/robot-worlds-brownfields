@@ -145,9 +145,9 @@ class LaunchRobotTests {
     }
 
     @Test
-    void WorldWithoutObstaclesIsFull(){
+    void WorldWithoutObstaclesIsFull() {
 
-    //Given a world of size 2x2
+        //Given a world of size 2x2
         assertTrue(serverClient.isConnected());
 
         // I have successfully launched 9 robots into the world
@@ -158,8 +158,28 @@ class LaunchRobotTests {
                     "  \"arguments\": [1, 1]" +
                     "}";
 
+            JsonNode response = serverClient.sendRequest(launchRequest);
+            assertEquals("OK", response.get("result").asText());
+        }
 
     }
 
+//        {// When I launch one more robot
+//            String duplicateLaunchRequest = "{" +
+//                    "  \"robot\": \"HAL10\"," +
+//                    "  \"command\": \"launch\"," +
+//                    "  \"arguments\": [1, 1]" +
+//                    "}";
+//
+//            JsonNode duplicateLaunchResponse = serverClient.sendRequest(duplicateLaunchRequest);
+//            // Then I should get an error response back with the message "No more space in this world"
+//
+//            assertNotNull(duplicateLaunchResponse.get("result"));
+//            assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
+//            assertNotNull(duplicateLaunchResponse.get("data"));
+//            assertNotNull(duplicateLaunchResponse.get("data").get("message"));
+//            assertEquals("No more space in this world.", duplicateLaunchResponse.get("data").get("message").asText());
+//        }
 
+    }
 
