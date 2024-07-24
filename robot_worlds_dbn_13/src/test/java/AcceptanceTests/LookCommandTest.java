@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -13,6 +16,8 @@ public class LookCommandTest {
     private final static int DEFAULT_PORT = 5001;
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
+    private boolean isObstacle = false;
+    private int position = 0;
     private final String launchRequest = "{" +
             "  \"robot\": \"HAL\"," +
             "  \"command\": \"launch\"," +
@@ -54,6 +59,43 @@ public class LookCommandTest {
 
         // And I should also get the state of the robot
         assertNotNull(response.get("state"));
+    }
+    @Test
+    public void See_obstacle(){
+        // Given that you're connected to a robot world server
+        assertTrue(serverClient.isConnected());
+
+        // And I have launched a robot into the world
+        serverClient.sendRequest(launchRequest);
+
+        // When I send a valid look request to the server
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"look\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        JsonNode response = serverClient.sendRequest(request);
+        // When I ask the robot to look
+        // Then I should get an response back with an object of type OBSTACLE at a distance of 1 step.
+
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+
+        assertNotNull(response.get("data").get("objects").toString());
+        JsonNode objects = response.get("data").get("objects");
+
+        for (JsonNode object : objects) {
+            if (object.get("type").toString().contains("OBSTACLE")) {
+                isObstacle = true;
+                position = Integer.parseInt(object.get("distance").toString());
+                break;
+            }
+        }
+        assertTrue(isObstacle);
+        assertEquals(1, position);
+
+
     }
 
     @Test
