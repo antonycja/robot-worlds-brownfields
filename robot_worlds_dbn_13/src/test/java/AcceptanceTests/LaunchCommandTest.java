@@ -89,12 +89,6 @@ class LaunchRobotTests {
         // Given that I have a launched robot in the world
         JsonNode response = serverClient.sendRequest(launchRequest);
 
-        // When I send a valid robot launch request
-//        String request = "{" +
-//                "\"robot\": \"Ben\"," +
-//                "}";
-//        JsonNode response = serverClient.sendRequest(launchRequest);
-
         // Then I should get a valid response
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
