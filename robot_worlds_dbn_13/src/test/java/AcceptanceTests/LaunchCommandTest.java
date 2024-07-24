@@ -164,22 +164,22 @@ class LaunchRobotTests {
 
     }
 
-//        {// When I launch one more robot
-//            String duplicateLaunchRequest = "{" +
-//                    "  \"robot\": \"HAL10\"," +
-//                    "  \"command\": \"launch\"," +
-//                    "  \"arguments\": [1, 1]" +
-//                    "}";
-//
-//            JsonNode duplicateLaunchResponse = serverClient.sendRequest(duplicateLaunchRequest);
-//            // Then I should get an error response back with the message "No more space in this world"
-//
-//            assertNotNull(duplicateLaunchResponse.get("result"));
-//            assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
-//            assertNotNull(duplicateLaunchResponse.get("data"));
-//            assertNotNull(duplicateLaunchResponse.get("data").get("message"));
-//            assertEquals("No more space in this world.", duplicateLaunchResponse.get("data").get("message").asText());
-//        }
+        {// When I launch one more robot
+            String duplicateLaunchRequest = "{" +
+                    "  \"robot\": \"HAL10\"," +
+                    "  \"command\": \"launch\"," +
+                    "  \"arguments\": [1, 1]" +
+                    "}";
+
+            JsonNode duplicateLaunchResponse = serverClient.sendRequest(duplicateLaunchRequest);
+            // Then I should get an error response back with the message "No more space in this world"
+
+            assertNotNull(duplicateLaunchResponse.get("result"));
+            assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
+            assertNotNull(duplicateLaunchResponse.get("data"));
+            assertNotNull(duplicateLaunchResponse.get("data").get("message"));
+            assertEquals("No more space in this world.", duplicateLaunchResponse.get("data").get("message").asText());
+        }
 
     }
 
