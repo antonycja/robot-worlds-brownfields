@@ -38,12 +38,12 @@ class LaunchRobotTests {
         assertTrue(serverClient.isConnected());
 
         // When I send a valid launch request to the server
-        String request = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-        JsonNode response = serverClient.sendRequest(request);
+//        String request = "{" +
+//                "  \"robot\": \"HAL\"," +
+//                "  \"command\": \"launch\"," +
+//                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+//                "}";
+        JsonNode response = serverClient.sendRequest(launchRequest);
 
         // Then I should get a valid response from the server
         assertNotNull(response.get("result"));
