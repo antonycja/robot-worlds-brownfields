@@ -121,7 +121,17 @@ class LaunchRobotTests {
 }
     @Test
     void NoMoreSpaceForMoreRobots(){
+        // Given that I am connected to a running Robot Worlds server
+        // The world is configured or hardcoded to this size
+        assertTrue(serverClient.isConnected());
 
+        // And a robot called "HAL" is already connected and launched
+        String launchRequest = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [1, 1]" +
+                "}";
+        serverClient.sendRequest(launchRequest);
 
     }
 
