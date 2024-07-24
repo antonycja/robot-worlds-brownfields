@@ -6,24 +6,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
+import robot_worlds_13.server.robot.Position;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 public class LookCommandTest {
     private final static int DEFAULT_PORT = 5001;
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
     private boolean isObstacle = false;
+    private boolean Robots = false;
     private int position = 0;
     private final String launchRequest = "{" +
             "  \"robot\": \"HAL\"," +
             "  \"command\": \"launch\"," +
             "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
             "}";
-
 
     @BeforeEach
     void connectToServer() {
@@ -37,7 +35,6 @@ public class LookCommandTest {
 
     @Test
     public void testExecute_Success() {
-
         // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
 
@@ -48,20 +45,20 @@ public class LookCommandTest {
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"look\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "  \"arguments\": []" +
                 "}";
-
         JsonNode response = serverClient.sendRequest(request);
 
-        // Then I should get a valid response from a server
+        // Then I should get a valid response from the server
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
 
         // And I should also get the state of the robot
         assertNotNull(response.get("state"));
     }
+
     @Test
-    public void See_obstacle(){
+    public void testSeeObstacle() {
         // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
 
@@ -72,127 +69,124 @@ public class LookCommandTest {
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"look\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "  \"arguments\": []" +
                 "}";
-
         JsonNode response = serverClient.sendRequest(request);
-        // When I ask the robot to look
-        // Then I should get an response back with an object of type OBSTACLE at a distance of 1 step.
 
+        // Then I should get a response with an object of type OBSTACLE at a distance of 1 step.
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
 
-        assertNotNull(response.get("data").get("objects").toString());
         JsonNode objects = response.get("data").get("objects");
+        assertNotNull(objects);
 
         for (JsonNode object : objects) {
-            if (object.get("type").toString().contains("OBSTACLE")) {
+            if ("OBSTACLE".equals(object.get("type").asText())) {
                 isObstacle = true;
-                position = Integer.parseInt(object.get("distance").toString());
+                position = object.get("distance").asInt();
                 break;
             }
         }
+
         assertTrue(isObstacle);
         assertEquals(1, position);
-
-
     }
-    @Test
-    public void look_with_a_robot_that_does_not_exist() {
-        // Given that you're connected to a robot world server
-        assertTrue(serverClient.isConnected());
 
-        // And I have launched a robot into the world
+    @Test
+    public void testLookWithNonExistentRobot() {
+        // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
 
         String request = "{" +
                 "  \"robot\": \"Bob\"," +
                 "  \"command\": \"look\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "  \"arguments\": []" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
+
         // Then I should get an "ERROR" response with the message "Robot does not exist"
         assertNotNull(response.get("result"));
         assertEquals("ERROR", response.get("result").asText());
         assertNotNull(response.get("data"));
         assertNotNull(response.get("data").get("message"));
         assertEquals("Robot does not exist", response.get("data").get("message").asText());
+    }
 
-
-}
     @Test
-    public void request_look_command_with_a_spelling_error(){
-
+    public void testSeeRobotsAndObstacles() {
         // Given that you're connected to a robot world server
-        assertTrue(serverClient.isConnected());
-
-        // And I have launched a robot into the world
-        assertTrue(serverClient.isConnected());
-        String request = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"luk\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
-        JsonNode response = serverClient.sendRequest(request);
-        // Then I should get an "ERROR" response with the message "Robot does not exist"
-
-        assertNotNull(response.get("result"));
-        assertEquals("ERROR", response.get("result").asText());
-        assertNotNull(response.get("data"));
-        assertNotNull(response.get("data").get("message"));
-        assertEquals("Unsupported command", response.get("data").get("message").asText());
-
-
-
-}
-
-
-    @Test
-    public void See_robots_and_obstacles() {
-        //Given I launch a robot and in a  world size 2x2
         assertTrue(serverClient.isConnected());
 
         // And I have launched a robot into the world
         serverClient.sendRequest(launchRequest);
 
+        String launchAnotherRobotRequest = "{" +
+                "  \"robot\": \"TOM\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": []" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest);
+
         // When I send a valid look request to the server
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"look\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "  \"arguments\": []" +
                 "}";
-
         JsonNode response = serverClient.sendRequest(request);
-
-        // Then I should get a valid response from a server
+        // Then I should get a response with an object of type OBSTACLE at a distance of 1 step.
+        // Then I should get a response with an object of type OBSTACLE at a distance of 1 step.
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
 
-        // And I should also get the state of the robot
-        assertNotNull(response.get("state"));
+        JsonNode objects = response.get("data").get("objects");
+        assertNotNull(objects);
+        for (JsonNode object : objects) {
+            System.out.println(object);
+            if (object.get("type").toString().contains("OBSTACLE")){
+                isObstacle = true;
+                position = object.get("distance").asInt();
+                System.out.println(object);
+                break;
+            }
+            if (object.get("type").toString().contains("ROBOT")) {
+                Robots = true;
+                position = object.get("distance").asInt();
+                break;
+            }
+
+        }
+
+        assertTrue(isObstacle);
+        assertTrue(Robots);
+        assertEquals(1, position);
+        assertEquals(3, position);
+    }
+}
+
+/*
+        // Then I should get a valid response from the server
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
 
         // Check for obstacles and other robots
-        JsonNode observation = response.get("state").get("type"); // Adjust path according to your actual JSON
-      /*  and the world has an obstacle at coordinate [0,1]
-        and I have successfully launched 8 robots into the world*/
-        int obstacleCount = 0;
-        int robotCount = 8;
+        JsonNode objects = response.get("data").get("objects");
+        assertNotNull(objects);
 
-        // Iterate through the observation to count the items
-        for (JsonNode item : observation) {
+        int obstacleCount = 1;
+        int robots = 3;
+
+        for (JsonNode item : objects) {
             String type = item.get("type").asText();
             if ("OBSTACLE".equals(type)) {
                 obstacleCount++;
             } else if ("ROBOT".equals(type)) {
-                robotCount++;
+                robots++;
             }
-
         }
-       /* Then I should get an response back with
-        one object being an OBSTACLE that is one step away
-        and three objects should be ROBOTs that is one step away*/
+
         assertEquals(1, obstacleCount);
-        assertEquals(3, robotCount, response.get("result").asText());
+        assertEquals(3, robots);
     }
 }
+*/

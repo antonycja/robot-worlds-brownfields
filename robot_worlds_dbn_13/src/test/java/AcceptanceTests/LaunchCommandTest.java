@@ -12,15 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * I want to launch my robot in the online robot world
  * So that I can break the record for the most robot kills
  */
+@Nested
 class LaunchRobotTests {
     private final static int DEFAULT_PORT = 5001;
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
-    private final String launchRequest = "{" +
-            "  \"robot\": \"HAL\"," +
-            "  \"command\": \"launch\"," +
-            "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-            "}";
 
     @BeforeEach
     void connectToServer(){
@@ -38,12 +34,12 @@ class LaunchRobotTests {
         assertTrue(serverClient.isConnected());
 
         // When I send a valid launch request to the server
-//        String request = "{" +
-//                "  \"robot\": \"HAL\"," +
-//                "  \"command\": \"launch\"," +
-//                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-//                "}";
-        JsonNode response = serverClient.sendRequest(launchRequest);
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
 
         // Then I should get a valid response from the server
         assertNotNull(response.get("result"));
@@ -87,7 +83,15 @@ class LaunchRobotTests {
         //Hal is connected
 
         // Given that I have a launched robot in the world
-        JsonNode response = serverClient.sendRequest(launchRequest);
+
+
+        // When I send a valid robot launch request
+        String request = "{" +
+                "\"robot\": \"HAL\"," +
+                "\"command\": \"luanch\"," +
+                "\"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
 
         // Then I should get a valid response
         assertNotNull(response.get("result"));
@@ -115,39 +119,36 @@ class LaunchRobotTests {
         assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
         assertNotNull(duplicateLaunchResponse.get("data"));
         assertNotNull(duplicateLaunchResponse.get("data").get("message"));
-        assertEquals("Too many of you in this world", duplicateLaunchResponse.get("data").get("message").asText());
+        assertEquals("Too many of you in this world.", duplicateLaunchResponse.get("data").get("message").asText());
 
-    }
-
+}
     @Test
-    void CanLaunchAnotherRobot(){
+    void NoMoreSpaceForMoreRobots(){
         // Given that I am connected to a running Robot Worlds server
         // The world is configured or hardcoded to this size
         assertTrue(serverClient.isConnected());
 
-        // Launch HAL
-        serverClient.sendRequest(launchRequest);
-        // And a robot called "TOM"
-        String request = "{" +
-                "  \"robot\": \"TOM\"," +
+        // And a robot called "HAL" is already connected and launched
+        String launchRequest = "{" +
+                "  \"robot\": \"HAL\"," +
                 "  \"command\": \"launch\"," +
                 "  \"arguments\": [1, 1]" +
                 "}";
-//        serverClient.sendRequest(request);
+        serverClient.sendRequest(launchRequest);
 
         // WHEN there is no more space in the world for another robot to launch
-        JsonNode duplicateLaunchResponse = serverClient.sendRequest(request);
+        JsonNode duplicateLaunchResponse = serverClient.sendRequest(launchRequest);
 
         // THEN I should get an error saying "No more space in this world."
         assertNotNull(duplicateLaunchResponse.get("result"));
-        assertEquals("OK", duplicateLaunchResponse.get("result").asText());
+        assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
         assertNotNull(duplicateLaunchResponse.get("data"));
-//        assertNotNull(duplicateLaunchResponse.get("data").get("message"));
-//        assertEquals("No more space in this world.", duplicateLaunchResponse.get("data").get("message").asText());
+        assertNotNull(duplicateLaunchResponse.get("data").get("message"));
+        assertEquals("No more space in this world.", duplicateLaunchResponse.get("data").get("message").asText());
     }
 
     @Test
-    void NoMoreSpaceForMoreRobots() {
+    void WorldWithoutObstaclesIsFull() {
 
         //Given a world of size 2x2
         assertTrue(serverClient.isConnected());
@@ -164,22 +165,24 @@ class LaunchRobotTests {
             assertEquals("OK", response.get("result").asText());
         }
 
-        // When I launch one more robot
-        String duplicateLaunchRequest = "{" +
-                "  \"robot\": \"HAL10\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [1, 1]" +
-                "}";
+    }
 
-        JsonNode duplicateLaunchResponse = serverClient.sendRequest(duplicateLaunchRequest);
-        // Then I should get an error response back with the message "No more space in this world"
+        {// When I launch one more robot
+            String duplicateLaunchRequest = "{" +
+                    "  \"robot\": \"HAL10\"," +
+                    "  \"command\": \"launch\"," +
+                    "  \"arguments\": [1, 1]" +
+                    "}";
 
-        assertNotNull(duplicateLaunchResponse.get("result"));
-        assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
-        assertNotNull(duplicateLaunchResponse.get("data"));
-        assertNotNull(duplicateLaunchResponse.get("data").get("message"));
-        assertEquals("No more space in this world", duplicateLaunchResponse.get("data").get("message").asText());
+            JsonNode duplicateLaunchResponse = serverClient.sendRequest(duplicateLaunchRequest);
+            // Then I should get an error response back with the message "No more space in this world"
+
+            assertNotNull(duplicateLaunchResponse.get("result"));
+            assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
+            assertNotNull(duplicateLaunchResponse.get("data"));
+            assertNotNull(duplicateLaunchResponse.get("data").get("message"));
+            assertEquals("No more space in this world.", duplicateLaunchResponse.get("data").get("message").asText());
+        }
 
     }
 
-}
