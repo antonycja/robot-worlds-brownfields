@@ -145,7 +145,12 @@ class LaunchRobotTests {
     }
 
     @Test
-    void WorldWithoutObstaclesIsFull
+    void WorldWithoutObstaclesIsFull(){
+
+    //Given a world of size 2x2
+        assertTrue(serverClient.isConnected());
+
+    }
 
 
 
