@@ -144,7 +144,8 @@ class LaunchRobotTests {
         assertEquals("No more space in this world.", duplicateLaunchResponse.get("data").get("message").asText());
     }
 
-    }
+    @Test
+    void WorldWithoutObstaclesIsFull
 
 
 
