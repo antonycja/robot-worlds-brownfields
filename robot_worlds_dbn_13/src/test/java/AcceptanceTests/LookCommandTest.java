@@ -111,7 +111,32 @@ public class LookCommandTest {
         assertNotNull(response.get("data").get("message"));
         assertEquals("Robot does not exist", response.get("data").get("message").asText());
     }
+    @Test
+    public void testRequestLookCommandWithASpellingError(){
 
+        // Given that you're connected to a robot world server
+        assertTrue(serverClient.isConnected());
+
+        // And I have launched a robot into the world
+        assertTrue(serverClient.isConnected());
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"luk\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        JsonNode response = serverClient.sendRequest(request);
+        // Then I should get an "ERROR" response with the message "Robot does not exist"
+
+        assertNotNull(response.get("result"));
+        assertEquals("ERROR", response.get("result").asText());
+        assertNotNull(response.get("data"));
+        assertNotNull(response.get("data").get("message"));
+        assertEquals("Unsupported command", response.get("data").get("message").asText());
+
+
+
+    }
     @Test
     public void testSeeRobotsAndObstacles() {
         // Given that you're connected to a robot world server
@@ -143,7 +168,7 @@ public class LookCommandTest {
         assertNotNull(objects);
         for (JsonNode object : objects) {
             System.out.println(object);
-            if (object.get("type").toString().contains("OBSTACLE")){
+            if (object.get("type").toString().contains("OBSTACLE")) {
                 isObstacle = true;
                 position = object.get("distance").asInt();
                 System.out.println(object);
@@ -161,32 +186,7 @@ public class LookCommandTest {
         assertTrue(Robots);
         assertEquals(1, position);
         assertEquals(3, position);
+
     }
+
 }
-
-/*
-        // Then I should get a valid response from the server
-        assertNotNull(response.get("result"));
-        assertEquals("OK", response.get("result").asText());
-
-        // Check for obstacles and other robots
-        JsonNode objects = response.get("data").get("objects");
-        assertNotNull(objects);
-
-        int obstacleCount = 1;
-        int robots = 3;
-
-        for (JsonNode item : objects) {
-            String type = item.get("type").asText();
-            if ("OBSTACLE".equals(type)) {
-                obstacleCount++;
-            } else if ("ROBOT".equals(type)) {
-                robots++;
-            }
-        }
-
-        assertEquals(1, obstacleCount);
-        assertEquals(3, robots);
-    }
-}
-*/
