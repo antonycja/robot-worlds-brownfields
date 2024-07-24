@@ -97,12 +97,26 @@ class LaunchRobotTests {
     }
     @Test
     void LaunchRobotWithDuplicateName(){
-        assertTrue(serverClient.isConnected());
         // Given that the robot does not exist in the world
+        assertTrue(serverClient.isConnected());
 
+        // And a robot called "HAL" is already connected and launched
+        String launchRequest = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": []" +
+                "}";
+        serverClient.sendRequest(launchRequest);
 
-
-
-
+//        // When a robot with the same name already exists
+//        JsonNode duplicateLaunchResponse = serverClient.sendRequest(launchRequest);
+//
+//        // Then I must receive an error message saying "Too many of you in this world."
+//        assertNotNull(duplicateLaunchResponse.get("result"));
+//        assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
+//        assertNotNull(duplicateLaunchResponse.get("data"));
+//        assertNotNull(duplicateLaunchResponse.get("data").get("message"));
+//        assertEquals("Too many of you in this world.", duplicateLaunchResponse.get("data").get("message").asText());
+//
 
 }
