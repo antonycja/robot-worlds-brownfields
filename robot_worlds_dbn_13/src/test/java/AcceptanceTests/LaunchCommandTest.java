@@ -118,5 +118,12 @@ class LaunchRobotTests {
         assertNotNull(duplicateLaunchResponse.get("data").get("message"));
         assertEquals("Too many of you in this world.", duplicateLaunchResponse.get("data").get("message").asText());
 
-
 }
+    @Test
+    void NoMoreSpaceForMoreRobots(){
+
+
+    }
+
+
+
