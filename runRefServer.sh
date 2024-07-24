@@ -32,10 +32,10 @@ while getopts ":hdpsoca" opt; do
       cmd="$cmd -s 2"
       ;;
     o )
-      cmd="$cmd -o 1,2"
+      cmd="$cmd -o 0,1"
       ;;
     a | c )
-      cmd="$cmd -p 5001 -s 2 -o 1,2"
+      cmd="$cmd -p 5001 -s 2 -o 0,1"
       break
       ;;
     \? )
