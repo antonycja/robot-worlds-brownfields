@@ -95,4 +95,14 @@ class LaunchRobotTests {
         assertEquals("OK", response.get("result").asText());
 
     }
+    @Test
+    void LaunchRobotWithDuplicateName(){
+        assertTrue(serverClient.isConnected());
+        // Given that the robot does not exist in the world
+
+
+
+
+
+
 }
