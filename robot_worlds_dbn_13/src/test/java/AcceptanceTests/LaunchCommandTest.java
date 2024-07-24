@@ -133,6 +133,17 @@ class LaunchRobotTests {
                 "}";
         serverClient.sendRequest(launchRequest);
 
+        // WHEN there is no more space in the world for another robot to launch
+        JsonNode duplicateLaunchResponse = serverClient.sendRequest(launchRequest);
+
+        // THEN I should get an error saying "No more space in this world."
+        assertNotNull(duplicateLaunchResponse.get("result"));
+        assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
+        assertNotNull(duplicateLaunchResponse.get("data"));
+        assertNotNull(duplicateLaunchResponse.get("data").get("message"));
+        assertEquals("No more space in this world.", duplicateLaunchResponse.get("data").get("message").asText());
+    }
+
     }
 
 
