@@ -110,9 +110,10 @@ public class LookCommandTest {
         assertNotNull(response.get("data"));
         assertNotNull(response.get("data").get("message"));
         assertEquals("Robot does not exist", response.get("data").get("message").asText());
-    }
+}
+
     @Test
-    public void testRequestLookCommandWithASpellingError(){
+    public void request_look_command_with_a_spelling_error(){
 
         // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
@@ -136,7 +137,8 @@ public class LookCommandTest {
 
 
 
-    }
+}
+
     @Test
     public void testSeeRobotsAndObstacles() {
         // Given that you're connected to a robot world server
@@ -146,11 +148,62 @@ public class LookCommandTest {
         serverClient.sendRequest(launchRequest);
 
         String launchAnotherRobotRequest = "{" +
-                "  \"robot\": \"TOM\"," +
+                "  \"robot\": \"HAL2\"," +
                 "  \"command\": \"launch\"," +
-                "  \"arguments\": []" +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
         serverClient.sendRequest(launchAnotherRobotRequest);
+
+        String launchAnotherRobotRequest2 = "{" +
+                "  \"robot\": \"HAL3\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest2);
+
+        String launchAnotherRobotRequest3 = "{" +
+                "  \"robot\": \"HAL4\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest3);
+
+        String launchAnotherRobotRequest4 = "{" +
+                "  \"robot\": \"HAL2\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest4);
+
+
+        String launchAnotherRobotRequest5 = "{" +
+                "  \"robot\": \"HAL2\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest5);
+
+        String launchAnotherRobotRequest6 = "{" +
+                "  \"robot\": \"HAL3\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest6);
+
+        String launchAnotherRobotRequest7 = "{" +
+                "  \"robot\": \"HAL4\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest7);
+
+        String launchAnotherRobotRequest8 = "{" +
+                "  \"robot\": \"HAL2\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest8);
+
 
         // When I send a valid look request to the server
         String request = "{" +
@@ -159,34 +212,58 @@ public class LookCommandTest {
                 "  \"arguments\": []" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
-        // Then I should get a response with an object of type OBSTACLE at a distance of 1 step.
+
         // Then I should get a response with an object of type OBSTACLE at a distance of 1 step.
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
 
         JsonNode objects = response.get("data").get("objects");
         assertNotNull(objects);
+
+
+
         for (JsonNode object : objects) {
             System.out.println(object);
-            if (object.get("type").toString().contains("OBSTACLE")) {
+            if ("OBSTACLE".equals(object.get("type").asText())) {
                 isObstacle = true;
                 position = object.get("distance").asInt();
-                System.out.println(object);
-                break;
             }
-            if (object.get("type").toString().contains("ROBOT")) {
+            if ("ROBOT".equals(object.get("type").asText())) {
                 Robots = true;
                 position = object.get("distance").asInt();
-                break;
             }
-
         }
 
-        assertTrue(isObstacle);
+        // Check if at least one robot is found and there is an obstacle at distance 1
         assertTrue(Robots);
+        assertTrue(isObstacle);
         assertEquals(1, position);
-        assertEquals(3, position);
-
+        }
     }
 
+/*
+        // Then I should get a valid response from the server
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+
+        // Check for obstacles and other robots
+        JsonNode objects = response.get("data").get("objects");
+        assertNotNull(objects);
+
+        int obstacleCount = 1;
+        int robots = 3;
+
+        for (JsonNode item : objects) {
+            String type = item.get("type").asText();
+            if ("OBSTACLE".equals(type)) {
+                obstacleCount++;
+            } else if ("ROBOT".equals(type)) {
+                robots++;
+            }
+        }
+
+        assertEquals(1, obstacleCount);
+        assertEquals(3, robots);
+    }
 }
+*/
