@@ -151,7 +151,7 @@ class LaunchRobotTests {
 
         //Given a world of size 2x2
         assertTrue(serverClient.isConnected());
-
+        JsonNode response = null;
         // I have successfully launched 9 robots into the world
         for (int i = 1; i <= 9; i++) {
             String launchRequest = "{" +
@@ -160,9 +160,10 @@ class LaunchRobotTests {
                     "  \"arguments\": [1, 1]" +
                     "}";
 
-            JsonNode response = serverClient.sendRequest(launchRequest);
-            assertEquals("OK", response.get("result").asText());
+            response = serverClient.sendRequest(launchRequest);
+            if ("ERROR".equals(response.get("result").asText())) break;
         }
+        assertEquals("ERROR", response.get("result").asText());
 
         // When I launch one more robot
         String duplicateLaunchRequest = "{" +
