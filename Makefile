@@ -2,7 +2,7 @@
 VERSION := $(shell mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 RELEASE_VERSION := $(subst -SNAPSHOT,,$(VERSION))
 BUILD_TYPE := development # default build type
-POM_FILE := robot_worlds_dbn_13/pom.xml
+POM_FILE := pom.xml
 REF_SERVER := $(shell pgrep -f runRefServer.sh)
 #OWN_SERVER := $(shell pgrep -f runServer.sh)
 
@@ -32,7 +32,7 @@ run_ref_server:
 test_ref: stop_ref_server run_ref_server
     # Wait for the server to start if necessary
 	sleep 2
-	cd robot_worlds_dbn_13 && mvn test -Dserver=reference
+	mvn test -Dserver=reference
     # Stop the reference server after tests
 	make stop_ref_server
 
