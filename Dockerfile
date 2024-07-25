@@ -1,5 +1,26 @@
-# Use an official OpenJDK image as a parent image
-FROM openjdk:17
+# Use Maven image for building the application
+FROM maven:3.8.5-openjdk-17-slim AS build
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the pom.xml and any other files needed for dependency resolution
+COPY pom.xml /app/
+
+# Copy the lib directory if there are external JAR dependencies
+COPY libs /app/libs
+
+# Copy the source code to the container
+COPY src /app/src
+
+# Package the application using Maven
+RUN mvn clean package -DskipTests
+
+# Debug: List contents of /app/target
+RUN ls -l /app/target
+
+# Use an official OpenJDK image as the runtime environment
+FROM openjdk:17-jdk-slim
 
 # Set the maintainer label
 LABEL maintainer="Tech Team <tech-team@wethinkcode.co.za>"
@@ -7,23 +28,11 @@ LABEL maintainer="Tech Team <tech-team@wethinkcode.co.za>"
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the pom.xml and any other files needed for dependency resolution
-COPY /home/lindani/cpt13_brownfields_2024/pom.xml /app/
-
-# Copy the source code to the container
-COPY src /app/src
-
-# Copy the lib directory if there are external JAR dependencies
-COPY libs /app/libs
-
-# Install Maven to build the project
-RUN  apt update && apt install -y maven
-
-# Package the application using Maven
-RUN mvn clean package -DskipTests
+# Copy the built jar file from the build stage
+COPY --from=build /app/target/cpt13_brownfields_2024-1.0-SNAPSHOT.jar /app/cpt13_brownfields_2024-1.0-SNAPSHOT.jar
 
 # Set the entry point to run the JAR file
-ENTRYPOINT ["java", "-jar", "target/cpt13_brownfields_2024-1.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "cpt13_brownfields_2024-1.0-SNAPSHOT.jar"]
 
 # Expose the port the application runs on
-EXPOSE 8080
+EXPOSE 5001
