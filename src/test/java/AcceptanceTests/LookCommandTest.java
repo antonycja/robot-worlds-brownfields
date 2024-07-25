@@ -144,7 +144,9 @@ public class LookCommandTest {
         // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
 
-        // And I have launched a robot into the world
+        /*Given a world of size 2x2
+        and the world has an obstacle at coordinate [0,1]
+        and I have successfully launched 8 robots into the world*/
         serverClient.sendRequest(launchRequest);
 
         String launchAnotherRobotRequest = "{" +
@@ -205,7 +207,7 @@ public class LookCommandTest {
         serverClient.sendRequest(launchAnotherRobotRequest8);
 
 
-        // When I send a valid look request to the server
+        //When I ask the first robot to look
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"look\"," +
@@ -233,36 +235,12 @@ public class LookCommandTest {
             }
         }
 
-        // Check if at least one robot is found and there is an obstacle at distance 1
+        // one object being an OBSTACLE that is one step away
+        //and three objects should be Robots that is one step away
         assertTrue(Robots);
         assertTrue(isObstacle);
         assertEquals(1, position);
         }
     }
 
-/*
-        // Then I should get a valid response from the server
-        assertNotNull(response.get("result"));
-        assertEquals("OK", response.get("result").asText());
 
-        // Check for obstacles and other robots
-        JsonNode objects = response.get("data").get("objects");
-        assertNotNull(objects);
-
-        int obstacleCount = 1;
-        int robots = 3;
-
-        for (JsonNode item : objects) {
-            String type = item.get("type").asText();
-            if ("OBSTACLE".equals(type)) {
-                obstacleCount++;
-            } else if ("ROBOT".equals(type)) {
-                robots++;
-            }
-        }
-
-        assertEquals(1, obstacleCount);
-        assertEquals(3, robots);
-    }
-}
-*/
