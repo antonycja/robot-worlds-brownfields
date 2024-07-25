@@ -223,7 +223,6 @@ public class LookCommandTest {
 
 
         for (JsonNode object : objects) {
-            System.out.println(object);
             if ("OBSTACLE".equals(object.get("type").asText())) {
                 isObstacle = true;
                 position = object.get("distance").asInt();
