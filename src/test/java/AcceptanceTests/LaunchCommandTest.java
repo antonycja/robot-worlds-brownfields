@@ -182,5 +182,26 @@ class LaunchRobotTests {
         assertEquals("No more space in this world", duplicateLaunchResponse.get("data").get("message").asText());
 
     }
+    @Test
+    void LaunchRobotWithoutRobotName(){
+        // Given that I am connected to a running Robot Worlds server
+        // The world is configured or hardcoded to this size
+        assertTrue(serverClient.isConnected());
+        // When I luanch a robot without specifying the robot name
+        String launchRequest = "{" +
+                "  \"robot\":," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [1, 1]" +
+                "}";
+        JsonNode duplicateLaunchResponse = serverClient.sendRequest(launchRequest);
+        // Then I should get an error response back with the message "Invalid Request"
+        assertNotNull(duplicateLaunchResponse.get("result"));
+        assertEquals("ERROR", duplicateLaunchResponse.get("result").asText());
+        assertNotNull(duplicateLaunchResponse.get("data"));
+        assertNotNull(duplicateLaunchResponse.get("data").get("message"));
+        assertEquals("Invalid Request", duplicateLaunchResponse.get("data").get("message").asText());
+
+    }
+
 
 }
