@@ -49,11 +49,12 @@ jobs:
         run: mvn package
 
       - name: Build Docker image
-        run:
+        run: docker build -t your-dockerhub-username/your-repository-name:tag .
 
       - name: Log in to DockerHub
-        run:
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Push Docker image
-        run:
+        run: docker push your-dockerhub-username/your-repository-name:tag
+
 
