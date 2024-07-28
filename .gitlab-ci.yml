@@ -16,6 +16,8 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
+image: maven:latest
+
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
@@ -26,8 +28,8 @@ build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Compiling the code..."
-    - make clean
-    - make build
+    - mvn clean
+    - mvn build
     - echo "Compile complete."
 
 unit-test-job:   # This job runs in the test stage.
