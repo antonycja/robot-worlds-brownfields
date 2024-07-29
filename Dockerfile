@@ -29,10 +29,10 @@ LABEL maintainer="Tech Team <tech-team@wethinkcode.co.za>"
 WORKDIR /app
 
 # Copy the built jar file from the build stage
-COPY --from=build /app/target/cpt13_brownfields_2024-1.0-SNAPSHOT.jar /app/cpt13_brownfields_2024-1.0-SNAPSHOT.jar
+COPY --from=build /app/target/robot_worlds_dbn_13-1.0.jar /app/robot_worlds_dbn_13-1.0.jar
 
 # Set the entry point to run the JAR file
-ENTRYPOINT ["java", "-jar", "cpt13_brownfields_2024-1.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "robot_worlds_dbn_13-1.0.jar"]
 
 # Expose the port the application runs on
 EXPOSE 5001
