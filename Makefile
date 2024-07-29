@@ -6,11 +6,10 @@ POM_FILE := pom.xml
 REF_SERVER := $(shell pgrep -f runRefServer.sh)
 OWN_SERVER := $(shell pgrep -f runServer.sh)
 
-.PHONY: all compile test_ref test_own version release_version package tag clean run_ref_server stop_ref_server run_own_server stop_own_server
+.PHONY: all compile test_ref test_own version release_version package tag clean run_ref_server stop_ref_server run_own_server stop_own_server stop_servers
 
 # Default target
 all: compile test_ref stop_servers
-#all: compile test_ref test_own stop_servers
 
 compile:
 	mvn compile -f $(POM_FILE)
@@ -24,7 +23,7 @@ stop_ref_server:
 	fi
 
 run_ref_server:
-	@if lsof -i :5001 > /dev/null ; then \
+	@if lsof -i :5001 > /dev/null; then \
 		echo "Port 5001 is already in use. Killing the process..."; \
 		kill $$(lsof -t -i:5001); \
 		sleep 2; \
@@ -33,13 +32,16 @@ run_ref_server:
 	sleep 5  # Give the server more time to start
 
 test_ref: stop_ref_server run_ref_server
-	# Wait for the server to start if necessary
 	sleep 2
 	mvn test -Dserver=reference
-	# Stop the reference server after tests
 	make stop_ref_server
 
 run_own_server:
+	@if lsof -i :5000 > /dev/null; then \
+		echo "Port 5000 is already in use. Killing the process..."; \
+		kill $$(lsof -t -i:5000); \
+		sleep 2; \
+	fi
 	./runServer.sh &
 
 stop_own_server:
@@ -51,10 +53,8 @@ stop_own_server:
 	fi
 
 test_own: stop_own_server run_own_server
-	# Wait for the server to start if necessary
 	sleep 10
 	mvn test -Dserver=own
-	# Stop your own server after tests
 	make stop_own_server
 
 stop_servers: stop_ref_server stop_own_server
@@ -71,7 +71,7 @@ release_version:
 	@echo "Version updated to $(RELEASE_VERSION) in $(POM_FILE)"
 
 package: test_ref test_own
-ifeq ($(BUILD_TYPE), release)
+ifeq ($(BUILD_TYPE),release)
 	@echo "Packaging for release"
 	mvn package
 else
@@ -79,7 +79,7 @@ else
 endif
 
 tag: package
-ifeq ($(BUILD_TYPE), release)
+ifeq ($(BUILD_TYPE),release)
 	@echo "Tagging release version"
 	git tag release-$(RELEASE_VERSION)
 	git push origin release-$(RELEASE_VERSION)
