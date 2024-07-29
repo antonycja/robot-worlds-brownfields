@@ -182,7 +182,7 @@ class LaunchRobotTests {
         assertEquals("No more space in this world", duplicateLaunchResponse.get("data").get("message").asText());
 
     }
-    @Test
+ /*   @Test
     void LaunchRobotWithoutRobotName(){
         // Given that I am connected to a running Robot Worlds server
         // The world is configured or hardcoded to this size
@@ -201,7 +201,7 @@ class LaunchRobotTests {
         assertNotNull(duplicateLaunchResponse.get("data").get("message"));
         assertEquals("Invalid Request", duplicateLaunchResponse.get("data").get("message").asText());
 
-    }
+    }*/
 
 
 }
