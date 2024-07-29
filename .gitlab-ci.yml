@@ -29,8 +29,10 @@ acceptence-test-job:   # This job also runs in the test stage.
   script:
     - echo "Running acceptance tests..."
     - bash runRefServer.sh -a &
+    - echo "Waiting for server to start"
+    - sleep 5
     - mvn '-Dtest=AcceptanceTests.*Test' test
-    - echo "No lint issues found."
+    - echo "No Acceptance test issues found."
 
 
 package-job:   # This job runs the package stage.
@@ -38,6 +40,8 @@ package-job:   # This job runs the package stage.
   script:
     - echo "Packaging code..."
     - bash runRefServer.sh -a &
+    - echo "Waiting for server to start"
+    - sleep 5
     - mvn package
     - echo "Successfully packaged."
     - mvn verify
@@ -48,5 +52,8 @@ deploy-job:      # This job runs in the deploy stage.
   environment: production
   script:
     - echo "Deploying application..."
+    - bash runRefServer.sh -a &
+    - echo "Waiting for server to start"
+    - sleep 5
     - mvn deploy
     - echo "Application successfully deployed."
