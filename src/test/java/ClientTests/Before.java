@@ -1,4 +1,4 @@
-package clienttests;
+package ClientTests;
 
 public @interface Before {
 

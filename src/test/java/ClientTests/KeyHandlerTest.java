@@ -1,4 +1,4 @@
-package clienttests;
+package ClientTests;
 import robot_worlds_13.client.*;
 
 import org.junit.jupiter.api.BeforeEach;

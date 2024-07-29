@@ -1,4 +1,4 @@
-package servertests.robottests;
+package ServerTests;
 import robot_worlds_13.server.robot.*;
 
 import org.junit.jupiter.api.BeforeEach;

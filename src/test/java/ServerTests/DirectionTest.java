@@ -1,4 +1,4 @@
-package servertests.robottests;
+package ServerTests;
 
 import org.junit.jupiter.api.Test;
 import robot_worlds_13.server.robot.Direction;

@@ -1,4 +1,4 @@
-package servertests.robottests;
+package ServerTests;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
