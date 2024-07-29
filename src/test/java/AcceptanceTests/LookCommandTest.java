@@ -110,9 +110,10 @@ public class LookCommandTest {
         assertNotNull(response.get("data"));
         assertNotNull(response.get("data").get("message"));
         assertEquals("Robot does not exist", response.get("data").get("message").asText());
-    }
+}
+
     @Test
-    public void testRequestLookCommandWithASpellingError(){
+    public void request_look_command_with_a_spelling_error(){
 
         // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
@@ -136,57 +137,110 @@ public class LookCommandTest {
 
 
 
-    }
+}
+
     @Test
     public void testSeeRobotsAndObstacles() {
         // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
 
-        // And I have launched a robot into the world
+        /*Given a world of size 2x2
+        and the world has an obstacle at coordinate [0,1]
+        and I have successfully launched 8 robots into the world*/
         serverClient.sendRequest(launchRequest);
 
         String launchAnotherRobotRequest = "{" +
-                "  \"robot\": \"TOM\"," +
+                "  \"robot\": \"HAL2\"," +
                 "  \"command\": \"launch\"," +
-                "  \"arguments\": []" +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
         serverClient.sendRequest(launchAnotherRobotRequest);
 
-        // When I send a valid look request to the server
+        String launchAnotherRobotRequest2 = "{" +
+                "  \"robot\": \"HAL3\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest2);
+
+        String launchAnotherRobotRequest3 = "{" +
+                "  \"robot\": \"HAL4\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest3);
+
+        String launchAnotherRobotRequest4 = "{" +
+                "  \"robot\": \"HAL2\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest4);
+
+
+        String launchAnotherRobotRequest5 = "{" +
+                "  \"robot\": \"HAL2\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest5);
+
+        String launchAnotherRobotRequest6 = "{" +
+                "  \"robot\": \"HAL3\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest6);
+
+        String launchAnotherRobotRequest7 = "{" +
+                "  \"robot\": \"HAL4\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest7);
+
+        String launchAnotherRobotRequest8 = "{" +
+                "  \"robot\": \"HAL2\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        serverClient.sendRequest(launchAnotherRobotRequest8);
+
+
+        //When I ask the first robot to look
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"look\"," +
                 "  \"arguments\": []" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
-        // Then I should get a response with an object of type OBSTACLE at a distance of 1 step.
+
         // Then I should get a response with an object of type OBSTACLE at a distance of 1 step.
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
 
         JsonNode objects = response.get("data").get("objects");
         assertNotNull(objects);
+
+
+
         for (JsonNode object : objects) {
-            System.out.println(object);
-            if (object.get("type").toString().contains("OBSTACLE")) {
+            if ("OBSTACLE".equals(object.get("type").asText())) {
                 isObstacle = true;
                 position = object.get("distance").asInt();
-                System.out.println(object);
-                break;
             }
-            if (object.get("type").toString().contains("ROBOT")) {
+            if ("ROBOT".equals(object.get("type").asText())) {
                 Robots = true;
                 position = object.get("distance").asInt();
-                break;
             }
-
         }
 
-        assertTrue(isObstacle);
+        // one object being an OBSTACLE that is one step away
+        //and three objects should be Robots that is one step away
         assertTrue(Robots);
+        assertTrue(isObstacle);
         assertEquals(1, position);
-        assertEquals(3, position);
-
+        }
     }
 
-}
+
