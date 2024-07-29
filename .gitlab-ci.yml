@@ -46,7 +46,7 @@ acceptence-test-job:   # This job also runs in the test stage.
   script:
     - echo "Running acceptance tests..."
     - bash runRefServer.sh -a &
-    - mvn '-Dtest=AcceptanceTests.*' test
+    - mvn '-Dtest=AcceptanceTests.*Test' test
     - echo "No lint issues found."
 
 
