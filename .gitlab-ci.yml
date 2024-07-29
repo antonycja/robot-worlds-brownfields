@@ -37,9 +37,9 @@ unit-test-job:   # This job runs in the test stage.
   stage: test   # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running unit tests..."
-    - mvn '-Dtest=clienttests' test
-    - mvn '-Dtest=servertests/robottests' test
-    - echo "Code coverage is 90%"
+    - mvn '-Dtest=ClientTests.*Test' test
+    - mvn '-Dtest=ServerTests.*Test' test
+    - echo "All test ran succefully"
 
 acceptence-test-job:   # This job also runs in the test stage.
   stage: test    # It can run at the same time as unit-test-job (in parallel).
