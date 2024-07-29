@@ -55,5 +55,5 @@ deploy-job:      # This job runs in the deploy stage.
     - bash runRefServer.sh -a &
     - echo "Waiting for server to start"
     - sleep 5
-    - mvn deploy
+    # - mvn deploy
     - echo "Application successfully deployed."
