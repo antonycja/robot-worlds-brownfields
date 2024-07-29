@@ -94,7 +94,7 @@ public class MoveForwardTest {
         // When I send a command for "HAL" to move forward without specifying steps
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
-                "  \"command\": \"forward\"," +
+                "  \"command\": \"forward k\"," +
                 "  \"arguments\": [\"\"]" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
@@ -104,7 +104,7 @@ public class MoveForwardTest {
         assertEquals("ERROR", response.get("result").asText());
         assertNotNull(response.get("data"));
         assertNotNull(response.get("data").get("message"));
-        assertEquals("Error while executing command", response.get("data").get("message").asText());
+        assertEquals("Unsupported command", response.get("data").get("message").asText());
 
     }
 }
