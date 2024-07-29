@@ -37,7 +37,9 @@ package-job:   # This job runs the package stage.
   stage: package    # It can run at the same time as unit-test-job (in parallel).
   script:
     - echo "Packaging code..."
+    - bash runRefServer.sh -a &
     - mvn package
+    - echo "Successfully packaged."
     - mvn verify
     - echo "No package issues found."
 
