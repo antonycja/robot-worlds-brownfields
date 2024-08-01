@@ -40,8 +40,9 @@ public class Server {
 //        // Ask the Admin if they want to configure
 //        System.out.print("Welcome, would you like to Configure your own server or use previous Configurations? (y/n): ");
 //        String configure = scanner.nextLine().toLowerCase().trim();
-        ServerConfiguration serverConfiguration = new ServerConfiguration();
-        port = serverConfiguration.portNum;
+//        ServerConfiguration serverConfiguration = new ServerConfiguration();
+//        port = serverConfiguration.portNum;
+        port = 5001;
 
         System.out.println("Starting server...\n");
 
