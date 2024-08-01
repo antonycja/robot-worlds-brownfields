@@ -72,6 +72,7 @@ public class Client {
                 "      _)(  )(_\n" +
                 "     `---''---`");
 
+
         int port = getIntInput(scanner, "Port Number of Server: ", 1024, 65535);
         System.out.println("Here is the port: " + port);
         // connecting to server
