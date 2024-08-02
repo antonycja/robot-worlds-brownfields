@@ -1,0 +1,60 @@
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36mrobot_worlds_13:robot_worlds_13[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding robot_worlds_13 1.0[m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mrobot_worlds_13[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/lindani/cpt13_brownfields_2024/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrobot_worlds_13[0;1m ---[m
+[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[[1;34mINFO[m] skip non existing resourceDirectory /home/lindani/cpt13_brownfields_2024/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrobot_worlds_13[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;33mWARNING[m] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[[1;34mINFO[m] Compiling 44 source files to /home/lindani/cpt13_brownfields_2024/target/classes
+[[1;34mINFO[m] /home/lindani/cpt13_brownfields_2024/src/main/java/robot_worlds_13/server/ClientHandler.java: Some input files use unchecked or unsafe operations.
+[[1;34mINFO[m] /home/lindani/cpt13_brownfields_2024/src/main/java/robot_worlds_13/server/ClientHandler.java: Recompile with -Xlint:unchecked for details.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mrobot_worlds_13[0;1m ---[m
+[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[[1;34mINFO[m] skip non existing resourceDirectory /home/lindani/cpt13_brownfields_2024/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mrobot_worlds_13[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;33mWARNING[m] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[[1;34mINFO[m] Compiling 19 source files to /home/lindani/cpt13_brownfields_2024/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:3.0.0-M5:test[m [1m(default-test)[m @ [36mrobot_worlds_13[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:3.2.0:jar[m [1m(default-jar)[m @ [36mrobot_worlds_13[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/lindani/cpt13_brownfields_2024/target/robot_worlds_13-1.0.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-assembly-plugin:3.3.0:single[m [1m(default)[m @ [36mrobot_worlds_13[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/lindani/cpt13_brownfields_2024/libs/robot-worlds-server-jar-with-dependencies.jar
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  3.352 s
+[[1;34mINFO[m] Finished at: 2024-08-02T10:00:01+02:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[H[2J[3JStarting server...
+
+Server address: 10.200.130.65
+Port number: 5001
+
+Loading server data...
+    Repair: 5 seconds per robot
+    Shield: 500 shields maximum
+    Reload: 5 seconds per robot
+    Visibility: 100 steps forward
+    Width: 500 kliks
+    Bullet Distance: 100 steps forward
+    Shots: 1000 shots maximum
+    Height: 600 kliks
+
+java.net.BindException: Address already in use
+Server closed

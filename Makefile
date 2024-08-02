@@ -42,7 +42,10 @@ run_own_server:
 		kill $$(lsof -t -i:5000); \
 		sleep 2; \
 	fi
-	./runServer.sh &
+	./runServer.sh > own_server.log 2>&1 &
+	sleep 5  # Give the server more time to start
+	@echo "Own server log:"
+	@cat own_server.log
 
 stop_own_server:
 	@echo "Stopping own server if running"
