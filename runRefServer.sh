@@ -26,7 +26,7 @@ while getopts ":hdpsoca" opt; do
       cmd="java -jar libs/reference-server-0.2.3.jar"
       ;;
     p )
-      cmd="$cmd -p 5001"
+      cmd="$cmd -p 5050"
       ;;
     s )
       cmd="$cmd -s 2"
@@ -35,7 +35,7 @@ while getopts ":hdpsoca" opt; do
       cmd="$cmd -o 0,1"
       ;;
     a | c )
-      cmd="$cmd -p 5001 -s 2 -o 0,1"
+      cmd="$cmd -p 5050 -s 2 -o 0,1"
       break
       ;;
     \? )

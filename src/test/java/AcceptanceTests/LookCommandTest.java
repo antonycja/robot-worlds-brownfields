@@ -11,7 +11,7 @@ import robot_worlds_13.server.robot.Position;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LookCommandTest {
-    private final static int DEFAULT_PORT = 5001;
+    private final static int DEFAULT_PORT = 5050;
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
     private boolean isObstacle = false;

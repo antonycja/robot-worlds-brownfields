@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * So that I can see the current state (updated information) of my robot without having to move.
  */
 public class StateCommandTest {
-    private final static int DEFAULT_PORT = 5001;
+    private final static int DEFAULT_PORT = 5050;
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
     private final String launchRequest = "{" +

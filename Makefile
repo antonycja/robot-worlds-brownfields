@@ -74,12 +74,12 @@ release_version:
 	@echo "Version updated to $(RELEASE_VERSION) in $(POM_FILE)"
 
 package: test_ref test_own
-ifeq ($(BUILD_TYPE),release)
-	@echo "Packaging for release"
+#ifeq ($(BUILD_TYPE),release)
+#	@echo "Packaging for release"
 	mvn package
-else
-	@echo "Skipping packaging for development build"
-endif
+#else
+#	@echo "Skipping packaging for development build"
+#endif
 
 tag: package
 ifeq ($(BUILD_TYPE),release)

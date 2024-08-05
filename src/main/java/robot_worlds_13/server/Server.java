@@ -42,7 +42,7 @@ public class Server {
 //        String configure = scanner.nextLine().toLowerCase().trim();
 //        ServerConfiguration serverConfiguration = new ServerConfiguration();
 //        port = serverConfiguration.portNum;
-        port = 5001;
+        port = 5050;
 
         System.out.println("Starting server...\n");
 

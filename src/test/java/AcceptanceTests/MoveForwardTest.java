@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 //I want to command my robot to move forward a specified number of steps
 //so that I can explore the world and not be a sitting duck in a battle.
 public class MoveForwardTest {
-    private final static int DEFAULT_PORT = 5001;
+    private final static int DEFAULT_PORT = 5050;
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
     private final String launchRequest = "{" +
