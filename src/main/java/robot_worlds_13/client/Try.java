@@ -47,7 +47,7 @@ class GamePanel1 extends JPanel {
     }
 }
 
-// Main or test setup
+// Database.Main or test setup
 public class Try {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

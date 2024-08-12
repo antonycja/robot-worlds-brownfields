@@ -31,7 +31,7 @@ public class Server {
     public HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
 
     /**
-     * Main method to start the server.
+     * Database.Main method to start the server.
      * @param args Command line arguments.
      * @throws Exception Throws an exception if an error occurs.
      */
