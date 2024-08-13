@@ -16,32 +16,26 @@ import robot_worlds_13.server.robot.world.TextWorld;
 public class Server {
 
     // clients
-    List<ClientHandler> clients = new ArrayList<>();
-    private static List<Socket> clientConnections = new ArrayList<>();
-    static DataOutputStream dos;
+    private final List<ClientHandler> clients = new ArrayList<>();
+    private static final List<Socket> clientConnections = new ArrayList<>();
+    private static DataOutputStream dos;
     public static int port;
 
     // random
-    Random rand = new Random();
+    private final Random rand = new Random();
 
     // keeping track of robots
-    public ArrayList<String> robotNames = new ArrayList<>();
-    public ArrayList<Object> states = new ArrayList<>();
-    public HashMap<String, ArrayList<Object>> nameRobotMap = new HashMap<>();
-    public HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
+    private final ArrayList<String> robotNames = new ArrayList<>();
+    private final ArrayList<Object> states = new ArrayList<>();
+    public final HashMap<String, ArrayList<Object>> nameRobotMap = new HashMap<>();
+    private final HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
 
     /**
-     * Database.Main method to start the server.
+     * Main method to start the server.
      * @param args Command line arguments.
      * @throws Exception Throws an exception if an error occurs.
      */
     public static void main(String[] args) throws Exception {
-//        Scanner scanner = new Scanner(System.in);
-//        // Ask the Admin if they want to configure
-//        System.out.print("Welcome, would you like to Configure your own server or use previous Configurations? (y/n): ");
-//        String configure = scanner.nextLine().toLowerCase().trim();
-//        ServerConfiguration serverConfiguration = new ServerConfiguration();
-//        port = serverConfiguration.portNum;
         port = 5050;
 
         System.out.println("Starting server...\n");
@@ -52,8 +46,7 @@ public class Server {
         // Path to configuration file
         String path = new File(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
         String otherFilePath = "/../src/main/java/robot_worlds_13/server/configuration/file.txt";
-        String directoryPath = new File(path).getParent() + otherFilePath;
-        String filePath = directoryPath;
+        String filePath = new File(path).getParent() + otherFilePath;
 
         // Load server configuration data from file
         Map<String, Integer> dataMap = new HashMap<>();
@@ -63,20 +56,20 @@ public class Server {
             displayServerConfiguration(dataMap);
             System.out.println();
         } catch (IOException e) {
-            System.err.println("    Error reading file: " + e.getMessage());
+            System.err.println("Error reading file: " + e.getMessage());
+            System.exit(1);
         }
 
-        // This server
+        // Initialize the server object
         Server serverObject = new Server();
-        
+
         // Maze loaded
         SimpleMaze mazeGenerated = new SimpleMaze();
         mazeGenerated.setMinCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
         mazeGenerated.setMaxCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
         mazeGenerated.generateRandomObstacles();
-        
-        AbstractWorld world = new TextWorld(mazeGenerated, serverObject, dataMap);
 
+        AbstractWorld world = new TextWorld(mazeGenerated, serverObject, dataMap);
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started. Listening for incoming connections...");
@@ -99,10 +92,9 @@ public class Server {
                 Thread clientThread = new Thread(clientHandler);
                 clientThread.start();
             }
-        }
-        catch (Exception e) {
-            System.out.println(e);
-            System.out.println("Server closed");
+        } catch (Exception e) {
+            System.err.println("Server encountered an error: " + e.getMessage());
+            System.exit(1);
         }
     }
 
@@ -124,9 +116,14 @@ public class Server {
                     result.put(key, value);
                 } else {
                     System.err.println("Skipping malformed line: " + line);
-                    System.exit(0);
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("Configuration file not found: " + filePath);
+            throw e;
+        } catch (IOException e) {
+            System.err.println("IO Error: " + e.getMessage());
+            throw e;
         }
         return result;
     }
@@ -141,9 +138,8 @@ public class Server {
                 dos = new DataOutputStream(client.getOutputStream());
                 dos.writeUTF(message);
                 dos.flush();
-
             } catch (IOException e) {
-                continue;
+                System.err.println("Error broadcasting message to a client: " + e.getMessage());
             }
         }
     }
@@ -152,7 +148,7 @@ public class Server {
      * Retrieves names and positions only.
      * @return A map containing robot names and their positions.
      */
-    public Map <String, ArrayList<Object>> getNamesAndPositionsOnly () {
+    public Map<String, ArrayList<Object>> getNamesAndPositionsOnly() {
         return nameAndPositionMap;
     }
 
@@ -160,32 +156,19 @@ public class Server {
      * Removes a robot from the server.
      * @param name The name of the robot to remove.
      */
-    public void removeRobot (String name) {
+    public void removeRobot(String name) {
         this.robotNames.remove(name);
-        
-        Iterator<Map.Entry<String, ArrayList<Object>>> iterator = nameRobotMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, ArrayList<Object>> entry = iterator.next();
-            if (entry.getKey().equals(name)) {
-                iterator.remove(); // Safe remove
-            }
-        }
-        
-        Iterator<Map.Entry<String, ArrayList<Object>>> iterator2 = nameAndPositionMap.entrySet().iterator();
-        while (iterator2.hasNext()) {
-            Map.Entry<String, ArrayList<Object>> entry = iterator2.next();
-            if (entry.getKey().equals(name)) {
-                iterator2.remove(); // Safe remove
-            }
-        }
+
+        nameRobotMap.entrySet().removeIf(entry -> entry.getKey().equals(name));
+        nameAndPositionMap.entrySet().removeIf(entry -> entry.getKey().equals(name));
     }
 
     /**
      * Displays the server configuration.
      * @param dataMap The map containing the server configuration data.
      */
-    static public void displayServerConfiguration(Map<String, Integer> dataMap) {
-        for (String attribute: dataMap.keySet()) {
+    public static void displayServerConfiguration(Map<String, Integer> dataMap) {
+        for (String attribute : dataMap.keySet()) {
             switch (attribute) {
                 case "repair":
                     System.out.println("    Repair: " + dataMap.get(attribute) + " seconds per robot");
@@ -206,25 +189,22 @@ public class Server {
                     System.out.println("    Shots: " + dataMap.get(attribute) + " shots maximum");
                     break;
                 case "width":
-                    
                     System.out.println("    Width: " + dataMap.get(attribute) + " kliks");
                     if (dataMap.get(attribute) < 500) {
-                        System.out.println("Too small of a world size");
+                        System.err.println("Too small of a world size");
                         System.exit(0);
                     }
                     break;
                 case "height":
                     System.out.println("    Height: " + dataMap.get(attribute) + " kliks");
                     if (dataMap.get(attribute) < 500) {
-                        System.out.println("Too small of a world size");
+                        System.err.println("Too small of a world size");
                         System.exit(0);
                     }
                     break;
                 default:
                     break;
-                
             }
-            
         }
     }
 
