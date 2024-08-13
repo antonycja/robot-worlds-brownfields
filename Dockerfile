@@ -35,11 +35,9 @@ COPY src/main/java/robot_worlds_13/server/configuration/file.txt /app/configurat
 COPY libs/robot-worlds-server-jar-with-dependencies.jar /app/robot_worlds_13.jar
 
 # Set the entry point to run the JAR file
-<<<<<<< Updated upstream
-ENTRYPOINT ["java", "-jar", "robot_worlds_13-1.0.jar"]
-=======
+
 ENTRYPOINT ["java", "-jar", "robot_worlds_13.jar"]
->>>>>>> Stashed changes
+
 
 # Expose the port the application runs on
 EXPOSE 5001

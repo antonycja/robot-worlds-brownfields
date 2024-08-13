@@ -3,6 +3,7 @@ package robot_worlds_13.server;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.*;
 import java.util.*;
 
 import robot_worlds_13.server.configuration.ServerConfiguration;
@@ -44,14 +45,18 @@ public class Server {
         System.out.println("Port number: " + port + "\n");
 
         // Path to configuration file
-        String path = new File(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
-        String otherFilePath = "/../src/main/java/robot_worlds_13/server/configuration/file.txt";
-        String filePath = new File(path).getParent() + otherFilePath;
+        Path jarPath = Paths.get(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        Path parentPath = jarPath.getParent();
+        Path filePath = parentPath.resolve("../src/main/java/robot_worlds_13/server/configuration/file.txt").normalize();
 
         // Load server configuration data from file
         Map<String, Integer> dataMap = new HashMap<>();
+        if (Files.notExists(filePath)) {
+            System.err.println("Configuration file not found: " + filePath);
+            System.exit(1);
+        }
         try {
-            dataMap = parseFileToMap(filePath);
+            dataMap = parseFileToMap(filePath.toString());
             System.out.println("Loading server data...");
             displayServerConfiguration(dataMap);
             System.out.println();
@@ -207,5 +212,4 @@ public class Server {
             }
         }
     }
-
 }
