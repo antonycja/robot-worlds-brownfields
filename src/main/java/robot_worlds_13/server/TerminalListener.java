@@ -49,16 +49,23 @@ public class TerminalListener implements Runnable {
                     getRobotsInWorld();
                     getObstaclesInWorld();
 
-                } else if ("robots".equalsIgnoreCase(input)) {
+                }
+                else if ("robots".equalsIgnoreCase(input)) {
                     System.out.println("\nRobots command received...");
                     
                     getRobotsInWorld();
+                }
+                else if (input.toLowerCase().contains("save")) {
+                    System.out.println("\nSaving the world...");
 
                 }
-                
+                else if (input.toLowerCase().contains("restore")) {
+                    System.out.println("\nRestoring world...");
+                }
+
                 else {
                     System.out.println("\nInvalid terminal command received: " +"'" + input + "'");
-                    System.out.println("Hint use 'robots', 'quit' or 'dump'");
+                    System.out.println("Hint use: 'robots', 'quit', 'dump', 'save <world name>'or 'restore <world name>'");
                 }
             }
         } catch (IOException e) {
