@@ -17,7 +17,7 @@ import robot_worlds_13.server.robot.world.TextWorld;
 public class Server {
 
     // clients
-    private final List<ClientHandler> clients = new ArrayList<>();
+    List<ClientHandler> clients = new ArrayList<>();
     private static final List<Socket> clientConnections = new ArrayList<>();
     private static DataOutputStream dos;
     public static int port;
@@ -26,10 +26,10 @@ public class Server {
     private final Random rand = new Random();
 
     // keeping track of robots
-    private final ArrayList<String> robotNames = new ArrayList<>();
-    private final ArrayList<Object> states = new ArrayList<>();
+    ArrayList<String> robotNames = new ArrayList<>();
+    ArrayList<Object> states = new ArrayList<>();
     public final HashMap<String, ArrayList<Object>> nameRobotMap = new HashMap<>();
-    private final HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
+    HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
 
     /**
      * Main method to start the server.

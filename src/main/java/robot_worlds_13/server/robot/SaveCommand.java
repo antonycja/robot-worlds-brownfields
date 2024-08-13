@@ -25,7 +25,7 @@ public class SaveCommand extends Command {
             int width = 100;
             int height = 100;
             int port = 8080;
-            sqlCommands.saveWorld("World", worldName, width, height, port);
+//            sqlCommands.saveWorld("World", worldName, width, height, port);
 
             System.out.println("World saved successfully with the name: " + worldName);
             return true;

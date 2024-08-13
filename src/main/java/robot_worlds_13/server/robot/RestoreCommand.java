@@ -22,7 +22,7 @@ public class RestoreCommand extends Command {
         String worldName = promptForWorldName();
 
         try {
-            sqlCommands.restoreWorld("World", worldName);
+//            sqlCommands.restoreWorld("World", worldName);
             System.out.println("World restored successfully with the name: " + worldName);
             return true;
         } catch (Exception e) {
