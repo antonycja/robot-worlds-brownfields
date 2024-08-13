@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import robot_worlds_13.server.robot.Robot;
+import robot_worlds_13.server.robot.SaveCommand;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import java.net.ServerSocket;
 import java.util.List;
@@ -56,8 +57,15 @@ public class TerminalListener implements Runnable {
                     getRobotsInWorld();
                 }
                 else if (input.toLowerCase().contains("save")) {
+                    SaveCommand save;
                     System.out.println("\nSaving the world...");
-
+                    String[] newInput = input.split(" ");
+                    if (newInput.length == 2){
+                        save = new SaveCommand(newInput[1]);
+                    } else {
+                        save = new SaveCommand();
+                    }
+                    save.saveWorld(world);
                 }
                 else if (input.toLowerCase().contains("restore")) {
                     System.out.println("\nRestoring world...");

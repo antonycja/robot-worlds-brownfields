@@ -32,7 +32,7 @@ public class SqlCommands {
     private void executeSQL(String sql) {
         try (Statement statement = conn.createStatement()) {
             statement.execute(sql);
-            System.out.println("SQL command executed successfully.");
+//            System.out.println("SQL command executed successfully.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -67,6 +67,7 @@ public class SqlCommands {
                 + " world_name text NOT NULL,\n"
                 + " x_position integer NOT NULL,\n"
                 + " y_position integer NOT NULL,\n"
+                + " size integer NOT NULL,\n"
                 + " type integer NOT NULL,\n"
                 + " FOREIGN KEY (type) REFERENCES " + typesTableName + "(_id)\n" // Foreign key reference
                 + ");";
@@ -93,24 +94,27 @@ public class SqlCommands {
             statement.setInt(2, width);
             statement.setInt(3, height);
             statement.executeUpdate();
-            System.out.println("Record inserted into table '" + tableName + "'.");
+
+//            System.out.println("Record inserted into table '" + tableName + "'.");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
+            throw new IllegalArgumentException();
         }
     }
 
     // Insert a new obstacle record
-    public void insertObstacle(String tableName, int xPosition, int yPosition, int type) {
-        String sql = "INSERT INTO " + tableName + " (world_name, x_position, y_position, type) VALUES(?, ?, ?, ?)";
+    public void insertObstacle(String tableName, int xPosition, int yPosition, int size, int type) {
+        String sql = "INSERT INTO " + tableName + " (world_name, x_position, y_position, size, type) VALUES(?, ?, ?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, this.worldName);
             statement.setInt(2, xPosition);
             statement.setInt(3, yPosition);
-            statement.setInt(4, type);
+            statement.setInt(4, size);
+            statement.setInt(5, type);
             statement.executeUpdate();
-            System.out.println("Record inserted into table '" + tableName + "'.");
+//            System.out.println("Record inserted into table '" + tableName + "'.");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
         }
     }
 
@@ -120,9 +124,9 @@ public class SqlCommands {
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, type);
             statement.executeUpdate();
-            System.out.println("Record inserted into table '" + tableName + "'.");
+//            System.out.println("Record inserted into table '" + tableName + "'.");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
         }
     }
 
