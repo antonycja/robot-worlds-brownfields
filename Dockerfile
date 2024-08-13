@@ -28,11 +28,16 @@ LABEL maintainer="Tech Team <tech-team@wethinkcode.co.za>"
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the built jar file from the build stage
-COPY --from=build /app/target/robot_worlds_13-1.0.jar /app/robot_worlds_13-1.0.jar
+# Assuming /app is the working directory in Docker
+COPY src/main/java/robot_worlds_13/server/configuration/file.txt /app/configuration/file.txt
+
+# Copy the JAR with dependencies from the libs directory to the runtime environment
+COPY libs/robot-worlds-server-jar-with-dependencies.jar /app/robot_worlds_13.jar
 
 # Set the entry point to run the JAR file
-ENTRYPOINT ["java", "-jar", "robot_worlds_13-1.0.jar"]
+
+ENTRYPOINT ["java", "-jar", "robot_worlds_13.jar"]
+
 
 # Expose the port the application runs on
 EXPOSE 5001
