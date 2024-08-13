@@ -36,7 +36,7 @@
                 <configuration>
                     <excludes>
                         <!-- Uncomment the following line to exclude acceptance tests -->
-                        <!-- <exclude>**/AcceptanceTests/**/*.java</exclude> -->
+                         <exclude>**/AcceptanceTests/**/*.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
