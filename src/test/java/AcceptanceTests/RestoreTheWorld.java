@@ -187,6 +187,10 @@ public class RestoreTheWorld {
             assertEquals(expectedHeight, worldSize.get("height").asInt());
         }
 
+        @Test
+        public void  testRestoreTheCommandWithOnlyPositionAndSizesOfObstacles(){
+
+        }
     }
 
 
