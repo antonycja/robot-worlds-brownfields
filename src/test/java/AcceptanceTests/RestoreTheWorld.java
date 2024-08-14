@@ -155,5 +155,10 @@ public class RestoreTheWorld {
         assertEquals("World 'world1' restored successfully.", response.get("data").get("message").asText());
     }
 
+    @Test
+    public void testRestoreTheWorldSize(){
+
+    }
+
 }
 
