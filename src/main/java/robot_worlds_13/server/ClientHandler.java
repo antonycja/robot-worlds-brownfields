@@ -22,7 +22,7 @@ import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.IWorld;
 import robot_worlds_13.server.robot.world.Obstacle;
 import robot_worlds_13.server.robot.world.TextWorld;
-
+ // TODO: check this out for request building
 /**
  * Responsible for handling communication with a client connected to the server.
  */
