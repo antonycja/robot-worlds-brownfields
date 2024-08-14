@@ -5,8 +5,18 @@ import robot_worlds_13.server.robot.world.Obstacle;
 import robot_worlds_13.server.robot.world.SquareObstacle;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ServerConfiguration {
+
+    // ANSI escape codes for colors
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BOLD = "\u001B[1m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
 
     private int portNum;
     private int size;
@@ -17,7 +27,7 @@ public class ServerConfiguration {
     // Default constructor with default values
     public ServerConfiguration() {
         this.portNum = 5050;
-        this.size = 1000; // Default size
+        this.size = 1; // Default size
         this.pit = 0;     // Default pit (0 means no pit, 1 means pit)
         this.obstacle = "0,0"; // Default obstacle coordinates
         this.lake = "0,0"; // Default lake coordinates
@@ -76,5 +86,24 @@ public class ServerConfiguration {
 
     public String getLake() {
         return lake;
+    }
+
+    public static int getIntInput(Scanner scanner, String prompt, int min, int max) {
+        int value;
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                value = Integer.parseInt(input);
+                if (value >= min && value <= max) {
+                    break;
+                } else {
+                    System.out.println(ANSI_RED + "Input must be between " + min + " and " + max + "." + ANSI_RESET);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(ANSI_RED + "Invalid input, enter a numeric value." + ANSI_RESET);
+            }
+        }
+        return value;
     }
 }

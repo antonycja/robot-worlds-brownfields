@@ -37,12 +37,60 @@ public class Server {
      * @throws Exception Throws an exception if an error occurs.
      */
     public static void main(String[] args) throws Exception {
-        port = 5050;
+        ServerConfiguration config = new ServerConfiguration();
 
+        // Parse command-line arguments
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "--size":
+                case "-s":
+                    if (i + 1 < args.length) {
+                        config = new ServerConfiguration(config.getPortNum(), Integer.parseInt(args[++i]), config.getPit(), config.getObstacle(), config.getLake());
+                    } else {
+                        System.err.println("Missing value for --size or -s");
+                        System.exit(1);
+                    }
+                    break;
+                case "--pit":
+                case "-p":
+                    if (i + 1 < args.length) {
+                        config = new ServerConfiguration(config.getPortNum(), config.getSize(), Integer.parseInt(args[++i]), config.getObstacle(), config.getLake());
+                    } else {
+                        System.err.println("Missing value for --pit or -p");
+                        System.exit(1);
+                    }
+                    break;
+                case "--obstacle":
+                case "-o":
+                    if (i + 1 < args.length) {
+                        config = new ServerConfiguration(config.getPortNum(), config.getSize(), config.getPit(), args[++i], config.getLake());
+                    } else {
+                        System.err.println("Missing value for --obstacle or -o");
+                        System.exit(1);
+                    }
+                    break;
+                case "--lake":
+                case "-l":
+                    if (i + 1 < args.length) {
+                        config = new ServerConfiguration(config.getPortNum(), config.getSize(), config.getPit(), config.getObstacle(), args[++i]);
+                    } else {
+                        System.err.println("Missing value for --lake or -l");
+                        System.exit(1);
+                    }
+                    break;
+                default:
+                    System.err.println("Unknown argument: " + args[i]);
+                    System.exit(1);
+            }
+        }
+
+        port = config.getPortNum();
         System.out.println("Starting server...\n");
-
         System.out.println("Server address: " + NetworkInfo.main(args));
         System.out.println("Port number: " + port + "\n");
+        System.out.println("Size: " + config.getSize() + " kliks");
+        System.out.println("Pit: " + (config.getPit() == 1 ? "Enabled" : "Disabled") + "\n");
+
 
         // Path to configuration file
         Path jarPath = Paths.get(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -75,7 +123,7 @@ public class Server {
         mazeGenerated.generateRandomObstacles();
 
         AbstractWorld world = new TextWorld(mazeGenerated, serverObject, dataMap);
-
+        config.configureWorld(world);
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started. Listening for incoming connections...");
 
