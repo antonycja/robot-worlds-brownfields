@@ -156,9 +156,38 @@ public class RestoreTheWorld {
     }
 
     @Test
-    public void testRestoreTheWorldSize(){
+    public void testRestoreCommandWithTheWorldSize(){
+
+            // Given that you're connected to a robot world server
+            assertTrue(serverClient.isConnected());
+
+            // And I have launched a robot into the world
+            serverClient.sendRequest(launchRequest);
+
+            // When I send a valid restore request to the server
+            String request = "{" +
+                    "  \"robot\": \"HAL\"," +
+                    "  \"command\": \"restore\"," +
+                    "  \"arguments\": [\"world1\"]" +
+                    "}";
+            JsonNode response = serverClient.sendRequest(request);
+
+            // Then I should get a valid response from the server
+            assertNotNull(response.get("result"));
+            assertEquals("OK", response.get("result").asText());
+
+            // And the world size should be restored successfully
+            assertNotNull(response.get("data"));
+            assertNotNull(response.get("data").get("worldSize"));
+            assertEquals("World size restored successfully.", response.get("data").get("message").asText());
+
+            // And verify that the restored world size matches the expected size
+            JsonNode worldSize = response.get("data").get("worldSize");
+            assertEquals(expectedWidth, worldSize.get("width").asInt());
+            assertEquals(expectedHeight, worldSize.get("height").asInt());
+        }
 
     }
 
-}
+
 
