@@ -191,6 +191,34 @@ public class SaveTheWorldTest {
         // And I have launched a robot into the world
         serverClient.sendRequest(launchRequest);
 
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"save\"," +
+                "  \"arguments\": [\"world1\"]" +
+                "  \"obstacles\": [" +
+                "    {" +
+                "      \"type\": \"bottomless pits\"," +
+                "      \"position\": {\"x\": 5, \"y\": 10}" +
+                "    }," +
+                "    {" +
+                "      \"type\": \"mines\"," +
+                "      \"position\": {\"x\": 15, \"y\": 20}" +
+                "    }" +
+                "  ]" +
+                "}";
+        // Send the request to the server
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Check if the result is OK
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+
+        // And the world should be saved successfully
+        assertNotNull(response.get("data"));
+        assertEquals("World 'world1' saved successfully.", response.get("data").get("message").asText());
+
+
+
 
     }
 
