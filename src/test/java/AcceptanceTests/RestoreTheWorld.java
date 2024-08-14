@@ -225,8 +225,48 @@ public class RestoreTheWorld {
                     assertEquals(expectedY, position.get("y").asInt());
                 }
             }
+            @Test
 
-        }
+            public void testRestoreTheWorldWithSizesOfAllObstacles() {
+
+                // Given that you're connected to a robot world server
+                assertTrue(serverClient.isConnected());
+
+                // And I have launched a robot into the world
+                serverClient.sendRequest(launchRequest);
+
+                // When I send a valid restore request to the server
+                String request = "{" +
+                        "  \"robot\": \"HAL\"," +
+                        "  \"command\": \"restore\"," +
+                        "  \"arguments\": [\"world1\"]" +
+                        "}";
+                JsonNode response = serverClient.sendRequest(request);
+
+                // Then I should get a valid response from the server
+                assertNotNull(response.get("result"));
+                assertEquals("OK", response.get("result").asText());
+
+                // And the world should be restored successfully
+                assertNotNull(response.get("data"));
+                assertEquals("World 'world1' restored successfully.", response.get("data").get("message").asText());
+
+                // And verify that the sizes of all obstacles match the expected values
+                JsonNode obstacles = response.get("data").get("obstacles");
+                assertNotNull(obstacles);
+                assertTrue(obstacles.isArray());
+
+                for (JsonNode obstacle : obstacles) {
+                    int expectedWidth = getExpectedWidth(obstacle.get("id").asText());
+                    int expectedHeight = getExpectedHeight(obstacle.get("id").asText());
+
+                    assertEquals(expectedWidth, obstacle.get("width").asInt());
+                    assertEquals(expectedHeight, obstacle.get("height").asInt());
+                }
+            }
+
+
+}
 
 
 
