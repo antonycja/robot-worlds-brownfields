@@ -129,5 +129,31 @@ public class RestoreTheWorld {
         assertNotNull(response.get("data"));
         assertEquals("Robot does not exist", response.get("data").get("message").asText());
     }
+    @Test
+    public void testRestoreCommandWithSavedWorld(){
+
+        // Given that you're connected to a robot world server
+        assertTrue(serverClient.isConnected());
+
+        // And I have launched a robot into the world
+        serverClient.sendRequest(launchRequest);
+
+        // When I send a valid save request to the server
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"restore\"," +
+                "  \"arguments\": [\"world1\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get a valid response from the server
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+
+        // And the world should be saved successfully
+        assertNotNull(response.get("data"));
+        assertEquals("World 'world1' restored successfully.", response.get("data").get("message").asText());
+    }
+
 }
 

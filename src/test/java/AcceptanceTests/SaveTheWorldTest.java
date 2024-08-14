@@ -183,13 +183,14 @@ public class SaveTheWorldTest {
 
     }
     @Test
-    public void testSaveTheWorldWithOnlyTheSizePositionAndObstacles(){
+    public void testSaveTheWorldWithOnlyTheSizePositionAndObstacleTypes(){
 
         // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
 
         // And I have launched a robot into the world
         serverClient.sendRequest(launchRequest);
+
 
     }
 
