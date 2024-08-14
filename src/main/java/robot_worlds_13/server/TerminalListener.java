@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import robot_worlds_13.server.robot.RestoreCommand;
 import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.robot.SaveCommand;
+import robot_worlds_13.server.robot.WorldsCommand;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import java.net.ServerSocket;
 import java.util.List;
@@ -80,13 +81,13 @@ public class TerminalListener implements Runnable {
                     restore.restoreWorld(world);
 
                 }
-//                else if (input.toLowerCase().contains("worlds")) {
-//                    System.out.println("Here is the list of your saved worlds:");
-//                    for (String worldName:)
-//                }
+                else if (input.toLowerCase().contains("worlds")) {
+                    WorldsCommand worldsCommand = new WorldsCommand();
+                    worldsCommand.showWorlds();
+                }
              else {
                     System.out.println("\nInvalid terminal command received: " +"'" + input + "'");
-                    System.out.println("Hint use: 'robots', 'quit', 'dump', 'save <world name>'or 'restore <world name>'");
+                    System.out.println("Hint use: 'robots', 'worlds', 'quit', 'dump', 'save <world name>'or 'restore <world name>'");
                 }
             }
         } catch (IOException e) {
