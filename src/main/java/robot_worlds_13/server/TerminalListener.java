@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import robot_worlds_13.server.robot.RestoreCommand;
 import robot_worlds_13.server.robot.Robot;
 import robot_worlds_13.server.robot.SaveCommand;
 import robot_worlds_13.server.robot.world.AbstractWorld;
@@ -68,10 +69,22 @@ public class TerminalListener implements Runnable {
                     save.saveWorld(world);
                 }
                 else if (input.toLowerCase().contains("restore")) {
+                    RestoreCommand restore;
                     System.out.println("\nRestoring world...");
-                }
+                    String[] newInput = input.split(" ");
+                    if (newInput.length == 2){
+                        restore = new RestoreCommand(newInput[1]);
+                    } else {
+                        restore = new RestoreCommand();
+                    }
+                    restore.restoreWorld(world);
 
-                else {
+                }
+//                else if (input.toLowerCase().contains("worlds")) {
+//                    System.out.println("Here is the list of your saved worlds:");
+//                    for (String worldName:)
+//                }
+             else {
                     System.out.println("\nInvalid terminal command received: " +"'" + input + "'");
                     System.out.println("Hint use: 'robots', 'quit', 'dump', 'save <world name>'or 'restore <world name>'");
                 }

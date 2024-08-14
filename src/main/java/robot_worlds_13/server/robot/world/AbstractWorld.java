@@ -96,6 +96,18 @@ public class AbstractWorld implements IWorld {
         return this.maze;
     }
 
+    public void setObstacles(List<Obstacle> obstacles) {
+        this.obstacles = obstacles;
+    }
+
+    public void setLakes(List<Obstacle> lakes) {
+        this.lakes = lakes;
+    }
+
+    public void setBottomLessPits(List<Obstacle> bottomLessPits) {
+        this.bottomLessPits = bottomLessPits;
+    }
+
     @Override
     public UpdateResponse updatePosition(int nrSteps) {
         int newX = this.position.getX();

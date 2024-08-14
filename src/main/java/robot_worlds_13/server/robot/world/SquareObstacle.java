@@ -21,7 +21,13 @@ public class SquareObstacle implements Obstacle {
     public int getBottomLeftX() {
         return this.x;
     }
-
+    @Override
+    public String toString() {
+        return "SquareObstacle{" +
+                "x_position=" + this.x +
+                ", y_position=" + this.y +
+                '}';
+    }
     @Override
     public int getBottomLeftY() {
         return this.y;
@@ -98,6 +104,7 @@ public class SquareObstacle implements Obstacle {
 
         return coordinates;
     }
+
 
     public Position getPosition() {
         return new Position(x, y);

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SaveCommand {
-    private final String worldName;
+    private String worldName;
     private final List<String> obstacleTypes = List.of("obstacle", "lake", "pit");
 
     public SaveCommand(String worldName) {
@@ -36,13 +36,13 @@ public class SaveCommand {
             sqlCommands.createTypesTable("types");
             // Insert data into types table
             for(String type: obstacleTypes ) {
-                sqlCommands.insertType("types", type);
+                sqlCommands.insertType(type);
             }
 
             // Create worlds table
             sqlCommands.createWorldTable("world");
             // Insert data into worlds
-            sqlCommands.insertWorld("world", this.worldName, width, height);
+            sqlCommands.insertWorld(worldName, width, height);
 
             // Create obstacles table
             sqlCommands.createObstacleTable("objects");
@@ -53,7 +53,7 @@ public class SaveCommand {
                 int x = obs.getBottomLeftX();
                 int y = obs.getBottomLeftY();
                 int id = obstacleTypes.indexOf("obstacle")+1;
-                sqlCommands.insertObstacle("objects", x, y, size, id);
+                sqlCommands.insertObstacle( x, y, size, id);
             }
             // Get lake type
             for (Obstacle obs: world.getLakes()) {
@@ -61,7 +61,7 @@ public class SaveCommand {
                 int x = obs.getBottomLeftX();
                 int y = obs.getBottomLeftY();
                 int id = obstacleTypes.indexOf("lake")+1;
-                sqlCommands.insertObstacle("objects", x, y, size, id);
+                sqlCommands.insertObstacle( x, y, size, id);
             }
             // Get pit type
             for (Obstacle obs: world.getBottomLessPits()) {
@@ -69,7 +69,7 @@ public class SaveCommand {
                 int x = obs.getBottomLeftX();
                 int y = obs.getBottomLeftY();
                 int id = obstacleTypes.indexOf("pit")+1;
-                sqlCommands.insertObstacle("objects", x, y, size, id);
+                sqlCommands.insertObstacle( x, y, size, id);
             }
             System.out.println("World saved successfully with the name: " + this.worldName);
             sqlCommands.closeConnection();
