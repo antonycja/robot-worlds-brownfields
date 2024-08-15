@@ -107,9 +107,7 @@ public class SqlCommands {
         } catch (SQLException e) {
 //            System.out.println(e.getMessage());
 //            System.out.println(e.getErrorCode());
-            if (e.getErrorCode() != 19) {
-                throw new IllegalArgumentException();
-            }
+            throw new IllegalArgumentException();
         }
     }
 
