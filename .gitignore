@@ -5,3 +5,4 @@ classes
 robot_worlds_dbn_13/target
 target
 robot_worlds_dbn_13/target/
+database/robot_worlds.db
