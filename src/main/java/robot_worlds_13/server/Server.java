@@ -93,42 +93,47 @@ public class Server {
         System.out.println("Obstacle: (" + (Objects.equals(config.getObstacle(), "(0,0)") ?"Unknown Position": config.getObstacle() + ")"));
         System.out.println("Lake: (" + (Objects.equals(config.getLake(), "(0,0)") ?"Unknown Position": config.getLake() + ")\n"));
 
+        // Initialize the server object
+        Server serverObject = new Server();
+
         // Path to configuration file
         Path jarPath = Paths.get(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         Path parentPath = jarPath.getParent();
         Path filePath = Paths.get("src/main/java/robot_worlds_13/server/configuration/file.txt").toAbsolutePath().normalize();
 
-        // Load server configuration data from file
-        Map<String, Integer> dataMap = new HashMap<>();
-        if (Files.notExists(filePath)) {
-            System.err.println("Configuration file not found: " + filePath);
-            System.exit(1);
-        }
-        try {
 
-            // TODO: SORT THIS OUT NEXT
+        // Load the configuration data from the file
+        Map<String, Integer> dataMap;
+        AbstractWorld world;
+        try {
+            // Always save the configuration to the file
+            saveConfigurationToFile(filePath.toString(), config);
+
             dataMap = parseFileToMap(filePath.toString());
             System.out.println("Loading server data...");
-            displayServerConfiguration(dataMap);
-            System.out.println();
+
+            // Maze loaded
+            SimpleMaze mazeGenerated = new SimpleMaze();
+            mazeGenerated.setMinCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
+            mazeGenerated.setMaxCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
+            mazeGenerated.generateRandomObstacles();
+
+            world = new TextWorld(mazeGenerated, serverObject, dataMap);
+
+            config.configureWorld(world);
+
+
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
             System.exit(1);
+            return;
         }
 
-        // Initialize the server object
-        Server serverObject = new Server();
+        // Always save the configuration to the file
+        saveConfigurationToFile(filePath.toString(), config);
 
-        // Maze loaded
-        SimpleMaze mazeGenerated = new SimpleMaze();
-        mazeGenerated.setMinCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
-        mazeGenerated.setMaxCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
-        mazeGenerated.generateRandomObstacles();
-
-        AbstractWorld world = new TextWorld(mazeGenerated, serverObject, dataMap);
-
-        config.configureWorld(world);
-
+        displayServerConfiguration(dataMap);
+        System.out.println("...\t\t...\t\t...\t\t...\t\t...\t\t...");
 //        System.out.println("All Obstacles:\n\t" + ServerConfiguration.showAllObstacles(world) + "\n");
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
@@ -158,6 +163,8 @@ public class Server {
         }
     }
 
+
+
     /**
      * Parses a configuration file into a map.
      * @param filePath The path to the configuration file.
@@ -186,6 +193,22 @@ public class Server {
             throw e;
         }
         return result;
+    }
+
+    public static void saveConfigurationToFile(String filePath, ServerConfiguration config) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write("visibility " + config.getVisibility() + System.lineSeparator());
+            writer.write("reload " + config.getReload() + System.lineSeparator());
+            writer.write("repair " + config.getRepair() + System.lineSeparator());
+            writer.write("shields " + config.getShields() + System.lineSeparator());
+            writer.write("shots " + config.getShots() + System.lineSeparator());
+            writer.write("width " + config.getSize() + System.lineSeparator());
+            writer.write("height " + config.getSize() + System.lineSeparator());
+            writer.write("visibility " + config.getVisibility() + System.lineSeparator());
+
+        } catch (IOException e) {
+            System.err.println("Error writing to configuration file: " + e.getMessage());
+        }
     }
 
     /**
@@ -223,6 +246,8 @@ public class Server {
         nameAndPositionMap.entrySet().removeIf(entry -> entry.getKey().equals(name));
     }
 
+
+
     /**
      * Displays the server configuration.
      * @param dataMap The map containing the server configuration data.
@@ -231,38 +256,39 @@ public class Server {
         for (String attribute : dataMap.keySet()) {
             switch (attribute) {
                 case "repair":
-                    System.out.println("    Repair: " + dataMap.get(attribute) + " seconds per robot");
+                    System.out.println("\t-Repair: " + dataMap.get(attribute) + " seconds per robot");
                     break;
                 case "shields":
-                    System.out.println("    Shield: " + dataMap.get(attribute) + " shields maximum");
+                    System.out.println("\t-Shield: " + dataMap.get(attribute) + " shields maximum");
                     break;
                 case "reload":
-                    System.out.println("    Reload: " + dataMap.get(attribute) + " seconds per robot");
+                    System.out.println("\t-Reload: " + dataMap.get(attribute) + " seconds for 1 rocket");
+                    break;
+                case "distance":
+                    System.out.println("\t-Distance: " + dataMap.get(attribute) + " kliks");
                     break;
                 case "visibility":
-                    System.out.println("    Visibility: " + dataMap.get(attribute) + " steps forward");
+                    System.out.println("\t-Visibility: " + dataMap.get(attribute) + " kliks");
                     break;
-                case "bulletDistance":
-                    System.out.println("    Bullet Distance: " + dataMap.get(attribute) + " steps forward");
+                case "round":
+                    System.out.println("\t-Round time: " + dataMap.get(attribute) + " seconds");
                     break;
-                case "shots":
-                    System.out.println("    Shots: " + dataMap.get(attribute) + " shots maximum");
+                case "size":
+                    System.out.println("    Size: " + dataMap.get(attribute) + " kliks");
                     break;
-                case "width":
-                    System.out.println("    Width: " + dataMap.get(attribute) + " kliks");
-                    if (dataMap.get(attribute) < 500) {
-                        System.err.println("Too small of a world size");
-                        System.exit(0);
-                    }
+                case "pit":
+                    System.out.println("    Pit: " + (dataMap.get(attribute) == 1 ? "Enabled" : "Disabled"));
                     break;
-                case "height":
-                    System.out.println("    Height: " + dataMap.get(attribute) + " kliks");
-                    if (dataMap.get(attribute) < 500) {
-                        System.err.println("Too small of a world size");
-                        System.exit(0);
-                    }
+                case "obstacle_x":
+                case "obstacle_y":
+                    System.out.println("    Obstacle: (" + dataMap.get("obstacle_x") + "," + dataMap.get("obstacle_y") + ")");
+                    break;
+                case "lake_x":
+                case "lake_y":
+                    System.out.println("    Lake: (" + dataMap.get("lake_x") + "," + dataMap.get("lake_y") + ")");
                     break;
                 default:
+                    System.out.println("\t-" + attribute + ": " + dataMap.get(attribute));
                     break;
             }
         }

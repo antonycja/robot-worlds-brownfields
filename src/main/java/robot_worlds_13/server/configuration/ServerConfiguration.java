@@ -18,6 +18,12 @@ public class ServerConfiguration {
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
 
+    private int visibility;
+    private int reload;
+    private int repair;
+    private int shields;
+    private int shots;
+    private int bulletDistance;
     private int portNum;
     private int size;
     private int pit;
@@ -30,6 +36,12 @@ public class ServerConfiguration {
         this.pit = 0;     // Default pit (0 means no pit, 1 means pit)
         this.obstacle = "0,0"; // Default obstacle coordinates
         this.lake = "0,0"; // Default lake coordinates
+        this.visibility = 10;
+        this.reload = 5;
+        this.repair = 5;
+        this.shields =10;
+        this.shots = 10;
+        this.bulletDistance = 20;
     }
 
     // Constructor with parsed arguments
@@ -39,6 +51,12 @@ public class ServerConfiguration {
         this.pit = pit;
         this.obstacle = obstacle;
         this.lake = lake;
+        this.visibility = 10;
+        this.reload = 5;
+        this.repair = 5;
+        this.shields =10;
+        this.shots = 10;
+        this.bulletDistance = 20;
     }
 
     // Method to configure the world with obstacles
@@ -83,6 +101,9 @@ public class ServerConfiguration {
 
     public int getPit() {
         return pit;
+    }
+    public int getVisibility() {
+        return visibility;
     }
 
     public String getObstacle() {
