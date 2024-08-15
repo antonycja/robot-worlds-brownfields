@@ -29,17 +29,18 @@ public class ServerConfiguration {
     private int pit;
     private String obstacle;
     private String lake;
+
     // Default constructor with default values
     public ServerConfiguration() {
         this.portNum = 5050;
-        this.size = 1; // Default size
+        this.size = 40; // Default size
         this.pit = 0;     // Default pit (0 means no pit, 1 means pit)
         this.obstacle = "0,0"; // Default obstacle coordinates
         this.lake = "0,0"; // Default lake coordinates
         this.visibility = 10;
         this.reload = 5;
         this.repair = 5;
-        this.shields =10;
+        this.shields = 10;
         this.shots = 10;
         this.bulletDistance = 20;
     }
@@ -54,38 +55,41 @@ public class ServerConfiguration {
         this.visibility = 10;
         this.reload = 5;
         this.repair = 5;
-        this.shields =10;
+        this.shields = 10;
         this.shots = 10;
         this.bulletDistance = 20;
     }
 
     // Method to configure the world with obstacles
     public void configureWorld(AbstractWorld world) {
+        // Use the dynamic size for obstacles
         Obstacle obstacleObj = new SquareObstacle(
                 Integer.parseInt(obstacle.split(",")[0]),
-                Integer.parseInt(obstacle.split(",")[1])
+                Integer.parseInt(obstacle.split(",")[1]),
+                this.size // Pass the dynamic size here
         );
         ArrayList<Obstacle> obstacles = (ArrayList<Obstacle>) world.getObstacles();
         obstacles.add(obstacleObj);
         world.setObstacles(obstacles);
 
         if (pit == 1) {
-            Obstacle pitObj = new SquareObstacle(1, 1); // Example pit coordinates
+            Obstacle pitObj = new SquareObstacle(1, 1, this.size); // Example pit coordinates
             ArrayList<Obstacle> pits = (ArrayList<Obstacle>) world.getBottomLessPits();
             pits.add(pitObj);
-            world.setObstacles(pits);
+            world.setBottomLessPits(pits); // Update pits in the world
         }
 
         Obstacle lakeObj = new SquareObstacle(
                 Integer.parseInt(lake.split(",")[0]),
-                Integer.parseInt(lake.split(",")[1])
+                Integer.parseInt(lake.split(",")[1]),
+                this.size // Pass the dynamic size here
         );
         ArrayList<Obstacle> lakes = (ArrayList<Obstacle>) world.getLakes();
         lakes.add(lakeObj);
-        world.setObstacles(lakes);
+        world.setLakes(lakes); // Update lakes in the world
     }
 
-    public static String showAllObstacles(AbstractWorld world){
+    public static String showAllObstacles(AbstractWorld world) {
         ArrayList<String> obstacles = (ArrayList<String>) world.getObstaclesAsString();
         String n = String.join("\t", obstacles);
         return n;
@@ -102,8 +106,29 @@ public class ServerConfiguration {
     public int getPit() {
         return pit;
     }
+
     public int getVisibility() {
         return visibility;
+    }
+
+    public int getReload() {
+        return reload;
+    }
+
+    public int getRepair() {
+        return repair;
+    }
+
+    public int getShields() {
+        return shields;
+    }
+
+    public int getShots() {
+        return shots;
+    }
+
+    public int getBulletDistance() {
+        return bulletDistance;
     }
 
     public String getObstacle() {

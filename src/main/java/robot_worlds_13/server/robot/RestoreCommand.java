@@ -20,6 +20,7 @@ public class RestoreCommand {
     public RestoreCommand(String worldName) {
         this.worldName = worldName;
     }
+
     public RestoreCommand() {
         this.worldName = promptForWorldName();
     }
@@ -31,10 +32,7 @@ public class RestoreCommand {
     }
 
     public void restoreWorld(AbstractWorld world) {
-
         try {
-            // Instantiate SQL
-//            sqlCommands = new SqlCommands();
             String worldTableName = "world";
             String obstacleTableName = "objects";
             String typeTableName = "types";
@@ -45,16 +43,23 @@ public class RestoreCommand {
             Integer worldWidth = (Integer) worldData.get("width");
             Integer worldHeight = (Integer) worldData.get("height");
 
-            ArrayList objects = (ArrayList) worldData.get("obstacles");
+            ArrayList<Object> objects = (ArrayList<Object>) worldData.get("obstacles");
             if (!this.worldName.equals(worldName)) {
                 System.out.println("The world '" + this.worldName + "' does not exist!!");
                 System.out.println("Aborting Restore...");
                 System.out.println("Successfully Reverted back.");
             } else {
                 for (Object object : objects) {
-                    Map obs = (Map) object;
-                    Obstacle obstacle = new SquareObstacle((Integer) obs.get("x_position"), (Integer) obs.get("y_position"));
-                    switch ((String) obs.get("type")) {
+                    Map<String, Object> obs = (Map<String, Object>) object;
+                    int obstacleSize = (Integer) obs.get("size");
+                    int xPosition = (Integer) obs.get("x_position");
+                    int yPosition = (Integer) obs.get("y_position");
+                    String type = (String) obs.get("type");
+
+                    // Create obstacles with dynamic size
+                    Obstacle obstacle = new SquareObstacle(xPosition, yPosition, obstacleSize);
+
+                    switch (type) {
                         case "obstacle":
                             obstacles.add(obstacle);
                             break;
@@ -65,7 +70,7 @@ public class RestoreCommand {
                             pits.add(obstacle);
                             break;
                         default:
-                            System.out.println("Something went wrong with finding your obstacle.");
+                            System.out.println("Unknown obstacle type: " + type);
                             break;
                     }
                 }
@@ -73,10 +78,6 @@ public class RestoreCommand {
                 world.setObstacles(obstacles);
                 world.setBottomLessPits(pits);
                 world.setLakes(lakes);
-
-//                System.out.println(obstacles);
-//                System.out.println(pits);
-//                System.out.println(lakes);
 
                 System.out.println("World restored successfully with the name: " + worldName);
             }

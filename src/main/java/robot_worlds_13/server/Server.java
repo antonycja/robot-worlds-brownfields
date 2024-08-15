@@ -113,7 +113,7 @@ public class Server {
             System.out.println("Loading server data...");
 
             // Maze loaded
-            SimpleMaze mazeGenerated = new SimpleMaze();
+            SimpleMaze mazeGenerated = new SimpleMaze(config.getSize());
             mazeGenerated.setMinCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
             mazeGenerated.setMaxCoordinate(Math.min(dataMap.get("width"), dataMap.get("height")) / 3);
             mazeGenerated.generateRandomObstacles();

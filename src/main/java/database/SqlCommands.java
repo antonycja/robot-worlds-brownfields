@@ -154,7 +154,7 @@ public class SqlCommands {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException();
         }
 
         return worlds;

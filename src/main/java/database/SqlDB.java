@@ -52,7 +52,7 @@ public class SqlDB {
         ArrayList objects = (ArrayList) worldData.get("obstacles");
         for(Object object: objects){
             Map obs = (Map) object;
-            Obstacle obstacle = new SquareObstacle((Integer) obs.get("x_position"), (Integer) obs.get("y_position"));
+            Obstacle obstacle = new SquareObstacle((Integer) obs.get("x_position"), (Integer) obs.get("y_position"), 5);
             switch ((String) obs.get("type")) {
                 case "mountain":
                     obstacles.add(obstacle);

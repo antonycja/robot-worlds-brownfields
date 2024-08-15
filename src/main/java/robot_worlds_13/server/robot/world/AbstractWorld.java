@@ -414,7 +414,7 @@ public class AbstractWorld implements IWorld {
     public List<String> getObstaclesAsString() {
         List<String> message = new ArrayList<String>();
         
-        if(this.obstacles.size() > 0) {
+        if(!this.obstacles.isEmpty()) {
             for(Obstacle obstacle: obstacles ){
                 int xBottomLeft = obstacle.getBottomLeftX();
                 int yBottomLeft = obstacle.getBottomLeftY();
@@ -427,7 +427,7 @@ public class AbstractWorld implements IWorld {
             }
         }
 
-        if(this.bottomLessPits.size() > 0) {
+        if(!this.bottomLessPits.isEmpty()) {
             for(Obstacle obstacle: bottomLessPits ){
                 int xBottomLeft = obstacle.getBottomLeftX();
                 int yBottomLeft = obstacle.getBottomLeftY();

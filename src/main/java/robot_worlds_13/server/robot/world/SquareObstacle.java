@@ -2,18 +2,19 @@ package robot_worlds_13.server.robot.world;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import robot_worlds_13.server.robot.Position;
 
 public class SquareObstacle implements Obstacle {
     private int x;
     private int y;
+    private int size; // Dynamic size
     private List<Position> obstacles = new ArrayList<>();
     private Position bottomLeftCorner;
 
-    public SquareObstacle(int x, int y) {
+    public SquareObstacle(int x, int y, int size) {
         this.x = x;
         this.y = y;
+        this.size = size; // Set dynamic size
         this.generateObstacle();
     }
 
@@ -21,13 +22,7 @@ public class SquareObstacle implements Obstacle {
     public int getBottomLeftX() {
         return this.x;
     }
-    @Override
-    public String toString() {
-        return "SquareObstacle{" +
-                "x_position=" + this.x +
-                ", y_position=" + this.y +
-                '}';
-    }
+
     @Override
     public int getBottomLeftY() {
         return this.y;
@@ -35,7 +30,16 @@ public class SquareObstacle implements Obstacle {
 
     @Override
     public int getSize() {
-        return 40;
+        return this.size; // Return dynamic size
+    }
+
+    @Override
+    public String toString() {
+        return "SquareObstacle{" +
+                "x_position=" + this.x +
+                ", y_position=" + this.y +
+                ", size=" + this.size + // Include size in the string representation
+                '}';
     }
 
     private void generateObstacle() {
@@ -49,10 +53,9 @@ public class SquareObstacle implements Obstacle {
 
     @Override
     public boolean blocksPosition(Position position) {
-        
         List<Position> validObstacles = getObstacles();
 
-        if (validObstacles.isEmpty()){
+        if (validObstacles.isEmpty()) {
             return false;
         }
 
@@ -66,7 +69,6 @@ public class SquareObstacle implements Obstacle {
         return false;
     }
 
-    
     @Override
     public boolean blocksPath(Position firstPosition, Position secondPosition) {
         for (Position position : getRoutes(firstPosition, secondPosition)) {
@@ -105,9 +107,7 @@ public class SquareObstacle implements Obstacle {
         return coordinates;
     }
 
-
     public Position getPosition() {
         return new Position(x, y);
     }
-
 }
