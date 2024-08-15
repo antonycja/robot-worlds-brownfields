@@ -95,7 +95,7 @@ public class Server {
         // Path to configuration file
         Path jarPath = Paths.get(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         Path parentPath = jarPath.getParent();
-        Path filePath = parentPath.resolve("../src/main/java/robot_worlds_13/server/configuration/file.txt").normalize();
+        Path filePath = Paths.get("src/main/java/robot_worlds_13/server/configuration/file.txt").toAbsolutePath().normalize();
 
         // Load server configuration data from file
         Map<String, Integer> dataMap = new HashMap<>();

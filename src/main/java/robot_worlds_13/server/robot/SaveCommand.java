@@ -26,7 +26,7 @@ public class SaveCommand {
         return scanner.nextLine().trim();
     }
 
-    public void saveWorld(AbstractWorld world) {
+    public String saveWorld(AbstractWorld world) {
         int width= world.width;
         int height = world.height;
         try {
@@ -73,8 +73,11 @@ public class SaveCommand {
             }
             System.out.println("World saved successfully with the name: " + this.worldName);
             sqlCommands.closeConnection();
+            return "World saved successfully with the name: " + this.worldName;
+
         } catch (IllegalArgumentException e) {
             System.out.println("World with name '" + this.worldName + "' already exists, skipping this process.");
+            return "World with name '" + this.worldName + "' already exists, skipping this process.";
         }
     }
 }
