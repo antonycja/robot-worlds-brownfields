@@ -23,7 +23,6 @@ public class ServerConfiguration {
     private int pit;
     private String obstacle;
     private String lake;
-
     // Default constructor with default values
     public ServerConfiguration() {
         this.portNum = 5050;
@@ -66,6 +65,12 @@ public class ServerConfiguration {
         ArrayList<Obstacle> lakes = (ArrayList<Obstacle>) world.getLakes();
         lakes.add(lakeObj);
         world.setObstacles(lakes);
+    }
+
+    public static String showAllObstacles(AbstractWorld world){
+        ArrayList<String> obstacles = (ArrayList<String>) world.getObstaclesAsString();
+        String n = String.join("\t", obstacles);
+        return n;
     }
 
     public int getPortNum() {
