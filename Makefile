@@ -5,8 +5,11 @@ BUILD_TYPE := development # default build type
 POM_FILE := pom.xml
 REF_SERVER := $(shell pgrep -f runRefServer.sh)
 OWN_SERVER := $(shell pgrep -f runServer.sh)
+IMAGE_NAME := gitlab.wethinkco.de:5050/amaposa023/cpt13_brownfields_2024
+CONTAINER_NAME := robot_worlds_container
+PORT := 5050
 
-.PHONY: all compile test_ref test_own version release_version package tag clean run_ref_server stop_ref_server run_own_server stop_own_server stop_servers
+.PHONY: all compile test_ref test_own version release_version package tag clean run_ref_server stop_ref_server run_own_server stop_own_server stop_servers docker-build docker-run docker-stop docker-push
 
 # Default target
 all: compile test_ref stop_servers
@@ -36,12 +39,7 @@ test_ref: stop_ref_server run_ref_server
 	mvn test -Dserver=reference
 	make stop_ref_server
 
-run_own_server:
-	@if lsof -i :5000 > /dev/null; then \
-		echo "Port 5000 is already in use. Killing the process..."; \
-		kill $$(lsof -t -i:5000); \
-		sleep 2; \
-	fi
+run_own_server: stop_server
 	./runServer.sh > own_server.log 2>&1 &
 	sleep 5  # Give the server more time to start
 	@echo "Own server log:"
@@ -53,6 +51,15 @@ stop_own_server:
 		kill $(OWN_SERVER); \
 	else \
 		echo "No own server process found"; \
+	fi
+
+stop_server:
+	@if lsof -i :$(PORT) > /dev/null; then \
+		echo "Port $(PORT) is already in use. Killing the process..."; \
+		kill $$(lsof -t -i:$(PORT)); \
+		sleep 2; \
+	else \
+		echo "No process found on port $(PORT)"; \
 	fi
 
 test_own: stop_own_server run_own_server
@@ -74,12 +81,7 @@ release_version:
 	@echo "Version updated to $(RELEASE_VERSION) in $(POM_FILE)"
 
 package: test_ref test_own
-#ifeq ($(BUILD_TYPE),release)
-#	@echo "Packaging for release"
 	mvn package
-#else
-#	@echo "Skipping packaging for development build"
-#endif
 
 tag: package
 ifeq ($(BUILD_TYPE),release)
@@ -100,3 +102,25 @@ release: clean release_version compile package tag
 .PHONY: development
 development: BUILD_TYPE := development
 development: clean compile package
+
+# Docker targets
+docker-build:
+	docker build -t $(IMAGE_NAME) .
+
+docker-run: docker-stop docker-build
+	docker run -d --name $(CONTAINER_NAME) -p $(PORT):$(PORT) $(IMAGE_NAME)
+
+docker-stop:
+	@echo "Stopping Docker container if running"
+	@if docker ps -q -f name=$(CONTAINER_NAME); then \
+		docker stop $(CONTAINER_NAME); \
+		docker rm $(CONTAINER_NAME); \
+	else \
+		echo "No Docker container found"; \
+	fi
+
+docker-push: docker-build
+	@echo "Pushing Docker image to GitLab registry"
+	docker push $(IMAGE_NAME)
+
+docker-release: docker-stop docker-build docker-run docker-push
