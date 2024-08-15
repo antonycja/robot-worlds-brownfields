@@ -85,12 +85,13 @@ public class Server {
         }
 
         port = config.getPortNum();
-        System.out.println("Starting server...\n");
+        System.out.println("Starting server...");
         System.out.println("Server address: " + NetworkInfo.main(args));
         System.out.println("Port number: " + port + "\n");
         System.out.println("Size: " + config.getSize() + " kliks");
-        System.out.println("Pit: " + (config.getPit() == 1 ? "Enabled" : "Disabled") + "\n");
-
+        System.out.println("Pit: " + (config.getPit() == 1 ? "Enabled" : "Disabled"));
+        System.out.println("Obstacle: (" + (Objects.equals(config.getObstacle(), "(0,0)") ?"Unknown Position": config.getObstacle() + ")"));
+        System.out.println("Lake: (" + (Objects.equals(config.getLake(), "(0,0)") ?"Unknown Position": config.getLake() + ")\n"));
 
         // Path to configuration file
         Path jarPath = Paths.get(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -104,6 +105,8 @@ public class Server {
             System.exit(1);
         }
         try {
+
+            // TODO: SORT THIS OUT NEXT
             dataMap = parseFileToMap(filePath.toString());
             System.out.println("Loading server data...");
             displayServerConfiguration(dataMap);
@@ -123,7 +126,11 @@ public class Server {
         mazeGenerated.generateRandomObstacles();
 
         AbstractWorld world = new TextWorld(mazeGenerated, serverObject, dataMap);
+
         config.configureWorld(world);
+
+//        System.out.println("All Obstacles:\n\t" + ServerConfiguration.showAllObstacles(world) + "\n");
+
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started. Listening for incoming connections...");
 

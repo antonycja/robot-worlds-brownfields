@@ -13,6 +13,8 @@ import robot_worlds_13.server.robot.world.AbstractWorld;
 import java.net.ServerSocket;
 import java.util.List;
 
+import static robot_worlds_13.server.configuration.ServerConfiguration.showAllObstacles;
+
 /**
  * This class listens for terminal commands and executes them accordingly.
  */
@@ -151,14 +153,12 @@ public class TerminalListener implements Runnable {
     /**
      * Prints information about the obstacles in the world.
      */
+
     private void getObstaclesInWorld () {
         if (world.getObstaclesAsString().isEmpty()) {
             System.out.println("There are no obstacles in the world");
             return;
         }
-        System.out.println("Obstacles in world: ");
-        for (String obstacle: world.getObstaclesAsString()) {
-            System.out.println("    " + obstacle);
-        }
+        System.out.println("All Obstacles:\n\t" + showAllObstacles(world));
     }
 }
