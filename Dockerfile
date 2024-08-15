@@ -46,4 +46,4 @@ COPY --from=build /app/libs/robot-worlds-server-jar-with-dependencies.jar /app/r
 ENTRYPOINT ["java", "-jar", "robot_worlds_13.jar"]
 
 # Expose the port the application runs on
-EXPOSE 5001
+EXPOSE 5050
