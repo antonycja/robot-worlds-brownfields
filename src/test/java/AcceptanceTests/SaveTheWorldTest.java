@@ -201,10 +201,12 @@ public class SaveTheWorldTest {
                 "    {" +
                 "      \"type\": \"bottomless pits\"," +
                 "      \"position\": {\"x\": 5, \"y\": 10}" +
+                "       \"size\": {\"width\": 2, \"height\": 2}\" +"+
                 "    }," +
                 "    {" +
                 "      \"type\": \"mines\"," +
                 "      \"position\": {\"x\": 15, \"y\": 20}" +
+                "        \"size\": {\"width\": 2, \"height\": 2}\" +"+
                 "    }" +
                 "  ]" +
                 "}";
