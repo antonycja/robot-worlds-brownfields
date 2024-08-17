@@ -2,6 +2,8 @@ package ClientTests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -95,10 +97,10 @@ public class ClientTest {
     public void testSendJsonRequest() throws IOException {
         // Mocking Socket and DataOutputStream
         Socket mockSocket = Mockito.mock(Socket.class);
-        DataOutputStream mockDout = Mockito.mock(DataOutputStream.class);
+        PrintStream mockDout = Mockito.mock(PrintStream.class);
 
-        Client.sThisClient = mockSocket;
-        Client.dout = mockDout;
+        Client.socket = mockSocket;
+        Client.out = mockDout;
         Client.robotName = "robot1";
 
         Map<String, Object> commandDetails = new HashMap<>();
@@ -108,7 +110,7 @@ public class ClientTest {
 
         // Verify if the DataOutputStream writeUTF method was called with the correct JSON string
         String expectedJson = "{\"command\":\"testCommand\",\"robot\":\"robot1\"}";
-        Mockito.verify(mockDout).writeUTF(expectedJson);
+        Mockito.verify(mockDout).println(expectedJson);
         Mockito.verify(mockDout).flush();
     }
 }

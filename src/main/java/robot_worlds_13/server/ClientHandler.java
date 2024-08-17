@@ -1,8 +1,6 @@
 package robot_worlds_13.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +30,8 @@ public class ClientHandler implements Runnable {
 
     // socket variables
     final Socket clientSocket;
-    DataInputStream dis;
-    DataOutputStream dos;
+    BufferedReader in;
+    PrintStream out;
     String clientIdentifier;
     Scanner commandLine;
     ServerProtocol serverProtocol;
@@ -77,8 +75,8 @@ public class ClientHandler implements Runnable {
     public void run() {
         try {
             // Initialization
-            this.dis = new DataInputStream(clientSocket.getInputStream());
-            this.dos = new DataOutputStream(clientSocket.getOutputStream());
+            this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            this.out = new PrintStream(clientSocket.getOutputStream());
             this.clientIdentifier = getClientIdentifier(clientSocket);
             this.commandLine = new Scanner(System.in);
 
@@ -87,11 +85,11 @@ public class ClientHandler implements Runnable {
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> state = new HashMap<>();
             data.clear();
-            data.put("message", "\nConnected successfully to server you can launch a robot!\n");
+//            data.put("message", "\nConnected successfully to server you can launch a robot!\n");
             state.clear();
-            
-            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
-            
+//            sendMessage(ServerProtocol.buildResponse("OK",data));
+
+
             // luanch validation
             String potentialRobotName;
             int maximumShieldStrength = 0;
@@ -195,7 +193,9 @@ public class ClientHandler implements Runnable {
                     
                     data.clear();
                     data.put("message", "Successfully launched " + "width " + world.width + " height " + world.height);
-                    sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+//                    data.put("position", robot.position);
+
+                    sendMessage(ServerProtocol.buildResponse("OK", data));
                     try {
                         Thread.sleep(3000);
                     } catch (Exception e) {
@@ -205,6 +205,8 @@ public class ClientHandler implements Runnable {
                     break;
                 }
             }
+            data.put("position", robot.position);
+            sendMessage(ServerProtocol.buildResponse("OK",data));
 
 
 
@@ -477,7 +479,7 @@ public class ClientHandler implements Runnable {
     public String getCommand(){
         String message = "";
         try {
-            message = dis.readUTF();
+            message = in.readLine();
             if (!isValidJson(message)) {
                 System.out.println("Invalid JSON received: " + message);
                 return "{}"; // Return empty JSON or handle appropriately
@@ -504,12 +506,8 @@ public class ClientHandler implements Runnable {
      * @param question The message to be sent.
      */
     public void sendMessage(String question) {
-        try {
-            dos.writeUTF(question);
-            dos.flush();
-        } catch (IOException e) {
-            // e.printStackTrace();
-        }
+        out.println(question);
+        out.flush();
     }
 
     /**
@@ -518,12 +516,8 @@ public class ClientHandler implements Runnable {
      */
     public void sendMessage(Robot target) {
         String response = target.toString();
-        try {
-            dos.writeUTF(response);
-            dos.flush();
-        } catch (IOException e) {
-            // e.printStackTrace();
-        }
+        out.println(response);
+        out.flush();
     }
 }
 

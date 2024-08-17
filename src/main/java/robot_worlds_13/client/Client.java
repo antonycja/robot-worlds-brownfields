@@ -4,24 +4,13 @@
  * and user interaction.
  */
 package robot_worlds_13.client;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.Binding;
-import org.jline.reader.Reference;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
-import org.jline.keymap.KeyMap;
 
 import java.util.regex.Matcher;
 
@@ -47,9 +36,9 @@ public class Client {
     private static final String IP_REGEX = "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b";
     static String localAddress = "localhost";
     static String serverIpAddress = "20.20.15.94";
-    public static Socket sThisClient;
-    public static DataOutputStream dout;
-    public static DataInputStream din;
+    public static Socket socket;
+    public static PrintStream out;
+    public static BufferedReader in;
     static Scanner line = new Scanner(System.in);
     public static String robotName;
 
@@ -81,14 +70,13 @@ public class Client {
         String address = "";
         if (args.length == 0) {
             address = localAddress;
-//            port = portLocal;
             try {
-                sThisClient = new Socket(address, port);
+                socket = new Socket(address, port);
             } catch (Exception ex) {
                 System.out.println("Failed to connect to the server using the specified IP address.");
                 System.out.println("Resorting to localhost...\n");
                 try {
-                    sThisClient = new Socket(address, port);
+                    socket = new Socket(address, port);
                 } catch (Exception e) {
                     System.out.println("Failed to connect to localhost.");
                     System.out.println("None of the known servers are running");
@@ -117,7 +105,7 @@ public class Client {
             port = Integer.parseInt(args[1]);
             address =args[0].toLowerCase();
             try {
-                sThisClient = new Socket(address, port);
+                socket = new Socket(address, port);
 
             } catch (Exception ex) {
                 System.out.println(port);
@@ -128,8 +116,11 @@ public class Client {
         
 
         try {
-            dout = new DataOutputStream(sThisClient.getOutputStream());
-            din = new DataInputStream(sThisClient.getInputStream());
+            out = new PrintStream(socket.getOutputStream());
+            in = new BufferedReader( new InputStreamReader(socket.getInputStream()));
+
+//            out = new DataOutputStream(socket.getOutputStream());
+//            in = new DataInputStream(socket.getInputStream());
             
             String response;
             String potentialRobotName = "";
@@ -140,7 +131,7 @@ public class Client {
 
             while (true) {
                 // try to launch robot
-                response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
+                response = ClientProtocol.jsonResponseUnpacker(in.readLine());
 
                 if (response.contains("Successfully launched")) {
                     robotName = potentialRobotName;
@@ -203,7 +194,7 @@ public class Client {
             while (true) {
                 // get server messages
                 
-                response = ClientProtocol.jsonResponseUnpacker(din.readUTF());
+                response = ClientProtocol.jsonResponseUnpacker(in.readLine());
 
                 if (response.contains("GUI")) {
                     continue;
@@ -241,8 +232,8 @@ public class Client {
 
             // close this client
             System.out.println("Client closed connection");
-            dout.flush();
-            dout.close();
+            out.flush();
+            out.close();
             System.exit(0);
         }
         catch (EOFException e) {
@@ -254,9 +245,9 @@ public class Client {
             e.printStackTrace();
             try {
                 e.printStackTrace();
-                dout.writeUTF("off");
-                dout.flush();
-                dout.close();
+                out.println("off");
+                out.flush();
+                out.close();
                 
             } catch (Exception i) {
                 System.out.println("Connection problem encountered: Server is down or you do not an active internet connection");
@@ -278,8 +269,8 @@ public class Client {
         System.out.println("--------------------------------------------------------------");
         
         try {
-            dout.writeUTF(jsonRequest);
-            dout.flush();
+            out.println(jsonRequest);
+            out.flush();
         } catch (Exception i) {
             System.out.println("Could not send request");
         }

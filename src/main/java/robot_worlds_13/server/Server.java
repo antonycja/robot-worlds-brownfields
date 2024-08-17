@@ -19,7 +19,7 @@ public class Server {
     // clients
     List<ClientHandler> clients = new ArrayList<>();
     private static final List<Socket> clientConnections = new ArrayList<>();
-    private static DataOutputStream dos;
+    private static PrintStream out;
     public static int port;
 
     // random
@@ -218,9 +218,9 @@ public class Server {
     public static void broadcastMessage(String message) {
         for (Socket client : clientConnections) {
             try {
-                dos = new DataOutputStream(client.getOutputStream());
-                dos.writeUTF(message);
-                dos.flush();
+                out = new PrintStream(client.getOutputStream());
+                out.println(message);
+                out.flush();
             } catch (IOException e) {
                 System.err.println("Error broadcasting message to a client: " + e.getMessage());
             }
