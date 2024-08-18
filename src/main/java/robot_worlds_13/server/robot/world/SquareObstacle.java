@@ -14,7 +14,7 @@ public class SquareObstacle implements Obstacle {
     public SquareObstacle(int x, int y, int size) {
         this.x = x;
         this.y = y;
-        this.size = size; // Set dynamic size
+        this.size = 5; // Set dynamic size
         this.generateObstacle();
     }
 

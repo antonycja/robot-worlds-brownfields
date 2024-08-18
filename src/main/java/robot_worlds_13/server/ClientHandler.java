@@ -85,13 +85,14 @@ public class ClientHandler implements Runnable {
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> state = new HashMap<>();
             data.clear();
-//            data.put("message", "\nConnected successfully to server you can launch a robot!\n");
+            data.put("message", "\nConnected successfully to server you can launch a robot!\n");
             state.clear();
 //            sendMessage(ServerProtocol.buildResponse("OK",data));
 
+//            Server.broadcastMessage(ServerProtocol.buildResponse("OK", data));
 
             // luanch validation
-            String potentialRobotName;
+            String potentialRobotName = "";
             int maximumShieldStrength = 0;
             int maximumShots = 0;
             while (true) {
@@ -105,7 +106,10 @@ public class ClientHandler implements Runnable {
                     data.put("message", "Could not parse arguments");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
-                    continue;
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
+//                    continue;
+                    break;
                 }
 
                 // Parsing command
@@ -114,7 +118,10 @@ public class ClientHandler implements Runnable {
                     data.put("message", "Could not parse arguments");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
-                    continue;
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
+//                    continue;
+                    break;
                 }
 
                 potentialRobotName = (String) request.get("robot");
@@ -123,32 +130,38 @@ public class ClientHandler implements Runnable {
                 
                 String make;
                 try {
-                    make = (String) arguments.get(2);
+                    make = (String) arguments.get(0);
                 } catch (Exception e) {
                     data.clear();
                     data.put("message", "Could not parse arguments");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
                 }
 
                 
                 try {
-                    maximumShieldStrength = (int) Math.round((double) arguments.get(0));
+                    maximumShieldStrength = (int) Math.round((double) Integer.parseInt((String) arguments.get(1)));
                 } catch (Exception e) {
                     data.clear();
                     data.put("message", "Could not parse arguments");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
                 }
 
                 
                 try {
-                    maximumShots = (int) Math.round((double)arguments.get(1));
+                    maximumShots = (int) Math.round((double) Integer.parseInt((String) arguments.get(2)));
                 } catch (Exception e) {
                     data.clear();
                     data.put("message", "Could not parse arguments");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
                 }
 
                 // Validating command and arguments
@@ -158,7 +171,10 @@ public class ClientHandler implements Runnable {
                     data.put("message", "Unsupported command");
                     state = new HashMap<>();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
-                    continue;
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
+//                    continue;
+                    break;
                 }
 
                 if (!NameChecker.isValidName(potentialRobotName)) {
@@ -167,7 +183,10 @@ public class ClientHandler implements Runnable {
                     data.put("message", "Could not parse arguments");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
-                    continue;
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
+//                    continue;
+                    break;
                 }
 
                 // if name already exists in world
@@ -176,7 +195,10 @@ public class ClientHandler implements Runnable {
                     data.put("message", "Too many of you in this world");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
-                    continue;
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
+//                    continue;
+                    break;
                 }
 
                 // if number of robots is too large
@@ -185,7 +207,9 @@ public class ClientHandler implements Runnable {
                     data.put("message", "No more space in this world");
                     state.clear();
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
-                    continue;
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
+                    break;
                 }
 
                 // Launching the robot
@@ -195,9 +219,10 @@ public class ClientHandler implements Runnable {
                     data.put("message", "Successfully launched " + "width " + world.width + " height " + world.height);
 //                    data.put("position", robot.position);
 
-                    sendMessage(ServerProtocol.buildResponse("OK", data));
+//                    sendMessage(ServerProtocol.buildResponse("OK", data));
                     try {
-                        Thread.sleep(3000);
+//                        TODO: changed sleep time to 1/2 sec
+                        Thread.sleep(500);
                     } catch (Exception e) {
                         System.out.println("Error encountered with sleep thread");
                     }
@@ -205,8 +230,8 @@ public class ClientHandler implements Runnable {
                     break;
                 }
             }
-            data.put("position", robot.position);
-            sendMessage(ServerProtocol.buildResponse("OK",data));
+//            data.put("position", robot.position);
+//            sendMessage(ServerProtocol.buildResponse("OK",data));
 
 
 
@@ -234,7 +259,7 @@ public class ClientHandler implements Runnable {
             data.put("message", "OTHERCHARACTERS");
             state.clear();
             state.put("robots", currentRobotMap);
-            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             // load robots bulletDistance, shields, shots
             int maxShields;
@@ -253,7 +278,7 @@ public class ClientHandler implements Runnable {
             attributes.put("shields", maxShields);
             attributes.put("shots", maxShots);
             attributes.put("visibility", world.visibility);
-            attributes.put("bulletDistance", 100);
+            attributes.put("bulletDistance", world.visibility);
 
             // make the robot itself
             this.name = potentialRobotName;
@@ -271,38 +296,60 @@ public class ClientHandler implements Runnable {
             
 
             // send hello message
-            data.clear();
-            data.put("message", "Hello Kiddo!\n");
-            state.clear();
-            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+//            Robot rob = (Robot) currentRobotState.get(2);
+
+            // data
+//            data.clear();
+//            data.put("visibility", robot.worldData.visibility);
+//            data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
+//            data.put("objects", new ArrayList<>());
+//
+//            // state
+//            state.clear();
+//            state = robot.getRobotState();
+
+//            sendMessage(ServerProtocol.buildResponse("OK", data, state));
+
+
+
+//            data.clear();
+//            data.put("message", "Hello Kiddo!\n");
+//            int[] position = new int[] {
+//                    ((Position) currentRobotState.get(0)).getX(),
+//                    ((Position) currentRobotState.get(0)).getY()
+//            };
+//            data.put("position", position);
+//            sendMessage(ServerProtocol.buildResponse("OK", data));
 
             
 
             // Obstacles
             // world.showObstacles();  // will need to now return obstacles, and flush them to user
             List<String> obstaclesData = world.getObstaclesAsString();
-            String obstacleMessage = "";
+            StringBuilder obstacleMessage = new StringBuilder();
             if (obstaclesData.isEmpty()) {
-                obstacleMessage += "There are no obstacles in the world";
+                obstacleMessage.append("There are no obstacles in the world");
                 
             } else {
-                obstacleMessage += "Obstacles in world: \n";
+                obstacleMessage.append("Obstacles in world: \n");
                 for (String obstacle: obstaclesData) {
-                    obstacleMessage += "    " + obstacle;
+                    obstacleMessage.append("\t").append(obstacle);
                 }
             }
-            
-            data.clear();
-            data.put("message", obstacleMessage);
-            state.clear();
-            sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+
+//            data.clear();
+//            data.put("message", obstacleMessage.toString());
+//            state.clear();
+//            sendMessage(ServerProtocol.buildResponse("DISPLAY", data, state));
+//            sendMessage(ServerProtocol.buildResponse("OK", data, state));
+//            TODO: TEST AND CHANGE THE CODE UP.
 
             List<Obstacle> obstacles = world.getObstacles();
             data.clear();
             data.put("message", "OBSTACLES");
             state.clear();
             state.put("obstacles", obstacles);
-            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
 
             List<Obstacle> lakes = world.getLakes();
@@ -310,30 +357,33 @@ public class ClientHandler implements Runnable {
             data.put("message", "LAKES");
             state.clear();
             state.put("obstacles", lakes);
-            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             List<Obstacle> pits = world.getBottomLessPits();
             data.clear();
             data.put("message", "PITS");
             state.clear();
             state.put("obstacles", pits);
-            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             // starting position
             data.clear();
+            data.put("visibility", robot.worldData.visibility);
             data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
-            data.put("visibility",  world.visibility);
-            data.put("reload", world.ammoReloadTime);
-            data.put("repair", world.shieldRepairTime);
-            data.put("shields", robot.shields);
+            data.put("objects", new ArrayList<>());
+
+            // state
+            state.clear();
             state = robot.getRobotState();
             sendMessage(ServerProtocol.buildResponse("OK", data, state));
+//            System.out.println("Response: " + ServerProtocol.buildResponse("OK", data, state));
+
 
             data.clear();
             data.put("message", "LAUNCH");
             state.clear();
             state = robot.getGUIRobotState();
-            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
             Command command;
             boolean shouldContinue = true;
             String instruction;
@@ -345,7 +395,7 @@ public class ClientHandler implements Runnable {
                     if (robot != null && ("DEAD".equals(robot.getStatus()))) {
                         Map<String, Object> data = new HashMap<>();
                         data.put("message", "Your robot has died because it ran out of shields");
-                        sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+//                        sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
                         
                         connectedServer.removeRobot(name);
                         world.serverObject.robotNames.remove(name);
@@ -356,7 +406,7 @@ public class ClientHandler implements Runnable {
                         data.put("message", "REMOVE");
                         state.clear();
                         state.put("robots", name);
-                        Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//                        Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
                         ArrayList<Object> currentRobotState = new ArrayList<>();
                         currentRobotState.add(robot.getCurrentPosition());
@@ -375,7 +425,8 @@ public class ClientHandler implements Runnable {
                 // sending prompt to client
                 data.clear();
                 data.put("message", "What must I do next?");
-                sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+                // TODO: FIX THIS TO ALWAYS DISPLAY ON CLIENT
+//                sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
                 
                 // get command as json string
                 instruction = getCommand();
@@ -406,7 +457,8 @@ public class ClientHandler implements Runnable {
                 if (robot.shields < 0 || robot.getStatus() == "DEAD") {
                     data.clear();
                     data.put("message", "Your robot has died because it ran out of shields5");
-                    sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
+                    // TODO: ALSO FIX THIS
+//                    sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
                     break;
                 }
                 
@@ -419,14 +471,18 @@ public class ClientHandler implements Runnable {
                     data.clear();
                     data.put("message", "Unsupported command '" + requestedCommand + "'.");
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
-                    continue;
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+//                    continue;
+                    break;
                     
                 } catch (IndexOutOfBoundsException e) {
                     data.clear();
                     data.put("message", "Could not parse arguments '" + arguments + "'.");
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
-                    continue;
-                    
+                    System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
+
+//                    continue;
+                    break;
                 }
 
                 // print robot status after executing command
@@ -439,7 +495,7 @@ public class ClientHandler implements Runnable {
                     break;
                 }
             }
-            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
             // removing current robot from sever
             connectedServer.removeRobot(name);
             world.serverObject.robotNames.remove(name);
@@ -448,7 +504,7 @@ public class ClientHandler implements Runnable {
             data.put("message", "REMOVE");
             state.clear();
             state.put("robots", name);
-            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
             currentRobotState = new ArrayList<>();
             currentRobotState.add(robot.getCurrentPosition());
             currentRobotState.add(robot.getCurrentDirection());

@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import static robot_worlds_13.server.configuration.ServerConfiguration.getIntInput;
 
@@ -135,8 +136,11 @@ public class Client {
 
                 if (response.contains("Successfully launched")) {
                     robotName = potentialRobotName;
-                    int width = Integer.parseInt(response.split(" ")[3]);
-                    int height = Integer.parseInt(response.split(" ")[5]);
+                    JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+                    String message = jsonResponse.getAsJsonObject("data").get("message").getAsString();
+                    String[] parts = message.split(" ");
+                    int width = Integer.parseInt(parts[3]);
+                    int height = Integer.parseInt(parts[5]);
                     
                     System.out.println(ANSI_GREEN + "Launch GUI?");
                     String guiResponse = line.nextLine();
@@ -154,7 +158,7 @@ public class Client {
                 System.out.println("--------------------------------------------------------------");
                 System.err.println(ANSI_GREEN + response );
 
-                if (response.contains("Could not parse arguments") || response.contains("Unsupported command") || 
+                if (response.contains("Could not parse arguments") || response.contains("Unsupported command") ||
                 response.contains("Connected successfully to") || response.contains("Too many of you in this world")) {
                     System.out.println(ANSI_CYAN + "Launch a robot!, Hint use 'launch make robot_name'");
                     System.out.println(ANSI_GREEN + "Please enter a valid make. Options are: Pistol, Riffle, Sniper");

@@ -878,12 +878,18 @@ public class AbstractWorld implements IWorld {
 
     public Position generatePosition() {
         while (true) {
-            Position generatedPosition = getRandomPosition();
-            if (isPositionOccupied(generatedPosition)) {
-                continue;
+            if (serverObject.getNamesAndPositionsOnly().isEmpty()){
+                Position generatedPosition = new Position(0, 0);
+                return  generatedPosition;
             }
             else {
-                return generatedPosition;
+                Position generatedPosition = getRandomPosition();
+                if (isPositionOccupied(generatedPosition)) {
+                    continue;
+                }
+                else {
+                    return generatedPosition;
+                }
             }
         }
     }

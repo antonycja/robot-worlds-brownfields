@@ -35,7 +35,7 @@ while getopts ":hdpsoca" opt; do
       cmd="$cmd -o 0,1"
       ;;
     a | c )
-      cmd="$cmd -p 5050 -s 2 -o 0,1"
+      cmd="$cmd -p 5000 -s 2 -o 0,1"
       break
       ;;
     \? )

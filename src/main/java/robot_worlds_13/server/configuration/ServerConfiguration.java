@@ -73,7 +73,7 @@ public class ServerConfiguration {
         world.setObstacles(obstacles);
 
         if (pit == 1) {
-            Obstacle pitObj = new SquareObstacle(1, 1, this.size); // Example pit coordinates
+            Obstacle pitObj = new SquareObstacle(0, 3, this.size); // Example pit coordinates
             ArrayList<Obstacle> pits = (ArrayList<Obstacle>) world.getBottomLessPits();
             pits.add(pitObj);
             world.setBottomLessPits(pits); // Update pits in the world
