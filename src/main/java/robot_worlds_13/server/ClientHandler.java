@@ -165,6 +165,7 @@ public class ClientHandler implements Runnable {
                 }
 
                 // Validating command and arguments
+
                 if (!requestedCommand.equalsIgnoreCase("launch")) {
                     // "Unsupported command"
                     data = new HashMap<>();
@@ -427,7 +428,7 @@ public class ClientHandler implements Runnable {
                 data.put("message", "What must I do next?");
                 // TODO: FIX THIS TO ALWAYS DISPLAY ON CLIENT
 //                sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
-                
+//                System.out.println(ServerProtocol.buildResponse("DISPLAY", data));
                 // get command as json string
                 instruction = getCommand();
                 
@@ -442,6 +443,10 @@ public class ClientHandler implements Runnable {
                 } catch (Exception e) {
                     System.out.println(request);
                     System.err.println("Failed to parse JSON: " + e.getMessage());
+                    data.clear();
+                    data.put("message", "Invalid command");
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    System.out.println(ServerProtocol.buildResponse("ERROR", data));
                     e.printStackTrace();
                     break;
                 }
@@ -467,6 +472,19 @@ public class ClientHandler implements Runnable {
                     robot.previouPosition = robot.getCurrentPosition();
                     command = Command.create(requestedCommand, arguments);
                     shouldContinue = robot.handleCommand(command);
+
+                    data.clear();
+                    data.put("message", "Command '" + requestedCommand + "' executed.");
+                    data.put("visibility", robot.worldData.visibility);
+                    data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
+                    data.put("objects", new ArrayList<>());
+
+                    // state
+                    state.clear();
+                    state = robot.getRobotState();
+                    sendMessage(ServerProtocol.buildResponse("OK", data, state));
+                    System.out.println("Response: " + ServerProtocol.buildResponse("OK", data, state));
+
                 } catch (IllegalArgumentException e) {
                     data.clear();
                     data.put("message", "Unsupported command '" + requestedCommand + "'.");

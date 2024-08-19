@@ -51,8 +51,8 @@ class LaunchRobotTests {
         assertEquals("OK", response.get("result").asText());
 
         // And the position should be (x:0, y:0)
-        System.out.println(response.getClass());
-        System.out.println(response);
+//        System.out.println(response.getClass());
+//        System.out.println(response);
         assertNotNull(response.get("data"));
         assertNotNull(response.get("data").get("position"));
         assertInstanceOf(Integer.class,response.get("data").get("position").get(0).asInt());

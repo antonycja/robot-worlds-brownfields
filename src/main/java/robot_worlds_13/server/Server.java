@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import robot_worlds_13.server.configuration.ServerConfiguration;
 import robot_worlds_13.server.robot.maze.SimpleMaze;
@@ -28,8 +29,11 @@ public class Server {
     // keeping track of robots
     ArrayList<String> robotNames = new ArrayList<>();
     ArrayList<Object> states = new ArrayList<>();
-    public final HashMap<String, ArrayList<Object>> nameRobotMap = new HashMap<>();
-    HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
+//    public final HashMap<String, ArrayList<Object>> nameRobotMap = new HashMap<>();
+//    HashMap<String, ArrayList<Object>> nameAndPositionMap = new HashMap<>();
+
+    public final ConcurrentHashMap<String, ArrayList<Object>> nameRobotMap = new ConcurrentHashMap<>();
+    public ConcurrentHashMap<String, ArrayList<Object>> nameAndPositionMap = new ConcurrentHashMap<>();
 
     /**
      * Main method to start the server.
@@ -216,16 +220,37 @@ public class Server {
      * @param message The message to broadcast.
      */
     public static void broadcastMessage(String message) {
-        for (Socket client : clientConnections) {
-            try {
-                out = new PrintStream(client.getOutputStream());
-                out.println(message);
-                out.flush();
-            } catch (IOException e) {
-                System.err.println("Error broadcasting message to a client: " + e.getMessage());
+        Iterator<Socket> iterator = clientConnections.iterator();
+        while (iterator.hasNext()) {
+            Socket client = iterator.next();
+            if (!client.isClosed()) {
+                try {
+                    out = new PrintStream(client.getOutputStream());
+                    out.println(message);
+                    out.flush();
+                } catch (IOException e) {
+                    System.err.println("Error broadcasting message to a client: " + e.getMessage());
+                    iterator.remove(); // Remove the client from the list if there's an error
+                }
+            } else {
+                iterator.remove(); // Remove the client if the socket is closed
             }
         }
     }
+
+
+
+//    public static void broadcastMessage(String message) {
+//        for (Socket client : clientConnections) {
+//            try {
+//                out = new PrintStream(client.getOutputStream());
+//                out.println(message);
+//                out.flush();
+//            } catch (IOException e) {
+//                System.err.println("Error broadcasting message to a client: " + e.getMessage());
+//            }
+//        }
+//    }
 
     /**
      * Retrieves names and positions only.
@@ -240,10 +265,15 @@ public class Server {
      * @param name The name of the robot to remove.
      */
     public void removeRobot(String name) {
-        this.robotNames.remove(name);
+//        this.robotNames.remove(name);
+//
+//        nameRobotMap.entrySet().removeIf(entry -> entry.getKey().equals(name));
+//        nameAndPositionMap.entrySet().removeIf(entry -> entry.getKey().equals(name));
 
-        nameRobotMap.entrySet().removeIf(entry -> entry.getKey().equals(name));
-        nameAndPositionMap.entrySet().removeIf(entry -> entry.getKey().equals(name));
+        this.robotNames.remove(name);
+        nameRobotMap.remove(name);
+        nameAndPositionMap.remove(name);
+
     }
 
 
