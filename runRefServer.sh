@@ -6,10 +6,10 @@ show_help() {
   echo
   echo "  -h        Display this help message."
   echo "  -d        Run the default server."
-  echo "  -p        Run the server on a different port. (5001)"
+  echo "  -p        Run the server on a different port. (5050)"
   echo "  -s        Run the server with a size of 2x2."
   echo "  -o        Run the server with an obstacle at [1,2]."
-  echo "  -a        Run the server on a different port (5001) with size 2x2 and obstacle at [1,2]."
+  echo "  -a        Run the server on a different port (5050) with size 2x2 and obstacle at [1,2]."
 }
 
 # Initialize default command
@@ -35,7 +35,7 @@ while getopts ":hdpsoca" opt; do
       cmd="$cmd -o 0,1"
       ;;
     a | c )
-      cmd="$cmd -p 5000 -s 2 -o 0,1"
+      cmd="$cmd -p 5050 -s 2 -o 0,1"
       break
       ;;
     \? )

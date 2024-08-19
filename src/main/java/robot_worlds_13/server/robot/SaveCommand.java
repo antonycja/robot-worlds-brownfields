@@ -1,18 +1,20 @@
 package robot_worlds_13.server.robot;
 
 import database.SqlCommands;
+import robot_worlds_13.server.ServerProtocol;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.Obstacle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class SaveCommand {
     private String worldName;
     private final List<String> obstacleTypes = List.of("obstacle", "lake", "pit");
 
     public SaveCommand(String worldName) {
+        if (worldName.isEmpty()){
+            worldName = promptForWorldName();
+        }
         this.worldName = worldName;
     }
 
@@ -29,6 +31,8 @@ public class SaveCommand {
     public String saveWorld(AbstractWorld world) {
         int width= world.width;
         int height = world.height;
+        Map<String, Object> data = new HashMap<>();
+
         try {
             // Instantiate SQL
             SqlCommands sqlCommands = new SqlCommands();
@@ -73,9 +77,20 @@ public class SaveCommand {
             }
             System.out.println("World saved successfully with the name: " + this.worldName);
             sqlCommands.closeConnection();
+
+            data.put("message", "World saved successfully");
+            ServerProtocol.buildResponse("OK", data);
+            System.out.println(ServerProtocol.buildResponse("OK", data));
+
             return "World saved successfully with the name: " + this.worldName;
 
         } catch (IllegalArgumentException e) {
+
+            data.clear();
+            data.put("message", "World name already exists");
+            ServerProtocol.buildResponse("ERROR", data);
+            System.out.println(ServerProtocol.buildResponse("ERROR", data));
+
             System.out.println("World with name '" + this.worldName + "' already exists, skipping this process.");
             return "World with name '" + this.worldName + "' already exists, skipping this process.";
         }
