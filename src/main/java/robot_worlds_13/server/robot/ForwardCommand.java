@@ -1,6 +1,7 @@
 package robot_worlds_13.server.robot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import robot_worlds_13.server.ServerProtocol;
 import robot_worlds_13.server.robot.world.IWorld;
@@ -111,6 +112,7 @@ public class ForwardCommand extends Command {
             // Movement attempted outside the world boundaries
             data.clear();
             data.put("message", "Obstructed - Trying to move outside world");
+            data.put("position",  new int[] {target.getPosition().getX(), target.getPosition().getY()});
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
             target.previouPosition = target.position;
             data.clear();

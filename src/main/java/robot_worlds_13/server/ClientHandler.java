@@ -451,6 +451,15 @@ public class ClientHandler implements Runnable {
                     break;
                 }
 
+                String name = (String) request.get("robot");
+                if (!name.equalsIgnoreCase(potentialRobotName)){
+                    data.clear();
+                    data.put("message", "Robot does not exist");
+                    sendMessage(ServerProtocol.buildResponse("ERROR", data));
+                    System.out.println(ServerProtocol.buildResponse("ERROR", data));
+                    break;
+                }
+
                 // String robot = (String) request.get("robot");
                 String requestedCommand = (String) request.get("command");
                 ArrayList arguments = (ArrayList) request.get("arguments");
@@ -482,12 +491,12 @@ public class ClientHandler implements Runnable {
                     // state
                     state.clear();
                     state = robot.getRobotState();
-                    sendMessage(ServerProtocol.buildResponse("OK", data, state));
-                    System.out.println("Response: " + ServerProtocol.buildResponse("OK", data, state));
+//                    sendMessage(ServerProtocol.buildResponse("OK", data, state));
+//                    System.out.println("Response: " + ServerProtocol.buildResponse("OK", data, state));
 
                 } catch (IllegalArgumentException e) {
                     data.clear();
-                    data.put("message", "Unsupported command '" + requestedCommand + "'.");
+                    data.put("message", "Unsupported command");
                     sendMessage(ServerProtocol.buildResponse("ERROR", data));
                     System.out.println("Response: " + ServerProtocol.buildResponse("ERROR", data));
 //                    continue;

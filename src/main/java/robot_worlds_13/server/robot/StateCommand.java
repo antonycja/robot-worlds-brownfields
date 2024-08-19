@@ -18,12 +18,12 @@ public class StateCommand extends Command {
     public boolean execute(Robot target) {
         
         // String stateMessage = target.getStatus();
-            
+        Map<String, Object> data = new HashMap<>();
         Map<String, Object> state = target.getRobotState();
 
-        target.setResponseToRobot(ServerProtocol.buildResponse(state));
+        data.put("message", "done");
+        target.setResponseToRobot(ServerProtocol.buildResponse("OK", data ,state));
 
-        Map<String, Object> data = new HashMap<>();
         data.clear();
         data.put("message", "NONE");
         state.clear();
