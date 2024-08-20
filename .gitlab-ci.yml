@@ -11,8 +11,8 @@ build-job:
   stage: build
   script:
     - echo "Compiling the code..."
-    - mvn clean install
-    #- mvn validate
+    - mvn clean #install
+    - mvn validate
     - echo "Starting up server"
     #- bash runServer.sh &  # Start server in background
     #- sleep 30
