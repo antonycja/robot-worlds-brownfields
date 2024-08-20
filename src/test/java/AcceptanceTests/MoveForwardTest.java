@@ -94,11 +94,11 @@ public class MoveForwardTest {
         // When I send a command for "HAL" to move forward without specifying steps
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
-                "  \"command\": \"forward k\"," +
-                "  \"arguments\": [\"\"]" +
+                "  \"command\": \"forward\"," +
+                "  \"arguments\": [\"k\"]" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
-System.out.println(response);
+        System.out.println(response);
         // Then I should get an "ERROR" response with the message "Invalid argument"
         assertNotNull(response.get("result"));
         assertEquals("ERROR", response.get("result").asText());
