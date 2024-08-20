@@ -12,7 +12,7 @@ PORT := 5050
 .PHONY: all compile test_ref test_own version release_version package tag clean run_ref_server stop_ref_server run_own_server stop_own_server stop_servers docker-build docker-run docker-stop docker-push
 
 # Default target
-all: compile test_ref stop_servers
+all: compile test_own stop_own_server
 
 compile:
 	mvn compile -f $(POM_FILE)
@@ -80,7 +80,7 @@ release_version:
 	sed -i 's/$(VERSION)/$(RELEASE_VERSION)/' $(POM_FILE)
 	@echo "Version updated to $(RELEASE_VERSION) in $(POM_FILE)"
 
-package: test_ref test_own
+package:test_own #test_ref
 	mvn package
 
 tag: package

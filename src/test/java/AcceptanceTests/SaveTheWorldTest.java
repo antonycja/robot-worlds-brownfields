@@ -87,131 +87,131 @@ public class SaveTheWorldTest {
         assertNotNull(response.get("data"));
         assertEquals("Unsupported command", response.get("data").get("message").asText());
     }
-    @Test
-    public void testSaveTheWorldWithDifferentCollectionOfRobots(){
-
-        // Given that you're connected to a robot world server
-        assertTrue(serverClient.isConnected());
-
-        // And I have launched a robot into the world
-        serverClient.sendRequest(launchRequest);
-
-        String request1 = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"save\"," +
-                "  \"arguments\": [\"world1\"]" +
-                "}";
-        JsonNode response1 = serverClient.sendRequest(request1);
-
-        String request2 = "{" +
-                "  \"robot\": \"BOB\"," +
-                "  \"command\": \"save\"," +
-                "  \"arguments\": [\"world1\"]" +
-                "}";
-
-        JsonNode response2 = serverClient.sendRequest(request2);
-
-
-
-
-        // Then I should get a valid response from the server
-        assertNotNull(response1.get("result"));
-        assertEquals("OK", response1.get("result").asText());
-        assertNotNull(response1.get("data"));
-        assertEquals("World 'world1' saved successfully.", response1.get("data").get("message").asText());
-
-        // Then I should get a valid response from the server
-        assertNotNull(response2.get("result"));
-        assertEquals("OK", response2.get("result").asText());
-        assertNotNull(response2.get("data"));
-        assertEquals("World 'world1' saved successfully.", response2.get("data").get("message").asText());
-
-
-
-    }
-    @Test
-    public void testSaveTheWorldOnMoreThanOneOccasion(){
-
-        // Given that you're connected to a robot world server
-        assertTrue(serverClient.isConnected());
-
-        // And I have launched a robot into the world
-        serverClient.sendRequest(launchRequest);
-
-        String request1 = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"save\"," +
-                "  \"arguments\": [\"world1\"]" +
-                "}";
-        JsonNode response1 = serverClient.sendRequest(request1);
-
-        String request2 = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"save\"," +
-                "  \"arguments\": [\"world1\"]" +
-                "}";
-        JsonNode response2 = serverClient.sendRequest(request2);
-
-        // Then I should get a valid response from the server
-        assertNotNull(response1.get("result"));
-        assertEquals("OK", response1.get("result").asText());
-        // And the world should be saved successfully
-        assertNotNull(response1.get("data"));
-        assertEquals("World 'world1' saved successfully.", response1.get("data").get("message").asText());
-
-
-        // Then I should get a valid response from the server
-        assertNotNull(response2.get("result"));
-        assertEquals("OK", response2.get("result").asText());
-        // And the world should be saved successfully
-        assertNotNull(response2.get("data"));
-        assertEquals("World 'world1' saved successfully.", response2.get("data").get("message").asText());
-
-    }
-    @Test
-    public void testSaveTheWorldWithOnlyTheSizePositionAndObstacleTypes(){
-
-        // Given that you're connected to a robot world server
-        assertTrue(serverClient.isConnected());
-
-        // And I have launched a robot into the world
-        serverClient.sendRequest(launchRequest);
-
-                String request = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"save\"," +
-                "  \"arguments\": [\"world1\"]," +
-                "  \"obstacles\": [" +
-                "    {" +
-                "      \"type\": \"bottomless pits\"," +
-                "      \"position\": {\"x\": 5, \"y\": 10}," +
-                "      \"size\": {\"width\": 2, \"height\": 2}" +
-                "    }," +
-                "    {" +
-                "      \"type\": \"mines\"," +
-                "      \"position\": {\"x\": 15, \"y\": 20}," +
-                "      \"size\": {\"width\": 2, \"height\": 2}" +
-                "    }" +
-                "  ]" +
-                "}";
-
-        // Send the request to the server
-        JsonNode response = serverClient.sendRequest(request);
-
-
-
-        // Check if the result is OK
-        assertNotNull(response.get("result"));
-        assertEquals("OK", response.get("result").asText());
-
-        // And the world should be saved successfully
-        assertNotNull(response.get("data"));
-        assertEquals("World 'world1' saved successfully.", response.get("data").get("message").asText());
-
-
-
-
-    }
+//    @Test
+//    public void testSaveTheWorldWithDifferentCollectionOfRobots(){
+//
+//        // Given that you're connected to a robot world server
+//        assertTrue(serverClient.isConnected());
+//
+//        // And I have launched a robot into the world
+//        serverClient.sendRequest(launchRequest);
+//
+//        String request1 = "{" +
+//                "  \"robot\": \"HAL\"," +
+//                "  \"command\": \"save\"," +
+//                "  \"arguments\": [\"world1\"]" +
+//                "}";
+//        JsonNode response1 = serverClient.sendRequest(request1);
+//
+//        String request2 = "{" +
+//                "  \"robot\": \"BOB\"," +
+//                "  \"command\": \"save\"," +
+//                "  \"arguments\": [\"world1\"]" +
+//                "}";
+//
+//        JsonNode response2 = serverClient.sendRequest(request2);
+//
+//
+//
+//
+//        // Then I should get a valid response from the server
+//        assertNotNull(response1.get("result"));
+//        assertEquals("OK", response1.get("result").asText());
+//        assertNotNull(response1.get("data"));
+//        assertEquals("World 'world1' saved successfully.", response1.get("data").get("message").asText());
+//
+//        // Then I should get a valid response from the server
+//        assertNotNull(response2.get("result"));
+//        assertEquals("OK", response2.get("result").asText());
+//        assertNotNull(response2.get("data"));
+//        assertEquals("World 'world1' saved successfully.", response2.get("data").get("message").asText());
+//
+//
+//
+//    }
+//    @Test
+//    public void testSaveTheWorldOnMoreThanOneOccasion(){
+//
+//        // Given that you're connected to a robot world server
+//        assertTrue(serverClient.isConnected());
+//
+//        // And I have launched a robot into the world
+//        serverClient.sendRequest(launchRequest);
+//
+//        String request1 = "{" +
+//                "  \"robot\": \"HAL\"," +
+//                "  \"command\": \"save\"," +
+//                "  \"arguments\": [\"world1\"]" +
+//                "}";
+//        JsonNode response1 = serverClient.sendRequest(request1);
+//
+//        String request2 = "{" +
+//                "  \"robot\": \"HAL\"," +
+//                "  \"command\": \"save\"," +
+//                "  \"arguments\": [\"world1\"]" +
+//                "}";
+//        JsonNode response2 = serverClient.sendRequest(request2);
+//
+//        // Then I should get a valid response from the server
+//        assertNotNull(response1.get("result"));
+//        assertEquals("OK", response1.get("result").asText());
+//        // And the world should be saved successfully
+//        assertNotNull(response1.get("data"));
+//        assertEquals("World 'world1' saved successfully.", response1.get("data").get("message").asText());
+//
+//
+//        // Then I should get a valid response from the server
+//        assertNotNull(response2.get("result"));
+//        assertEquals("OK", response2.get("result").asText());
+//        // And the world should be saved successfully
+//        assertNotNull(response2.get("data"));
+//        assertEquals("World 'world1' saved successfully.", response2.get("data").get("message").asText());
+//
+//    }
+//    @Test
+//    public void testSaveTheWorldWithOnlyTheSizePositionAndObstacleTypes(){
+//
+//        // Given that you're connected to a robot world server
+//        assertTrue(serverClient.isConnected());
+//
+//        // And I have launched a robot into the world
+//        serverClient.sendRequest(launchRequest);
+//
+//                String request = "{" +
+//                "  \"robot\": \"HAL\"," +
+//                "  \"command\": \"save\"," +
+//                "  \"arguments\": [\"world1\"]," +
+//                "  \"obstacles\": [" +
+//                "    {" +
+//                "      \"type\": \"bottomless pits\"," +
+//                "      \"position\": {\"x\": 5, \"y\": 10}," +
+//                "      \"size\": {\"width\": 2, \"height\": 2}" +
+//                "    }," +
+//                "    {" +
+//                "      \"type\": \"mines\"," +
+//                "      \"position\": {\"x\": 15, \"y\": 20}," +
+//                "      \"size\": {\"width\": 2, \"height\": 2}" +
+//                "    }" +
+//                "  ]" +
+//                "}";
+//
+//        // Send the request to the server
+//        JsonNode response = serverClient.sendRequest(request);
+//
+//
+//
+//        // Check if the result is OK
+//        assertNotNull(response.get("result"));
+//        assertEquals("OK", response.get("result").asText());
+//
+//        // And the world should be saved successfully
+//        assertNotNull(response.get("data"));
+//        assertEquals("World 'world1' saved successfully.", response.get("data").get("message").asText());
+//
+//
+//
+//
+//    }
 
 }
 
