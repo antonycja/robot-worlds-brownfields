@@ -98,7 +98,7 @@ public class MoveForwardTest {
                 "  \"arguments\": [\"\"]" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
-
+System.out.println(response);
         // Then I should get an "ERROR" response with the message "Invalid argument"
         assertNotNull(response.get("result"));
         assertEquals("ERROR", response.get("result").asText());
