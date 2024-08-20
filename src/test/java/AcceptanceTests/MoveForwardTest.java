@@ -96,8 +96,8 @@ public class MoveForwardTest {
         // When I send a command for "HAL" to move forward without specifying steps
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
-                "  \"command\": \"forward k\"," +
-                "  \"arguments\": [\"\"]" +
+                "  \"command\": \"forward\"," +
+                "  \"arguments\": [\"k\"]" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
 
