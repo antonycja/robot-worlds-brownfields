@@ -28,7 +28,7 @@ acceptence-test-job:   # This job also runs in the test stage.
   stage: test    # It can run at the same time as unit-test-job (in parallel).
   script:
     - echo "Running acceptance tests..."
-    - bash runRefServer.sh -a &
+    - bash runServer.sh -a &
     - echo "Waiting for server to start"
     - sleep 5
     - mvn '-Dtest=AcceptanceTests.*Test' test
@@ -39,7 +39,7 @@ package-job:   # This job runs the package stage.
   stage: package    # It can run at the same time as unit-test-job (in parallel).
   script:
     - echo "Packaging code..."
-    - bash runRefServer.sh -a &
+    - bash runServer.sh -a &
     - echo "Waiting for server to start"
     - sleep 5
     - mvn package
@@ -52,7 +52,7 @@ deploy-job:      # This job runs in the deploy stage.
   environment: production
   script:
     - echo "Deploying application..."
-    - bash runRefServer.sh -a &
+    - bash runServer.sh -a &
     - echo "Waiting for server to start"
     - sleep 5
     # - mvn deploy
