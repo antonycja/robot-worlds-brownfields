@@ -13,6 +13,8 @@ build-job:
     - echo "Compiling the code..."
     - mvn clean install
     - mvn validate
+    - bash runServer.sh &  # Start server in background
+    - sleep 30
     - mvn compile
     - echo "Compile complete."
 
