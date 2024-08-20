@@ -86,21 +86,21 @@ public class MoveForwardTest {
     }
 
     @Test
-    void ForwardWithInvalidStepsShouldFail() throws InterruptedException {
+    void ForwardWithInvalidStepsShouldFail() {
         // Given that I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
 
         // And a robot called "HAL" is already connected and launched
         serverClient.sendRequest(launchRequest);
-        sleep(1000);
+
         // When I send a command for "HAL" to move forward without specifying steps
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
-                "  \"command\": \"forward\"," +
-                "  \"arguments\": [\"k\"]" +
+                "  \"command\": \"forward k\"," +
+                "  \"arguments\": [\"\"]" +
                 "}";
         JsonNode response = serverClient.sendRequest(request);
-        System.out.println(response);
+
         // Then I should get an "ERROR" response with the message "Invalid argument"
         assertNotNull(response.get("result"));
         assertEquals("ERROR", response.get("result").asText());
@@ -109,4 +109,5 @@ public class MoveForwardTest {
         assertEquals("Unsupported command", response.get("data").get("message").asText());
 
     }
+
 }
