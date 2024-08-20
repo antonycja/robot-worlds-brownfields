@@ -16,7 +16,7 @@ build-job:
     - echo "Starting up server"
     #- bash runServer.sh &  # Start server in background
     #- sleep 30
-    #- mvn compile
+    - mvn compile
     - echo "Compile complete."
 
 # Unit Test Stage
