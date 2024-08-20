@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build the project and skip tests
-mvn clean package -DskipTests
+#mvn clean package -DskipTests
 
 #Clear the terminal
 clear
