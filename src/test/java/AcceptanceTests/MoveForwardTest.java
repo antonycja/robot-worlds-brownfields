@@ -3,6 +3,8 @@ import AcceptanceTests.RobotWorldClient.RobotWorldClient;
 import AcceptanceTests.RobotWorldClient.RobotWorldJsonClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.*;
+
+import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.*;
 
 //As a player
@@ -84,13 +86,13 @@ public class MoveForwardTest {
     }
 
     @Test
-    void ForwardWithInvalidStepsShouldFail() {
+    void ForwardWithInvalidStepsShouldFail() throws InterruptedException {
         // Given that I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
 
         // And a robot called "HAL" is already connected and launched
         serverClient.sendRequest(launchRequest);
-
+        sleep(1000);
         // When I send a command for "HAL" to move forward without specifying steps
         String request = "{" +
                 "  \"robot\": \"HAL\"," +
