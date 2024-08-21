@@ -168,7 +168,7 @@ public class AbstractWorld implements IWorld {
         }
 
         // checking if path is not blocked by another robot in the world
-        else if (!isPathNotBlockedByRobot(positionBeforeUpdate, newPosition)) {
+else if (!isPathNotBlockedByRobot(positionBeforeUpdate, newPosition)) {
             return UpdateResponse.FAILED_OBSTRUCTED_BY_ROBOT;
         }
 

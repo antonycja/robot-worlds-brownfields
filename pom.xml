@@ -36,9 +36,9 @@
                 <configuration>
                     <excludes>
                         <!-- Uncomment the following line to exclude acceptance tests -->
-<!--                         <exclude>**/AcceptanceTests/**/*.java</exclude>-->
-<!--                        <exclude>**/ClientTests/**/*.java</exclude>-->
-<!--                        <exclude>**/ServerTests/**/*.java</exclude>-->
+                        <!-- <exclude>**/AcceptanceTests/**/*.java</exclude> -->
+                        <!-- <exclude>**/ClientTests/**/*.java</exclude> -->
+                        <!-- <exclude>**/ServerTests/**/*.java</exclude> -->
                     </excludes>
                 </configuration>
             </plugin>
@@ -81,10 +81,15 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
-
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>deployment-repo</id>
+            <url>http://your-repo-url</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -144,7 +149,11 @@
             <version>3.41.2.2</version>
         </dependency>
 
+        <!-- Javalin Dependency -->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>5.1.0</version> <!-- Use the latest version available -->
+        </dependency>
     </dependencies>
 </project>
-
-
