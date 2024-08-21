@@ -3,7 +3,6 @@ VERSION := $(shell mvn help:evaluate -Dexpression=project.version -q -DforceStdo
 RELEASE_VERSION := $(subst -SNAPSHOT,,$(VERSION))
 BUILD_TYPE := development # default build type
 POM_FILE := pom.xml
-REF_SERVER := $(shell pgrep -f runRefServer.sh)
 OWN_SERVER := $(shell pgrep -f runServer.sh)
 IMAGE_NAME := gitlab.wethinkco.de:5050/amaposa023/cpt13_brownfields_2024
 CONTAINER_NAME := robot_worlds_container
@@ -16,28 +15,6 @@ all: compile test_own stop_own_server
 
 compile:
 	mvn compile -f $(POM_FILE)
-
-stop_ref_server:
-	@echo "Stopping reference server if running"
-	@if [ -n "$(REF_SERVER)" ]; then \
-		kill $(REF_SERVER); \
-	else \
-		echo "No reference server process found"; \
-	fi
-
-run_ref_server:
-	@if lsof -i :5001 > /dev/null; then \
-		echo "Port 5001 is already in use. Killing the process..."; \
-		kill $$(lsof -t -i:5001); \
-		sleep 2; \
-	fi
-	bash runRefServer.sh -a &
-	sleep 5  # Give the server more time to start
-
-test_ref: stop_ref_server run_ref_server
-	sleep 2
-	mvn test -Dserver=reference
-	make stop_ref_server
 
 run_own_server: stop_server
 	./runServer.sh > own_server.log 2>&1 &
