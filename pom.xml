@@ -155,5 +155,13 @@
             <artifactId>javalin</artifactId>
             <version>5.1.0</version> <!-- Use the latest version available -->
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.31</version>
+        </dependency>
     </dependencies>
 </project>
+
+
+
