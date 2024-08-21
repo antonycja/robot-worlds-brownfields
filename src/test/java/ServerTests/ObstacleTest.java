@@ -8,13 +8,13 @@ import robot_worlds_13.server.robot.world.SquareObstacle;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ObstacleTest {
-    private int size = 40;
+    private final int size = 5;
     @Test
     void testObstacleDimensions() {
         Obstacle obstacle = new SquareObstacle(1,1, size);
         assertEquals(1, obstacle.getBottomLeftX());
         assertEquals(1, obstacle.getBottomLeftY());
-        assertEquals(40, obstacle.getSize());
+        assertEquals(5, obstacle.getSize());
     }
 
     @Test

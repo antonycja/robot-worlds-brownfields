@@ -12,24 +12,22 @@
 [[1;34mINFO[m] Deleting /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/target
 [[1;34mINFO[m] 
 [[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrobot_worlds_13[0;1m ---[m
-[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
 [[1;34mINFO[m] skip non existing resourceDirectory /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/src/main/resources
 [[1;34mINFO[m] 
 [[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrobot_worlds_13[0;1m ---[m
 [[1;34mINFO[m] Changes detected - recompiling the module!
-[[1;33mWARNING[m] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[[1;34mINFO[m] Compiling 44 source files to /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/target/classes
+[[1;34mINFO[m] Compiling 49 source files to /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/target/classes
 [[1;34mINFO[m] /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/src/main/java/robot_worlds_13/client/GamePanel.java: Some input files use unchecked or unsafe operations.
 [[1;34mINFO[m] /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/src/main/java/robot_worlds_13/client/GamePanel.java: Recompile with -Xlint:unchecked for details.
 [[1;34mINFO[m] 
 [[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mrobot_worlds_13[0;1m ---[m
-[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
 [[1;34mINFO[m] skip non existing resourceDirectory /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/src/test/resources
 [[1;34mINFO[m] 
 [[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mrobot_worlds_13[0;1m ---[m
 [[1;34mINFO[m] Changes detected - recompiling the module!
-[[1;33mWARNING[m] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[[1;34mINFO[m] Compiling 19 source files to /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/target/test-classes
+[[1;34mINFO[m] Compiling 20 source files to /home/anton/Desktop/LMS/work/OOP/Group/cpt13_brownfields_2024/target/test-classes
 [[1;34mINFO[m] 
 [[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:3.0.0-M5:test[m [1m(default-test)[m @ [36mrobot_worlds_13[0;1m ---[m
 [[1;34mINFO[m] Tests are skipped.
@@ -42,23 +40,281 @@
 [[1;34mINFO[m] [1m------------------------------------------------------------------------[m
 [[1;34mINFO[m] [1;32mBUILD SUCCESS[m
 [[1;34mINFO[m] [1m------------------------------------------------------------------------[m
-[[1;34mINFO[m] Total time:  5.064 s
-[[1;34mINFO[m] Finished at: 2024-08-05T14:09:59+02:00
+[[1;34mINFO[m] Total time:  7.385 s
+[[1;34mINFO[m] Finished at: 2024-08-20T17:04:15+02:00
 [[1;34mINFO[m] [1m------------------------------------------------------------------------[m
 [H[2J[3JStarting server...
-
 Server address: 10.200.110.118
 Port number: 5050
 
-Loading server data...
-    Repair: 5 seconds per robot
-    Shield: 500 shields maximum
-    Reload: 5 seconds per robot
-    Visibility: 100 steps forward
-    Width: 500 kliks
-    Bullet Distance: 100 steps forward
-    Shots: 1000 shots maximum
-    Height: 600 kliks
+Size: 40 kliks
+Pit: Disabled
+Obstacle: (0,0)
+Lake: (0,0)
 
-java.net.BindException: Address already in use
-Server closed
+Loading server data...
+	-Repair: 5 seconds per robot
+	-Shield: 10 shields maximum
+	-Reload: 5 seconds for 1 rocket
+	-Visibility: 10 kliks
+	-width: 40
+	-shots: 10
+	-height: 40
+...		...		...		...		...		...
+Server started. Listening for incoming connections...
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "NonExistentRobot",  "command": "save",  "arguments": ["world1"]}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "save",  "arguments": []}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {"robot": "HAL","command": "sate","arguments": ["shooter","5","5"]}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "TOM",  "command": "state",  "arguments": ["shooter","5","5"]}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 says: {"robot": "HAL","command": "state","arguments": ["shooter","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "TOM",  "command": "forward",  "arguments": ["5"]}
+{"result":"ERROR","data":{"message":"Robot does not exist"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "forward",  "arguments": ["1000"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "forward k",  "arguments": [""]}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL1",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL2",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL3",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL4",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL5",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL6",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Response: {"result":"ERROR","data":{"message":"No more space in this world"}}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL10",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Response: {"result":"ERROR","data":{"message":"No more space in this world"}}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 says: {  "robot": "TOM",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Response: {"result":"ERROR","data":{"message":"Too many of you in this world"}}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {"robot": "HAL","command": "luanch","arguments": ["pistol","5","5"]}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "look",  "arguments": []}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "Bob",  "command": "look",  "arguments": []}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Incoming connection accepted
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "look",  "arguments": []}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "luk",  "arguments": []}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL2",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL3",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL4",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "look",  "arguments": []}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "NonExistentRobot",  "command": "save",  "arguments": ["world1"]}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "save",  "arguments": []}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {"robot": "HAL","command": "sate","arguments": ["shooter","5","5"]}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "TOM",  "command": "state",  "arguments": ["shooter","5","5"]}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {"robot": "HAL","command": "state","arguments": ["shooter","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "TOM",  "command": "forward",  "arguments": ["5"]}
+{"result":"ERROR","data":{"message":"Robot does not exist"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "forward",  "arguments": ["1000"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "forward k",  "arguments": [""]}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL1",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL2",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL3",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL4",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL5",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL6",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Response: {"result":"ERROR","data":{"message":"No more space in this world"}}
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL10",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Response: {"result":"ERROR","data":{"message":"No more space in this world"}}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 says: {  "robot": "TOM",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Response: {"result":"ERROR","data":{"message":"Too many of you in this world"}}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["pistol","5","5"]}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {"robot": "HAL","command": "luanch","arguments": ["pistol","5","5"]}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "look",  "arguments": []}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "Bob",  "command": "look",  "arguments": []}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "look",  "arguments": []}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "luk",  "arguments": []}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Could not parse arguments"}}
+Response: {"result":"ERROR","data":{"message":"Unsupported command"}}
+Client 127.0.0.1 disconnected.
+Incoming connection accepted
+Incoming connection accepted
+Incoming connection accepted
+Incoming connection accepted
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL2",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL3",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL4",  "command": "launch",  "arguments": ["shooter","5","5"]}
+Client 127.0.0.1 says: {  "robot": "HAL",  "command": "look",  "arguments": []}
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.
+Client 127.0.0.1 disconnected.

@@ -12,7 +12,7 @@ import com.google.gson.reflect.TypeToken;
  * and its associated arguments suitable for JSON formatting.
  */
 public class ClientProtocol {
-    static private Gson gson = new Gson();
+    static Gson gson = new Gson();
 
     /**
      * Splits the input string into a command and its arguments.
@@ -282,8 +282,6 @@ public class ClientProtocol {
             return false;
         }
     }
-
-    
 
     
 }
