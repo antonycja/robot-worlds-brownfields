@@ -92,16 +92,21 @@ public class SaveTheWorldTest {
 
         // Given that you're connected to a robot world server
         assertTrue(serverClient.isConnected());
+     // And I have launched a robot into the world
+        serverClient.sendRequest(launchRequest);
 
         // And I have launched a robot into the world
-        serverClient.sendRequest(launchRequest);
+        assertNotNull(launchRequest, "Launch request is null");
+        JsonNode launchResponse = serverClient.sendRequest(launchRequest);
+        assertNotNull(launchResponse, "Launch response is null");
+        assertTrue(launchResponse.has("result") && "OK".equals(launchResponse.get("result").asText()),
+                "Launch response was not successful");
 
         String request1 = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"save\"," +
                 "  \"arguments\": [\"world1\"]" +
                 "}";
-        JsonNode response1 = serverClient.sendRequest(request1);
 
         String request2 = "{" +
                 "  \"robot\": \"BOB\"," +
@@ -109,26 +114,29 @@ public class SaveTheWorldTest {
                 "  \"arguments\": [\"world1\"]" +
                 "}";
 
+        JsonNode response1 = serverClient.sendRequest(request1);
         JsonNode response2 = serverClient.sendRequest(request2);
 
+        // Validate response from first robot
+        assertNotNull(response1, "Response1 is null");
+        assertNotNull(response1.get("result"), "Result field in Response1 is null");
+        assertEquals("OK", response1.get("result").asText(), "Unexpected result in Response1");
+        assertNotNull(response1.get("data"), "Data field in Response1 is null");
+        assertEquals("World 'world1' saved successfully.", response1.get("data").get("message").asText(), "Unexpected message in Response1");
 
-
-
-        // Then I should get a valid response from the server
-        assertNotNull(response1.get("result"));
-        assertEquals("OK", response1.get("result").asText());
-        assertNotNull(response1.get("data"));
-        assertEquals("World 'world1' saved successfully.", response1.get("data").get("message").asText());
-
-        // Then I should get a valid response from the server
-        assertNotNull(response2.get("result"));
-        assertEquals("OK", response2.get("result").asText());
-        assertNotNull(response2.get("data"));
-        assertEquals("World 'world1' saved successfully.", response2.get("data").get("message").asText());
-
-
-
+        // Validate response from second robot
+        assertNotNull(response2, "Response2 is null");
+        assertNotNull(response2.get("result"), "Result field in Response2 is null");
+        assertEquals("OK", response2.get("result").asText(), "Unexpected result in Response2");
+        assertNotNull(response2.get("data"), "Data field in Response2 is null");
+        assertEquals("World 'world1' saved successfully.", response2.get("data").get("message").asText(), "Unexpected message in Response2");
     }
+
+
+
+
+
+
     @Test
     public void testSaveTheWorldOnMoreThanOneOccasion(){
 

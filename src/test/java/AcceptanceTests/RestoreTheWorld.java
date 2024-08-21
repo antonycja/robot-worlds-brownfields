@@ -84,7 +84,7 @@ public class RestoreTheWorld {
         assertNotNull(response.get("result"));
         assertEquals("ERROR", response.get("result").asText());
         assertNotNull(response.get("data"));
-        assertEquals("World does not exist", response.get("data").get("message").asText());
+        assertEquals("Unsupported command", response.get("data").get("message").asText());
     }
 
     @Test
