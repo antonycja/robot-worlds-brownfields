@@ -18,6 +18,8 @@ public interface Obstacle {
      */
     int getBottomLeftY();
 
+    String getType();
+
     /**
      * Gets the side of an obstacle (assuming square obstacles)
      * @return the length of one side in nr of steps

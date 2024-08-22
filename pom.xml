@@ -112,8 +112,6 @@
         </repository>
     </distributionManagement>
 
-
-
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -178,17 +176,32 @@
             <artifactId>javalin</artifactId>
             <version>5.1.0</version> <!-- Use the latest version available -->
         </dependency>
+    <dependency>
+        <groupId>io.javalin</groupId>
+        <artifactId>javalin</artifactId>
+        <version>4.1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.7.31</version>
+    </dependency>
 
         <dependency>
             <groupId>net.lemnik</groupId>
             <artifactId>eodsql</artifactId>
             <version>2.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.31</version>
         </dependency>
+    <dependency>
+        <groupId>com.konghq</groupId>
+        <artifactId>unirest-java</artifactId>
+        <version>3.13.0</version>
+        <scope>test</scope>
+    </dependency>
     </dependencies>
 </project>

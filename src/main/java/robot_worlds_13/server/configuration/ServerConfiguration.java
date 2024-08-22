@@ -66,14 +66,14 @@ public class ServerConfiguration {
         Obstacle obstacleObj = new SquareObstacle(
                 Integer.parseInt(obstacle.split(",")[0]),
                 Integer.parseInt(obstacle.split(",")[1]),
-                this.size // Pass the dynamic size here
+                this.size, "obstacle" // Pass the dynamic size here
         );
         ArrayList<Obstacle> obstacles = (ArrayList<Obstacle>) world.getObstacles();
         obstacles.add(obstacleObj);
         world.setObstacles(obstacles);
 
         if (pit == 1) {
-            Obstacle pitObj = new SquareObstacle(0, 3, this.size); // Example pit coordinates
+            Obstacle pitObj = new SquareObstacle(0, 3, this.size, "pit"); // Example pit coordinates
             ArrayList<Obstacle> pits = (ArrayList<Obstacle>) world.getBottomLessPits();
             pits.add(pitObj);
             world.setBottomLessPits(pits); // Update pits in the world
@@ -82,7 +82,7 @@ public class ServerConfiguration {
         Obstacle lakeObj = new SquareObstacle(
                 Integer.parseInt(lake.split(",")[0]),
                 Integer.parseInt(lake.split(",")[1]),
-                this.size // Pass the dynamic size here
+                this.size, "lake" // Pass the dynamic size here
         );
         ArrayList<Obstacle> lakes = (ArrayList<Obstacle>) world.getLakes();
         lakes.add(lakeObj);

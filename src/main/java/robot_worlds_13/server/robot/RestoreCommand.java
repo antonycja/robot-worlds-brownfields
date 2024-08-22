@@ -31,7 +31,7 @@ public class RestoreCommand {
         return scanner.nextLine().trim();
     }
 
-    public void restoreWorld(AbstractWorld world) {
+    public static void restoreWorld(AbstractWorld world) {
         try {
             String worldTableName = "world";
             String obstacleTableName = "objects";
@@ -57,7 +57,7 @@ public class RestoreCommand {
                     String type = (String) obs.get("type");
 
                     // Create obstacles with dynamic size
-                    Obstacle obstacle = new SquareObstacle(xPosition, yPosition, obstacleSize);
+                    Obstacle obstacle = new SquareObstacle(xPosition, yPosition, obstacleSize,type);
 
                     switch (type) {
                         case "obstacle":

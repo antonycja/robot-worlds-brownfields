@@ -8,13 +8,15 @@ public class SquareObstacle implements Obstacle {
     private int x;
     private int y;
     private int size; // Dynamic size
+    private String type; // Dynamic size
     private List<Position> obstacles = new ArrayList<>();
     private Position bottomLeftCorner;
 
-    public SquareObstacle(int x, int y, int size) {
+    public SquareObstacle(int x, int y, int size, String type) {
         this.x = x;
         this.y = y;
-        this.size = 5; // Set dynamic size
+        this.size = 5;
+        this.type = type;
         this.generateObstacle();
     }
 
@@ -34,11 +36,17 @@ public class SquareObstacle implements Obstacle {
     }
 
     @Override
+    public String getType() {
+        return this.type;
+    }
+
+    @Override
     public String toString() {
         return "SquareObstacle{" +
                 "x_position=" + this.x +
                 ", y_position=" + this.y +
                 ", size=" + this.size + // Include size in the string representation
+                ", type="+ this.type+
                 '}';
     }
 

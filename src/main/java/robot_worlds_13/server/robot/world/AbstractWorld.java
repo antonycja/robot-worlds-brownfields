@@ -25,7 +25,8 @@ public class AbstractWorld implements IWorld {
     public Server serverObject;
     public ArrayList<String> obstacleInStringFormat = new ArrayList<>();
     Random rand = new Random();
-    
+
+    private List<Obstacle> allObstacles = new ArrayList<>();
     private List<Obstacle> obstacles = new ArrayList<>();
     private List<Obstacle> bottomLessPits = new ArrayList<>();
     private List<Obstacle> lakes = new ArrayList<>();
@@ -79,7 +80,11 @@ public class AbstractWorld implements IWorld {
         this.obstacles = mazeChosen.getObstacles();
         this.bottomLessPits = mazeChosen.getBottomLessPits();
         this.lakes = mazeChosen.getLakes();
-        
+
+        allObstacles.addAll(obstacles);
+        allObstacles.addAll(bottomLessPits);
+        allObstacles.addAll(lakes);
+
         this.robotHitBoxFromCenter = 10;
         this.maze = mazeChosen;
         this.position = IWorld.CENTRE;
@@ -391,6 +396,10 @@ public class AbstractWorld implements IWorld {
     @Override
     public List<Obstacle> getObstacles() {
         return obstacles;
+    }
+
+    public List<Obstacle> getAllObstacles(){
+        return allObstacles;
     }
 
     public List<Obstacle> getBottomLessPits() {

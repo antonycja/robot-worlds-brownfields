@@ -96,7 +96,7 @@ public class SimpleMaze extends AbstractMaze {
         for (int i = 0; i < 5; i++) {
             Position uniquePos = generateUniquePosition();
             if (uniquePos != null) {
-                obstacles.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY(), dynamicStep));
+                obstacles.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY(), dynamicStep, "obstacle"));
             } else {
                 System.out.println("Failed to place an obstacle: no unique position available.");
             }
@@ -106,7 +106,7 @@ public class SimpleMaze extends AbstractMaze {
         for (int i = 0; i < 3; i++) {
             Position uniquePos = generateUniquePosition();
             if (uniquePos != null) {
-                bottomLessPits.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY(), dynamicStep));
+                bottomLessPits.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY(), dynamicStep, "pit"));
             } else {
                 System.out.println("Failed to place a bottomless pit: no unique position available.");
             }
@@ -116,7 +116,7 @@ public class SimpleMaze extends AbstractMaze {
         for (int i = 0; i < 2; i++) {
             Position uniquePos = generateUniquePosition();
             if (uniquePos != null) {
-                lakes.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY(), dynamicStep));
+                lakes.add(new SquareObstacle(uniquePos.getX(), uniquePos.getY(), dynamicStep,"lake"));
             } else {
                 System.out.println("Failed to place a lake: no unique position available.");
             }

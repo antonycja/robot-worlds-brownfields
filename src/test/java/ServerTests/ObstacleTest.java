@@ -11,7 +11,7 @@ public class ObstacleTest {
     private final int size = 5;
     @Test
     void testObstacleDimensions() {
-        Obstacle obstacle = new SquareObstacle(1,1, size);
+        Obstacle obstacle = new SquareObstacle(1,1, size, "obstacle");
         assertEquals(1, obstacle.getBottomLeftX());
         assertEquals(1, obstacle.getBottomLeftY());
         assertEquals(5, obstacle.getSize());
@@ -19,7 +19,7 @@ public class ObstacleTest {
 
     @Test
     void testBlockPosition(){
-        Obstacle obstacle = new SquareObstacle(1,1, size);
+        Obstacle obstacle = new SquareObstacle(1,1, size,"obstacle");
         assertTrue(obstacle.blocksPosition(new Position(1,1)));
         assertTrue(obstacle.blocksPosition(new Position(5,1)));
         assertTrue(obstacle.blocksPosition(new Position(1,5)));
@@ -29,7 +29,7 @@ public class ObstacleTest {
 
     @Test
     void testBlockPath(){
-        Obstacle obstacle = new SquareObstacle(1,1, size);
+        Obstacle obstacle = new SquareObstacle(1,1, size,"obstacle");
         assertTrue(obstacle.blocksPath(new Position(1,0), new Position(1,50)));
         assertTrue(obstacle.blocksPath(new Position(2,-10), new Position(2, 100)));
         assertTrue(obstacle.blocksPath(new Position(-10,5), new Position(20, 5)));
