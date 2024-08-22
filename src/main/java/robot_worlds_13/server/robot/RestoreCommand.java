@@ -31,7 +31,7 @@ public class RestoreCommand {
         return scanner.nextLine().trim();
     }
 
-    public static void restoreWorld(AbstractWorld world) {
+    public void restoreWorld(AbstractWorld world) {
         try {
             String worldTableName = "world";
             String obstacleTableName = "objects";
