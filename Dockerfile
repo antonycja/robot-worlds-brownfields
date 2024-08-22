@@ -13,7 +13,7 @@ RUN apt-get update && apt-get upgrade -y && \
 COPY pom.xml /app/
 
 # Copy the lib directory if there are external JAR dependencies
-COPY libs /app/libs
+COPY lib /app/lib
 
 # Copy the source code to the container
 COPY src /app/src
@@ -40,7 +40,7 @@ COPY src/main/java/robot_worlds_13/server/configuration/file.txt /app/src/main/j
 
 
 # Copy the JAR with dependencies from the build stage
-COPY --from=build /app/libs/robot-worlds-server-jar-with-dependencies.jar /app/robot_worlds_13.jar
+COPY --from=build /app/lib/robot-worlds-server-jar-with-dependencies.jar /app/robot_worlds_13.jar
 
 # Set the entry point to run the JAR file
 ENTRYPOINT ["java", "-jar", "robot_worlds_13.jar"]

@@ -58,6 +58,27 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>net.lemnik</groupId>
+                            <artifactId>eodsql</artifactId>
+                            <version>2.2</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/eodsql.jar</file>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
@@ -70,7 +91,7 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <finalName>robot-worlds-server</finalName>
-                    <outputDirectory>${project.basedir}/libs</outputDirectory>
+                    <outputDirectory>lib</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -90,6 +111,8 @@
             <url>http://your-repo-url</url>
         </repository>
     </distributionManagement>
+
+
 
     <dependencies>
         <dependency>
@@ -161,6 +184,7 @@
             <artifactId>eodsql</artifactId>
             <version>2.2</version>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>

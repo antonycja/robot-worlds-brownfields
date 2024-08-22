@@ -13,7 +13,7 @@ show_help() {
 }
 
 # Initialize default command
-cmd="java -jar libs/reference-server-0.2.3.jar"
+cmd="java -jar lib/reference-server-0.2.3.jar"
 
 # Parse command-line options
 while getopts ":hdpsoca" opt; do
@@ -23,7 +23,7 @@ while getopts ":hdpsoca" opt; do
       exit 0
       ;;
     d )
-      cmd="java -jar libs/reference-server-0.2.3.jar"
+      cmd="java -jar lib/reference-server-0.2.3.jar"
       ;;
     p )
       cmd="$cmd -p 5050"
