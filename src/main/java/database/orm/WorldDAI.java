@@ -4,38 +4,56 @@ import net.lemnik.eodsql.BaseQuery;
 import net.lemnik.eodsql.Select;
 import net.lemnik.eodsql.Update;
 
+import java.util.List;
+
 public interface WorldDAI extends BaseQuery {
-    @Update("CREATE TABLE IF NOT EXISTS worlds ("
+    String worldTableName = "worlds";
+    String obstacleTableName = "objects";
+    String typeTableName = "types";
+    @Update("CREATE TABLE IF NOT EXISTS "+worldTableName+" ("
             + " name text PRIMARY KEY,"
             + " width integer NOT NULL,"
             + " height integer NOT NULL"
             + ")")
     WorldDO createWorldTable();
 
-    @Update("CREATE TABLE IF NOT EXISTS objects"
+    @Update("CREATE TABLE IF NOT EXISTS "+obstacleTableName
             + " (_id integer PRIMARY KEY,"
             + " world_name text NOT NULL,"
             + " x_position integer NOT NULL,"
             + " y_position integer NOT NULL,"
             + " size integer NOT NULL,"
             + " type integer NOT NULL,"
-            + " FOREIGN KEY (type) REFERENCES types (_id)" // Foreign key reference
+            + " FOREIGN KEY (type) REFERENCES "+typeTableName+" (_id)" // Foreign key reference
             + ")")
     ObstacleDO createObstacleTable();
 
-    @Update("CREATE TABLE IF NOT EXISTS types ("
+    @Update("CREATE TABLE IF NOT EXISTS "+typeTableName+" ("
             + " _id integer PRIMARY KEY,"
             + " type text UNIQUE"
             + ")")
     ObstacleDO createTypesTable();
 
-    @Update("INSERT INTO objects (world_name, x_position, y_position, size, type) VALUES(?{1}, ?{2}, ?{3}, ?{4}, ?{5})")
+    @Update("INSERT INTO "+worldTableName+" (name, width, height) VALUES(?{1}, ?{2}, ?{3})")
+    WorldDO addWorld(String name, int width, int height);
+
+    @Update("INSERT INTO "+obstacleTableName+" (world_name, x_position, y_position, size, type)" +
+            " VALUES(?{1}, ?{2}, ?{3}, ?{4}, ?{5})")
     ObstacleDO addObstacle(String worldName, int xPosition, int yPosition, int size, String type);
 
-    @Update("INSERT INTO types (type) VALUES(?)")
+    @Update("INSERT INTO "+typeTableName+" (type) VALUES(?{1})")
+    ObstacleDO addType(String typeName);
 
-    @Select("SELECT * FROM worlds")
-    WorldDO getAllWorlds();
+    @Select("SELECT * FROM "+ worldTableName)
+    List<WorldDO> getAllWorlds();
 
-//    @Select("SELECT ")
+
+    @Select("SELECT " + worldTableName + ".name, " + worldTableName + ".width, " + worldTableName + ".height, " +
+            obstacleTableName + ".x_position, " + obstacleTableName + ".y_position, " +
+            obstacleTableName + ".size, " + typeTableName + ".type " +
+            "FROM " + worldTableName +
+            " JOIN " + obstacleTableName + " ON " + worldTableName + ".name = " + obstacleTableName + ".world_name " +
+            " JOIN " + typeTableName + " ON " + obstacleTableName + ".type = " + typeTableName + "._id " +
+            "WHERE " + worldTableName + ".name = ?{1}")
+    WorldDO getWorldData(String worldName);
 }
