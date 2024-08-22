@@ -12,7 +12,7 @@ build-job:
   script:
     - echo "Compiling the code..."
     - mvn clean #install
-    - mvn install
+    # - mvn install
     - mvn validate
     - echo "Starting up server"
     #- bash runServer.sh &  # Start server in background
