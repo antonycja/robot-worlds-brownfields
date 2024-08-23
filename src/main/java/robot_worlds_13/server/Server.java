@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import database.orm.ConnectDB;
+import database.orm.WorldDAI;
 import robot_worlds_13.server.configuration.ServerConfiguration;
 import robot_worlds_13.server.robot.maze.SimpleMaze;
 import robot_worlds_13.server.robot.world.AbstractWorld;
@@ -24,6 +25,7 @@ public class Server {
     private static PrintStream out;
     public static int port;
 
+    public static WorldDAI worldDAO;
     // random
     private final Random rand = new Random();
 
@@ -38,6 +40,9 @@ public class Server {
 
     public Server(){
         ConnectDB connectDB = new ConnectDB();
+        connectDB.connectDB();
+        worldDAO = ConnectDB.worldDAO;
+
     }
 
     /**

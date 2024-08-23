@@ -34,18 +34,25 @@ public interface WorldDAI extends BaseQuery {
             + ")")
      void createTypesTable();
 
+    @Select("SELECT COUNT(*) FROM " + worldTableName + " WHERE name = ?{1}")
+    int countWorldName(String worldName);
+
     @Update("INSERT INTO "+worldTableName+" (name, width, height) VALUES(?{1}, ?{2}, ?{3})")
     void addWorld(String name, int width, int height);
 
-    @Update("INSERT INTO "+obstacleTableName+" (world_name, x_position, y_position, size, type)" +
-            " VALUES(?{1}, ?{2}, ?{3}, ?{4}, ?{5})")
-    void addObstacle(String worldName, int xPosition, int yPosition, int size, String type);
+    // Updated method to add an obstacle using the type name
+    @Update("INSERT INTO " + obstacleTableName + " (world_name, x_position, y_position, size, type)" +
+            " VALUES(?{1}, ?{2}, ?{3}, ?{4}, (SELECT _id FROM " + typeTableName + " WHERE type = ?{5}))")
+    void addObstacle(String worldName, int xPosition, int yPosition, int size, String typeName);
 
-    @Update("INSERT INTO "+typeTableName+" (type) VALUES(?{1})")
+    @Update("INSERT OR IGNORE INTO "+typeTableName+" (type) VALUES(?{1})")
     void addType(String typeName);
 
+    @Select("SELECT COUNT(*) FROM types WHERE type = ?{1}")
+    int countTypeByName(String name);
+
     @Select("SELECT * FROM "+ worldTableName)
-    public List<WorldDO> getAllWorlds();
+    List<WorldDO> getAllWorlds();
 
     @Select( "SELECT count(*) FROM " + worldTableName )
     public int getNumberOfWorlds();

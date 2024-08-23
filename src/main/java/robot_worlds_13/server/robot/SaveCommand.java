@@ -1,34 +1,23 @@
 package robot_worlds_13.server.robot;
 
-import database.SqlCommands;
-import database.orm.WorldDAI;
-import database.orm.WorldDO;
-import net.lemnik.eodsql.QueryTool;
 import robot_worlds_13.server.ServerProtocol;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.Obstacle;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
+import static database.orm.ConnectDB.worldDAO;
 import java.util.*;
 
-import static database.orm.ConnectDB.worldDAO;
-import static database.orm.OrmDB.displayWorld;
-
 public class SaveCommand {
-    private String worldName;
+    private final String worldName;
     private final List<String> obstacleTypes = List.of("obstacle", "lake", "pit");
 
     public SaveCommand(String worldName) {
-        if (worldName.isEmpty()){
-            worldName = promptForWorldName();
-        }
-        this.worldName = worldName;
+        this.worldName = (worldName.isEmpty()) ? promptForWorldName() : worldName;
+        addObstacleTypes();
     }
 
     public SaveCommand() {
         this.worldName = promptForWorldName();
+        addObstacleTypes();
     }
 
     private String promptForWorldName() {
@@ -37,79 +26,47 @@ public class SaveCommand {
         return scanner.nextLine().trim();
     }
 
-    public String saveWorld(AbstractWorld world) {
+    public void saveWorld(AbstractWorld world) {
         int width = world.width;
         int height = world.height;
         Map<String, Object> data = new HashMap<>();
 
+        List<Obstacle> obstacleList = world.getAllObstacles();
 
-        final List<WorldDO> allWorlds = worldDAO.getAllWorlds();
-
-        System.out.println(worldDAO.getNumberOfWorlds());
-        System.out.println("Here is a list of all saved worlds:");
-        System.out.println("\t\tName\t\tWidth\t\tHeight");
-        allWorlds.forEach(currWorld -> displayWorld(currWorld));
-
-        try {
-            // Instantiate SQL
-            SqlCommands sqlCommands = new SqlCommands();
-            // create the table for obstacle types
-            sqlCommands.createTypesTable("types");
-            // Insert data into types table
-            for (String type : obstacleTypes) {
-                sqlCommands.insertType(type);
-            }
-
-            // Create worlds table
-            sqlCommands.createWorldTable("world");
-            // Insert data into worlds
-            sqlCommands.insertWorld(worldName, width, height);
-
-            // Create obstacles table
-            sqlCommands.createObstacleTable("objects");
-            // Insert data in objects table
-            // Get obstacle type
-            for (Obstacle obs : world.getObstacles()) {
-                int size = obs.getSize();
-                int x = obs.getBottomLeftX();
-                int y = obs.getBottomLeftY();
-                int id = obstacleTypes.indexOf("obstacle") + 1;
-                sqlCommands.insertObstacle(x, y, size, id);
-            }
-            // Get lake type
-            for (Obstacle obs : world.getLakes()) {
-                int size = obs.getSize();
-                int x = obs.getBottomLeftX();
-                int y = obs.getBottomLeftY();
-                int id = obstacleTypes.indexOf("lake") + 1;
-                sqlCommands.insertObstacle(x, y, size, id);
-            }
-            // Get pit type
-            for (Obstacle obs : world.getBottomLessPits()) {
-                int size = obs.getSize();
-                int x = obs.getBottomLeftX();
-                int y = obs.getBottomLeftY();
-                int id = obstacleTypes.indexOf("pit") + 1;
-                sqlCommands.insertObstacle(x, y, size, id);
-            }
+        if (worldDAO.countWorldName(worldName) == 0 ){
+            addObstacles(obstacleList);
+            worldDAO.addWorld(worldName, width,height);
             System.out.println("World saved successfully with the name: " + this.worldName);
-            sqlCommands.closeConnection();
-
-            data.put("message", "World saved successfully");
-            ServerProtocol.buildResponse("OK", data);
-            System.out.println(ServerProtocol.buildResponse("OK", data));
-
-            return "World saved successfully with the name: " + this.worldName;
-
-        } catch (IllegalArgumentException e) {
-
-            data.clear();
-            data.put("message", "World name already exists");
-            ServerProtocol.buildResponse("ERROR", data);
-            System.out.println(ServerProtocol.buildResponse("ERROR", data));
-
-            System.out.println("World with name '" + this.worldName + "' already exists, skipping this process.");
-            return "World with name '" + this.worldName + "' already exists, skipping this process.";
+            successResponse(data);
         }
+        else {
+            System.out.println("'" + worldName+"' already exists, try another name or 'worlds' to see all saved worlds. Failed to Save.");
+            errorResponse(data);
+        }
+    }
+
+    private void addObstacles(List<Obstacle> obstacleList){
+        for (Obstacle obstacle:obstacleList){
+            String typeName = obstacle.getType();
+            if(worldDAO.countTypeByName(typeName) > 0){
+                worldDAO.addObstacle(worldName, obstacle.getBottomLeftX(),obstacle.getBottomLeftY(),obstacle.getSize(),obstacle.getType());
+            } else {System.out.println("'" + typeName + "' does not exist in types table. Failed to Save.");}
+        }
+    }
+
+    private void addObstacleTypes() {
+        for (String type : obstacleTypes) {worldDAO.addType(type);}
+    }
+
+    private void errorResponse(Map<String, Object> data){
+        data.clear();
+        data.put("message", "World name already exists");
+        ServerProtocol.buildResponse("ERROR", data);
+        System.out.println(ServerProtocol.buildResponse("ERROR", data));
+    }
+    private void successResponse(Map<String, Object> data){
+        data.put("message", "World saved successfully");
+        ServerProtocol.buildResponse("OK", data);
+        System.out.println(ServerProtocol.buildResponse("OK", data));
     }
 }

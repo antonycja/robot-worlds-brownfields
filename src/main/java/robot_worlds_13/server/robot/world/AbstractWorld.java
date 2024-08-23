@@ -81,10 +81,6 @@ public class AbstractWorld implements IWorld {
         this.bottomLessPits = mazeChosen.getBottomLessPits();
         this.lakes = mazeChosen.getLakes();
 
-        allObstacles.addAll(obstacles);
-        allObstacles.addAll(bottomLessPits);
-        allObstacles.addAll(lakes);
-
         this.robotHitBoxFromCenter = 10;
         this.maze = mazeChosen;
         this.position = IWorld.CENTRE;
@@ -399,6 +395,9 @@ public class AbstractWorld implements IWorld {
     }
 
     public List<Obstacle> getAllObstacles(){
+        allObstacles.addAll(obstacles);
+        allObstacles.addAll(bottomLessPits);
+        allObstacles.addAll(lakes);
         return allObstacles;
     }
 

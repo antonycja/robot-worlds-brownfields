@@ -1,22 +1,32 @@
 package robot_worlds_13.server.robot;
 
-import database.SqlCommands;
+import database.orm.WorldDO;
+
+import java.util.List;
+
+import static database.orm.ConnectDB.worldDAO;
 
 public class WorldsCommand {
-    private final SqlCommands sqlCommands;
-    public WorldsCommand(){
-        this.sqlCommands = new SqlCommands();
 
-    }
-    public void showWorlds(){
-//        if(sqlCommands.getWorlds().isEmpty())
-        try {
-            System.out.println("Here is the list of your saved world names:");
-            for(String worldName: sqlCommands.getWorlds("world")){
-                System.out.println("\t-" + worldName);
-            }
-        } catch (IllegalArgumentException e) {
+public void showWorlds(){
+
+    try {
+        final List<WorldDO> allWorlds = worldDAO.getAllWorlds();
+        int numberOfWorlds = worldDAO.getNumberOfWorlds();
+        if(numberOfWorlds < 1) {
             System.out.println("\t-No worlds to display. Try saving a world first.");
+            return;
         }
+        System.out.println("You have " + numberOfWorlds +" saved, Here they are:");
+        System.out.printf("%-20s %-10s %-10s%n", "Name", "Width", "Height");
+        System.out.println("------------------------------------------------------");
+        allWorlds.forEach(world ->
+                System.out.printf("%-20s %-10d %-10d%n", world.getPrimaryKey(), world.getWidth(), world.getHeight())
+        );
+    } catch (Exception e) {
+        System.out.println("\t-No worlds to display. Try saving a world first.");
+    }
+
+
     }
 }
