@@ -7,6 +7,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import database.orm.ConnectDB;
 import robot_worlds_13.server.configuration.ServerConfiguration;
 import robot_worlds_13.server.robot.maze.SimpleMaze;
 import robot_worlds_13.server.robot.world.AbstractWorld;
@@ -34,6 +35,10 @@ public class Server {
 
     public final ConcurrentHashMap<String, ArrayList<Object>> nameRobotMap = new ConcurrentHashMap<>();
     public ConcurrentHashMap<String, ArrayList<Object>> nameAndPositionMap = new ConcurrentHashMap<>();
+
+    public Server(){
+        ConnectDB connectDB = new ConnectDB();
+    }
 
     /**
      * Main method to start the server.

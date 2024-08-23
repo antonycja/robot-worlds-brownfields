@@ -1,11 +1,20 @@
 package robot_worlds_13.server.robot;
 
 import database.SqlCommands;
+import database.orm.WorldDAI;
+import database.orm.WorldDO;
+import net.lemnik.eodsql.QueryTool;
 import robot_worlds_13.server.ServerProtocol;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import robot_worlds_13.server.robot.world.Obstacle;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.*;
+
+import static database.orm.ConnectDB.worldDAO;
+import static database.orm.OrmDB.displayWorld;
 
 public class SaveCommand {
     private String worldName;
@@ -29,9 +38,17 @@ public class SaveCommand {
     }
 
     public String saveWorld(AbstractWorld world) {
-        int width= world.width;
+        int width = world.width;
         int height = world.height;
         Map<String, Object> data = new HashMap<>();
+
+
+        final List<WorldDO> allWorlds = worldDAO.getAllWorlds();
+
+        System.out.println(worldDAO.getNumberOfWorlds());
+        System.out.println("Here is a list of all saved worlds:");
+        System.out.println("\t\tName\t\tWidth\t\tHeight");
+        allWorlds.forEach(currWorld -> displayWorld(currWorld));
 
         try {
             // Instantiate SQL
@@ -39,7 +56,7 @@ public class SaveCommand {
             // create the table for obstacle types
             sqlCommands.createTypesTable("types");
             // Insert data into types table
-            for(String type: obstacleTypes ) {
+            for (String type : obstacleTypes) {
                 sqlCommands.insertType(type);
             }
 
@@ -52,28 +69,28 @@ public class SaveCommand {
             sqlCommands.createObstacleTable("objects");
             // Insert data in objects table
             // Get obstacle type
-            for (Obstacle obs: world.getObstacles()) {
+            for (Obstacle obs : world.getObstacles()) {
                 int size = obs.getSize();
                 int x = obs.getBottomLeftX();
                 int y = obs.getBottomLeftY();
-                int id = obstacleTypes.indexOf("obstacle")+1;
-                sqlCommands.insertObstacle( x, y, size, id);
+                int id = obstacleTypes.indexOf("obstacle") + 1;
+                sqlCommands.insertObstacle(x, y, size, id);
             }
             // Get lake type
-            for (Obstacle obs: world.getLakes()) {
+            for (Obstacle obs : world.getLakes()) {
                 int size = obs.getSize();
                 int x = obs.getBottomLeftX();
                 int y = obs.getBottomLeftY();
-                int id = obstacleTypes.indexOf("lake")+1;
-                sqlCommands.insertObstacle( x, y, size, id);
+                int id = obstacleTypes.indexOf("lake") + 1;
+                sqlCommands.insertObstacle(x, y, size, id);
             }
             // Get pit type
-            for (Obstacle obs: world.getBottomLessPits()) {
+            for (Obstacle obs : world.getBottomLessPits()) {
                 int size = obs.getSize();
                 int x = obs.getBottomLeftX();
                 int y = obs.getBottomLeftY();
-                int id = obstacleTypes.indexOf("pit")+1;
-                sqlCommands.insertObstacle( x, y, size, id);
+                int id = obstacleTypes.indexOf("pit") + 1;
+                sqlCommands.insertObstacle(x, y, size, id);
             }
             System.out.println("World saved successfully with the name: " + this.worldName);
             sqlCommands.closeConnection();

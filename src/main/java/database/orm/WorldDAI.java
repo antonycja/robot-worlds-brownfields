@@ -15,7 +15,7 @@ public interface WorldDAI extends BaseQuery {
             + " width integer NOT NULL,"
             + " height integer NOT NULL"
             + ")")
-    WorldDO createWorldTable();
+    void createWorldTable();
 
     @Update("CREATE TABLE IF NOT EXISTS "+obstacleTableName
             + " (_id integer PRIMARY KEY,"
@@ -26,27 +26,29 @@ public interface WorldDAI extends BaseQuery {
             + " type integer NOT NULL,"
             + " FOREIGN KEY (type) REFERENCES "+typeTableName+" (_id)" // Foreign key reference
             + ")")
-    ObstacleDO createObstacleTable();
+    void createObstacleTable();
 
     @Update("CREATE TABLE IF NOT EXISTS "+typeTableName+" ("
             + " _id integer PRIMARY KEY,"
             + " type text UNIQUE"
             + ")")
-    ObstacleDO createTypesTable();
+     void createTypesTable();
 
     @Update("INSERT INTO "+worldTableName+" (name, width, height) VALUES(?{1}, ?{2}, ?{3})")
-    WorldDO addWorld(String name, int width, int height);
+    void addWorld(String name, int width, int height);
 
     @Update("INSERT INTO "+obstacleTableName+" (world_name, x_position, y_position, size, type)" +
             " VALUES(?{1}, ?{2}, ?{3}, ?{4}, ?{5})")
-    ObstacleDO addObstacle(String worldName, int xPosition, int yPosition, int size, String type);
+    void addObstacle(String worldName, int xPosition, int yPosition, int size, String type);
 
     @Update("INSERT INTO "+typeTableName+" (type) VALUES(?{1})")
-    ObstacleDO addType(String typeName);
+    void addType(String typeName);
 
     @Select("SELECT * FROM "+ worldTableName)
-    List<WorldDO> getAllWorlds();
+    public List<WorldDO> getAllWorlds();
 
+    @Select( "SELECT count(*) FROM " + worldTableName )
+    public int getNumberOfWorlds();
 
     @Select("SELECT " + worldTableName + ".name, " + worldTableName + ".width, " + worldTableName + ".height, " +
             obstacleTableName + ".x_position, " + obstacleTableName + ".y_position, " +
