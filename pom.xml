@@ -184,11 +184,11 @@
             <artifactId>javalin</artifactId>
             <version>5.1.0</version> <!-- Use the latest version available -->
         </dependency>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>1.7.31</version>
-    </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.31</version>
+        </dependency>
 
 
         <dependency>
@@ -199,11 +199,11 @@
             <systemPath>${project.basedir}/lib/eodsql.jar</systemPath>
         </dependency>
 
-    <dependency>
-        <groupId>com.konghq</groupId>
-        <artifactId>unirest-java</artifactId>
-        <version>3.13.0</version>
-        <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>3.13.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
