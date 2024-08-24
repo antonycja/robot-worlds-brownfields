@@ -1,12 +1,16 @@
 package database.orm;
 
 import net.lemnik.eodsql.ResultColumn;
+import robot_worlds_13.server.robot.world.Obstacle;
+
+import java.util.List;
 
 public class WorldDO {
 
     private String name;   // Maps to the 'name' column in the database
     private int width;     // Maps to the 'width' column in the database
     private int height;    // Maps to the 'height' column in the database
+    private List<Obstacle> allObstacles;
 
     public WorldDO() {}
 

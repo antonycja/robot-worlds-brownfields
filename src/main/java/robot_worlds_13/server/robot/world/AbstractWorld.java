@@ -45,6 +45,7 @@ public abstract class AbstractWorld implements IWorld {
     public int maximumShots;
     public int width;
     public int height;
+    private String name = "default";
 
     public AbstractWorld (Maze mazeChosen, Server givenServerObject, Map<String, Integer> mapConfigurables) {
         this.obstacles = mazeChosen.getObstacles();
@@ -918,6 +919,13 @@ public abstract class AbstractWorld implements IWorld {
         }
     }
 
+    public String getName() {
+        return name;
+    }
 
-    public abstract void setLakes(List<Obstacle> lakes);
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //    public abstract void setLakes(List<Obstacle> lakes);
 }

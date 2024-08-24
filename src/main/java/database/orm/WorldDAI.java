@@ -57,12 +57,13 @@ public interface WorldDAI extends BaseQuery {
     @Select( "SELECT count(*) FROM " + worldTableName )
     public int getNumberOfWorlds();
 
-    @Select("SELECT " + worldTableName + ".name, " + worldTableName + ".width, " + worldTableName + ".height, " +
-            obstacleTableName + ".x_position, " + obstacleTableName + ".y_position, " +
-            obstacleTableName + ".size, " + typeTableName + ".type " +
-            "FROM " + worldTableName +
-            " JOIN " + obstacleTableName + " ON " + worldTableName + ".name = " + obstacleTableName + ".world_name " +
-            " JOIN " + typeTableName + " ON " + obstacleTableName + ".type = " + typeTableName + "._id " +
-            "WHERE " + worldTableName + ".name = ?{1}")
+    @Select("SELECT * FROM " + worldTableName + " WHERE name = ?{1}")
     WorldDO getWorldData(String worldName);
+
+    @Select("SELECT " + obstacleTableName + ".*, " + typeTableName + ".type " +
+            "FROM " + obstacleTableName +
+            " JOIN " + typeTableName + " ON " + obstacleTableName + ".type = " + typeTableName + "._id " +
+            "WHERE " + obstacleTableName + ".world_name = ?{1}")
+    List<ObjectsDO> getObjectData(String worldName);
+
 }

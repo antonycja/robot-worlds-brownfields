@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import robot_worlds_13.server.robot.RestoreCommand;
-import robot_worlds_13.server.robot.Robot;
-import robot_worlds_13.server.robot.SaveCommand;
-import robot_worlds_13.server.robot.WorldsCommand;
+import robot_worlds_13.server.robot.*;
 import robot_worlds_13.server.robot.world.AbstractWorld;
 import java.net.ServerSocket;
 import java.util.List;
@@ -52,7 +49,7 @@ public class TerminalListener implements Runnable {
                     System.out.println("\nDump command received... ");
                     
                     getRobotsInWorld();
-                    getObstaclesInWorld();
+                    new Dump(world);
 
                 }
                 else if ("robots".equalsIgnoreCase(input)) {

@@ -8,7 +8,7 @@ import java.util.*;
 
 public class SaveCommand {
     private final String worldName;
-    private final List<String> obstacleTypes = List.of("obstacle", "lake", "pit");
+    static final List<String> obstacleTypes = List.of("obstacle", "lake", "pit");
 
     public SaveCommand(String worldName) {
         this.worldName = (worldName.isEmpty()) ? promptForWorldName() : worldName;
@@ -35,6 +35,7 @@ public class SaveCommand {
 
         if (worldDAO.countWorldName(worldName) == 0 ){
             addObstacles(obstacleList);
+            world.setName(worldName);
             worldDAO.addWorld(worldName, width,height);
             System.out.println("World saved successfully with the name: " + this.worldName);
             successResponse(data);
