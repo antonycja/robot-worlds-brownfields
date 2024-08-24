@@ -15,7 +15,6 @@ import static database.orm.ConnectDB.worldDAO;
 
 public class RestoreCommand {
     private final String worldName;
-    private final SqlCommands sqlCommands = new SqlCommands();
     private ArrayList<Obstacle> obstacles = new ArrayList<>();
     private ArrayList<Obstacle> lakes = new ArrayList<>();
     private ArrayList<Obstacle> pits = new ArrayList<>();

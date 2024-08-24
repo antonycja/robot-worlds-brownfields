@@ -17,16 +17,18 @@ public interface WorldDAI extends BaseQuery {
             + ")")
     void createWorldTable();
 
-    @Update("CREATE TABLE IF NOT EXISTS "+obstacleTableName
+    @Update("CREATE TABLE IF NOT EXISTS " + obstacleTableName
             + " (_id integer PRIMARY KEY,"
             + " world_name text NOT NULL,"
             + " x_position integer NOT NULL,"
             + " y_position integer NOT NULL,"
             + " size integer NOT NULL,"
             + " type integer NOT NULL,"
-            + " FOREIGN KEY (type) REFERENCES "+typeTableName+" (_id)" // Foreign key reference
+//            + " FOREIGN KEY (world_name) REFERENCES " + worldTableName + " (name) ON DELETE CASCADE,"  // Foreign key to world table with cascading delete
+            + " FOREIGN KEY (type) REFERENCES " + typeTableName + " (_id)"                              // Foreign key to types table
             + ")")
     void createObstacleTable();
+
 
     @Update("CREATE TABLE IF NOT EXISTS "+typeTableName+" ("
             + " _id integer PRIMARY KEY,"
@@ -65,5 +67,11 @@ public interface WorldDAI extends BaseQuery {
             " JOIN " + typeTableName + " ON " + obstacleTableName + ".type = " + typeTableName + "._id " +
             "WHERE " + obstacleTableName + ".world_name = ?{1}")
     List<ObjectsDO> getObjectData(String worldName);
+
+    @Update("DELETE FROM " + worldTableName + " WHERE name = ?{1}")
+    void deleteWorld(String worldName);
+
+    @Update("DELETE FROM " + obstacleTableName + " WHERE world_name = ?{1}")
+    void deleteWorldObjects(String worldName);
 
 }

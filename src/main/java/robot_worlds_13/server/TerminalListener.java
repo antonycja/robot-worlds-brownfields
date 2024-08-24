@@ -80,6 +80,18 @@ public class TerminalListener implements Runnable {
                     restore.restoreWorld(world);
 
                 }
+                else if (input.toLowerCase().contains("delete")) {
+                    DeleteCommand delete;
+                    System.out.println("\nDeleting world...");
+                    String[] newInput = input.split(" ");
+                    if (newInput.length == 2){
+                        delete = new DeleteCommand(newInput[1]);
+                    } else {
+                        delete = new DeleteCommand();
+                    }
+                    delete.deleteWorld(world);
+
+                }
                 else if (input.toLowerCase().contains("worlds")) {
                     WorldsCommand worldsCommand = new WorldsCommand();
                     worldsCommand.showWorlds();

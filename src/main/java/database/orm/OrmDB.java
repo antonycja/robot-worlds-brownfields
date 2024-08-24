@@ -15,7 +15,7 @@ public class OrmDB {
         ConnectDB connectDB = new ConnectDB();
         connectDB.connectDB();
 
-        String worldName = "lutho";
+        String worldName = "ben";
         String typeName = "lake";
 //        System.out.println(worldDAO.getWorldData(worldName).getName());
         worldDAO.addType(typeName);
@@ -26,6 +26,8 @@ public class OrmDB {
             }
             else {System.out.println("'" + typeName + "' does not exist in types table. Failed to Save.");}
         } else{System.out.println("'" + worldName+"' already exists, try another name or 'worlds' to see all saved worlds. Failed to Save.");}
+
+        worldDAO.deleteWorld("tom");
 
         final List<WorldDO> allWorlds = worldDAO.getAllWorlds();
         final List<ObjectsDO> worldObjects = worldDAO.getObjectData(worldName);
