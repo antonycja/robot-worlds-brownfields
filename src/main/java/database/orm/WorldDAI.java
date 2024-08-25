@@ -74,4 +74,10 @@ public interface WorldDAI extends BaseQuery {
     @Update("DELETE FROM " + obstacleTableName + " WHERE world_name = ?{1}")
     void deleteWorldObjects(String worldName);
 
+
+    // New method to save a world using a WorldDO object
+    @Update("INSERT INTO " + worldTableName + " (name, width, height) VALUES (?{1.name}, ?{1.width}, ?{1.height})")
+    void saveWorld(WorldDO world);
 }
+
+

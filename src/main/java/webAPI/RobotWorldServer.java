@@ -17,8 +17,13 @@ public class RobotWorldServer {
         server = Javalin.create();
 
         // Set up the routes for the API
-        this.server.get("/world", RobotWorldApi::getCurrentWorld);
-        this.server.get("/world/{world}", RobotWorldApi::restoreSavedWorld);
+        server.get("/world", RobotWorldApi::getCurrentWorld);
+        server.get("/world/{world}", RobotWorldApi::restoreSavedWorld);
+        server.post("/world", RobotWorldApi::saveWorld);  // Route for saving a world
+        server.post("/robot/{name}", RobotWorldApi::launchRobot);  // Route for launching a robot
+
+        // Test endpoint to verify server is running
+        server.get("/test", ctx -> ctx.result("Server is running"));
     }
 
     public void start(int port) {
