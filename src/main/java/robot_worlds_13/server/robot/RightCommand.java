@@ -26,7 +26,7 @@ public class RightCommand extends Command {
 
         // Construct response data and state
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "Done");
+        data.put("message", target.getName()+" Turned right. Now facing " + target.getCurrentDirection());
         Map<String, Object> state = target.getRobotState();
 
         // Set response to the robot

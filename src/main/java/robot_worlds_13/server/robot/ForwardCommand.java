@@ -40,7 +40,7 @@ public class ForwardCommand extends Command {
             data.put("message", "FRONT");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -55,7 +55,7 @@ public class ForwardCommand extends Command {
             data.put("message", "FRONT");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -68,7 +68,7 @@ public class ForwardCommand extends Command {
             data.clear();
 
             data.put("message", "Obstructed - There is an obstacle in the way");
-            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            target.setResponseToRobot(ServerProtocol.buildResponse("ERROR", data));
             target.previouPosition = target.position;
             data.clear();
             data.put("message", "FRONT");
@@ -113,7 +113,7 @@ public class ForwardCommand extends Command {
             data.clear();
             data.put("message", "Obstructed - Trying to move outside world");
             data.put("position",  new int[] {target.getPosition().getX(), target.getPosition().getY()});
-            target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+            target.setResponseToRobot(ServerProtocol.buildResponse("ERROR", data, state));
             target.previouPosition = target.position;
             data.clear();
             data.put("message", "FRONT");
@@ -127,7 +127,7 @@ public class ForwardCommand extends Command {
         // If the update is successful, generate responses
         if (target.updatePosition(nrSteps, "front")){
             data.clear();
-            data.put("message", "Done");
+            data.put("message", target.getName()+" moved forward by " + nrSteps + " steps, now at: " + target.getCurrentPosition().toString());
             state.clear();
             state = target.getRobotState();
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));

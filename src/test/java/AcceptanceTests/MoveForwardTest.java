@@ -75,7 +75,7 @@ public class MoveForwardTest {
 
         // Then I should get an "OK" response with the message "At the NORTH edge"
         assertNotNull(response.get("result"));
-        assertEquals("OK", response.get("result").asText());
+        assertEquals("ERROR", response.get("result").asText());
         assertNotNull(response.get("data"));
         assertNotNull(response.get("data").get("message"));
 //        assertEquals("At the NORTH edge", response.get("data").get("message").asText());

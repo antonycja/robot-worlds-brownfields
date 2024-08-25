@@ -498,17 +498,19 @@ public class ClientHandler implements Runnable {
                     command = Command.create(requestedCommand, arguments);
                     shouldContinue = robot.handleCommand(command);
 
-                    data.clear();
-                    data.put("message", "Command '" + requestedCommand + "' executed.");
-                    data.put("visibility", robot.worldData.visibility);
-                    data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
-                    data.put("objects", new ArrayList<>());
+                    if (!requestedCommand.equalsIgnoreCase("help")) {
+                        data.clear();
+                        data.put("message", "Command '" + requestedCommand + "' executed.");
+                        data.put("visibility", robot.worldData.visibility);
+                        data.put("position", new int[]{robot.getPosition().getX(), robot.getPosition().getY()});
+                        data.put("objects", new ArrayList<>());
 
-//                  state
-                    state.clear();
-                    state = robot.getRobotState();
+    //                  state
+                        state.clear();
+                        state = robot.getRobotState();
 //                    sendMessage(ServerProtocol.buildResponse("OK", data, state));
 //                    System.out.println("Response: " + ServerProtocol.buildResponse("OK", data, state));
+                    }
 
                 } catch (IllegalArgumentException e) {
                     data.clear();
@@ -529,8 +531,17 @@ public class ClientHandler implements Runnable {
                 }
 
                 // print robot status after executing command
-                System.out.println(ServerProtocol.buildResponse("OK", data, state));
-                sendMessage(ServerProtocol.buildResponse("OK", data, state));
+
+                System.out.println(robot.getResponseToRobot());
+                sendMessage(robot.getResponseToRobot());
+
+//                if (!requestedCommand.equalsIgnoreCase("help")) {
+//                    System.out.println(ServerProtocol.buildResponse("OK", data, state));
+//                    sendMessage(ServerProtocol.buildResponse("OK", data, state));
+//                } else {
+//                    System.out.println(robot.getResponseToRobot());
+//                    sendMessage(robot.getResponseToRobot());}
+
 //                sendMessage(robot.getResponseToRobot());
 //                Server.broadcastMessage(robot.getGUIResponseToRobot());
                 

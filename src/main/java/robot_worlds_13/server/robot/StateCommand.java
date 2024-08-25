@@ -22,7 +22,7 @@ public class StateCommand extends Command {
         Map<String, Object> state = target.getRobotState();
 
         data.put("message", "done");
-        target.setResponseToRobot(ServerProtocol.buildResponse("OK" ,state));
+        target.setResponseToRobot(ServerProtocol.buildResponse("OK", data ,state));
 
         data.clear();
         data.put("message", "NONE");

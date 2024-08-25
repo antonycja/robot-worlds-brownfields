@@ -90,7 +90,7 @@ public class ClientProtocol {
                 return commandMap;
     }
 
-    public static String jsonResponseUnpacker (String jsonResponse) {
+    public static String jsonResponseUnpacker (String jsonResponse, String command) {
         try {
             // Map<String, Object> responseMap = gson.fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
             Map<String, Object> responseMap = gson.fromJson(jsonResponse, new TypeToken<Map<String, Object>>(){}.getType());
@@ -127,12 +127,13 @@ public class ClientProtocol {
             String message = "";
 
             if (responseMap.get("data") != null) {
-                if (responseMap.get("data") instanceof Map) {
+                if ((responseMap.get("data") instanceof Map) && (!command.equalsIgnoreCase("state"))) {
                     Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("data");
                     message += "Data: \n";
                     if (innerMap.get("message") != null) {
                         String messageResponse = (String) innerMap.get("message");
                         message += "    Message: " + messageResponse + "\n";
+                        if (!command.equalsIgnoreCase("launch")){message = "\t"+messageResponse + "\n";}
                     }
                     if (innerMap.get("distance") != null) { // robots steps away
                         String distance = (String.valueOf((int) Math.round((double) innerMap.get("distance"))));
@@ -226,12 +227,12 @@ public class ClientProtocol {
 
 
                 } else {
-                    System.out.println("result is not a JSON object.");
+                    if (!command.equalsIgnoreCase("state")){System.out.println("result is not a JSON object.");}
                 }
             }
 
             if (responseMap.get("state") != null) {
-                if (responseMap.get("state") instanceof Map) {
+                if (((responseMap.get("state") instanceof Map) && (command.equalsIgnoreCase("state") || command.equalsIgnoreCase("launch")) )) {
                     message += "State: \n";
                     Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("state");
                     String status = "    Status: " + innerMap.get("status") + "\n";
@@ -245,24 +246,24 @@ public class ClientProtocol {
                     String shields = "    Shields: " + (String.valueOf((int) Math.round((double) innerMap.get("shields")))) + "\n";
                     message += shields;
 
-                    return message;
-                } else {
-                    System.out.println("state is not a JSON object.");
-                    return "No";
-                }
+                    return message;}
+//                } else {
+////                    System.out.println("state is not a JSON object.");
+////                    return responseMap.get("");
+//                }
             }
 
             if (responseMap.get("command") != null) {
                 return (String) responseMap.get("command");
                 }
-
+//            System.out.println(responseMap.get("");
+            return message;
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("No json found");
             return jsonResponse;
         }
-        return jsonResponse;
     }
 
     // gets the position of the robot

@@ -396,6 +396,7 @@ public class AbstractWorld implements IWorld {
     }
 
     public List<Obstacle> getAllObstacles(){
+        allObstacles.clear();
         allObstacles.addAll(obstacles);
         allObstacles.addAll(bottomLessPits);
         allObstacles.addAll(lakes);

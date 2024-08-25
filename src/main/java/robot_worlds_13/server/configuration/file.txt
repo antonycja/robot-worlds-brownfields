@@ -3,6 +3,6 @@ reload 5
 repair 5
 shields 10
 shots 10
-width 40
-height 40
+width 400
+height 400
 visibility 10

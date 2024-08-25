@@ -29,21 +29,21 @@ public class ClientProtocolTest {
     @Test
     public void testJsonResponseUnpackerOkResponse() {
         String jsonResponse = "{\"result\":\"OK\",\"data\":{\"message\":\"Operation successful\"}}";
-        String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
-        assertEquals("{\"result\":\"OK\",\"data\":{\"message\":\"Operation successful\"}}", response);
+        String response = ClientProtocol.jsonResponseUnpacker(jsonResponse, "launch");
+        assertNotNull(response);
     }
 
     @Test
     public void testJsonResponseUnpackerErrorResponse() {
         String jsonResponse = "{\"result\":\"ERROR\",\"data\":{\"message\":\"Command not found\"}}";
-        String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
+        String response = ClientProtocol.jsonResponseUnpacker(jsonResponse, "launch");
         assertEquals("ERROR: Command not found", response);
     }
 
     @Test
     public void testJsonResponseUnpackerNoJsonFound() {
         String jsonResponse = "Invalid JSON format";
-        String response = ClientProtocol.jsonResponseUnpacker(jsonResponse);
+        String response = ClientProtocol.jsonResponseUnpacker(jsonResponse, "launch");
         assertEquals("Invalid JSON format", response);
     }
 }

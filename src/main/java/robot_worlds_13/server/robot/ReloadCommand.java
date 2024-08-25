@@ -40,7 +40,7 @@ public class ReloadCommand extends Command{
 
         // Construct response data and state
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "Done");
+        data.put("message", "Reloading " + target.getName());
         Map<String, Object> state = target.getRobotState();
 
         // Set response to the robot

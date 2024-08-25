@@ -120,7 +120,7 @@ public class BackCommand extends Command {
         // where towards is either "front" or "back"
         if (target.updatePosition(nrSteps, "back")) {
             data.clear();
-            data.put("message", "Done");
+            data.put("message", target.getName()+" moved back by " + nrSteps + " steps, now at: " + target.getCurrentPosition().toString());
             state.clear();
             state = target.getRobotState();
             target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
