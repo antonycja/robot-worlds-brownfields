@@ -887,11 +887,11 @@ public abstract class AbstractWorld implements IWorld {
 
     public Position generatePosition() {
         while (true) {
-            if (serverObject.getNamesAndPositionsOnly().isEmpty()){
-                Position generatedPosition = new Position(0, 0);
-                return  generatedPosition;
-            }
-            else {
+//            if (serverObject.getNamesAndPositionsOnly().isEmpty()){
+//                Position generatedPosition = new Position(0, 0);
+//                return  generatedPosition;
+//            }
+//            else {
                 Position generatedPosition = getRandomPosition();
                 if (isPositionOccupied(generatedPosition)) {
                     continue;
@@ -900,7 +900,7 @@ public abstract class AbstractWorld implements IWorld {
                     return generatedPosition;
                 }
             }
-        }
+//        }
     }
 
     public int getStepsAway (Position start, Position end) {
