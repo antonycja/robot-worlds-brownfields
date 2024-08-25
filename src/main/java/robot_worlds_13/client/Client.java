@@ -147,19 +147,26 @@ public class Client {
 //                    sendJsonRequest(formattedCommand);
 //                    continue;
 //                }
+                ArrayList<Object> attributes = new ArrayList<>();
+                try{
+                    attributes = getAttributes(potentialRobotNameArray[1]);
 
-                ArrayList<Object> attributes = getAttributes(potentialRobotNameArray[1]);
-
-                try {
-                    formattedCommand = ClientProtocol.jsonRequestBuilder(potentialRobotName, potentialRobotNameArray[1], attributes);
-                } catch (Exception e) {
-                    formattedCommand = ClientProtocol.jsonRequestBuilder("launch");
+                    try {
+                        formattedCommand = ClientProtocol.jsonRequestBuilder(potentialRobotName, potentialRobotNameArray[1], attributes);
+                    } catch (Exception e) {
+                        formattedCommand = ClientProtocol.jsonRequestBuilder("launch");
+                        sendJsonRequest(formattedCommand);
+                        System.out.println(ANSI_RESET);
+                        continue;
+                    }
+                    // send to server as json
                     sendJsonRequest(formattedCommand);
-                    System.out.println(ANSI_RESET);
+                } catch (Exception e) {
+                    System.out.println("Invalid launch");
                     continue;
                 }
-                // send to server as json
-                sendJsonRequest(formattedCommand);
+
+
                 System.out.print(ANSI_RESET);
 
                 String raw = in.readLine();
@@ -170,7 +177,7 @@ public class Client {
 
                 if(result.equalsIgnoreCase("ok")){
                     robotName = potentialRobotName;
-                    response = ClientProtocol.jsonResponseUnpacker(jsonObject.toString());
+                    response = ClientProtocol.jsonResponseUnpacker(jsonObject.toString(), formattedCommand.get("command").toString());
 //                    System.out.println(ANSI_CYAN + response);
 
 //                    System.out.println(response);
@@ -218,9 +225,9 @@ public class Client {
 
                     // send to server as json
                     sendJsonRequest(formattedCommand);
-
-                    response = ClientProtocol.jsonResponseUnpacker(in.readLine());
-                    System.out.println(response);
+//                    if (formattedCommand.get("command").toString().equalsIgnoreCase(""))
+                    response = ClientProtocol.jsonResponseUnpacker(in.readLine(), formattedCommand.get("command").toString());
+//                    System.out.println(response);
                 }
             }
 
