@@ -14,12 +14,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>lemnik-repo</id>
-            <url>https://lemnik.org/maven</url>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>lemnik-repo</id>-->
+<!--            <url>https://lemnik.org/maven</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
 
     <build>
@@ -194,8 +194,6 @@
             <groupId>net.lemnik</groupId>
             <artifactId>eodsql</artifactId>
             <version>2.2</version>
-<!--            <scope>compile</scope>-->
-<!--            <systemPath>${project.basedir}/lib/eodsql.jar</systemPath>-->
         </dependency>
 
         <dependency>
