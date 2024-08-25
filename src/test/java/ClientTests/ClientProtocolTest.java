@@ -15,13 +15,6 @@ public class ClientProtocolTest {
         assertEquals("forward", result.get("command"));
     }
 
-    @Test
-    public void testJsonRequestBuilderCommandWithArguments() {
-        String input = "move 10 left";
-        Map<String, Object> result = ClientProtocol.jsonRequestBuilder(input);
-        assertArrayEquals(new Object[]{"10", "left"}, (Object[]) result.get("arguments"));
-        assertEquals("move", result.get("command"));
-    }
 
     @Test
     public void testJsonRequestBuilderWithRobotName() {

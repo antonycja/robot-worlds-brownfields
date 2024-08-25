@@ -26,7 +26,7 @@ public class SaveCommand {
         return scanner.nextLine().trim();
     }
 
-    public void saveWorld(AbstractWorld world) {
+    public String saveWorld(AbstractWorld world) {
         int width = world.width;
         int height = world.height;
         Map<String, Object> data = new HashMap<>();
@@ -44,6 +44,7 @@ public class SaveCommand {
             System.out.println("'" + worldName+"' already exists, try another name or 'worlds' to see all saved worlds. Failed to Save.");
             errorResponse(data);
         }
+        return "World saved successfully with the name: "+ this.worldName;
     }
 
     private void addObstacles(List<Obstacle> obstacleList){
