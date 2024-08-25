@@ -37,7 +37,7 @@ public class LeftCommand extends Command {
         data.put("message", "LEFT");
         state.clear();
         state = target.getGUIRobotState();
-        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
 
         return true;
     }

@@ -54,32 +54,34 @@ public class FireCommand extends Command {
         data.put("state", affectedRobot.getRobotState());
         state = target.getRobotState();
         target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+        return true;
     } else {
         // if its a miss then nothing
 
         data.put("message", "Miss");
         state = target.getRobotState();
         target.setResponseToRobot(ServerProtocol.buildResponse("OK", data, state));
+        return true;
     }
 
-    data.clear();
-    data.put("message", "NONE");
-    state.clear();
-    state = target.getGUIRobotState();
-    target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//    data.clear();
+//    data.put("message", "NONE");
+//    state.clear();
+//    state = target.getGUIRobotState();
+//    target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
 
     // Broadcast the fire action to the GUI
-    data.clear();
-    data.put("message", "FIRE");
-    state.clear();
-    state.put("name", "fireRobot");
-    state.put("previousPosition", new int[] {target.getPosition().getX(), target.getPosition().getY()});
-    state.put("position", new int[] {affectedRobot.getPosition().getX(), affectedRobot.getPosition().getY()});
-    state.put("direction", target.getCurrentDirection());
-    Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
+//    data.clear();
+//    data.put("message", "FIRE");
+//    state.clear();
+//    state.put("name", "fireRobot");
+//    state.put("previousPosition", new int[] {target.getPosition().getX(), target.getPosition().getY()});
+//    state.put("position", new int[] {affectedRobot.getPosition().getX(), affectedRobot.getPosition().getY()});
+//    state.put("direction", target.getCurrentDirection());
+//    Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
     
 
-    return true;
+//    return true;
     }
 
     /**

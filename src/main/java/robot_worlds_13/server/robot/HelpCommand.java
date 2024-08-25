@@ -56,7 +56,7 @@ public class HelpCommand extends Command {
 
         // Set GUI response
         state = target.getGUIRobotState();
-        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
 
         return true;
     }

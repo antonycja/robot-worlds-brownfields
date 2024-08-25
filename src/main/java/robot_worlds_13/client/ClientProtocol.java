@@ -2,6 +2,7 @@ package robot_worlds_13.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -21,24 +22,34 @@ public class ClientProtocol {
      * @return a map containing the command and an array of arguments
      */
     public static Map<String, Object> jsonRequestBuilder (String input) {
-        String[] parts = input.trim().split("\\s+", 2);  // Split on whitespace, limit 2 parts
-        
+        String[] parts = input.trim().split("\\s+", 3);  // Split on whitespace, limit 2 parts
+
+        // Prepare the command and arguments for JSON formatting
+        HashMap<String, Object> commandMap = new HashMap<>();
+
         // command
         String command = parts[0];  // The first part is always the command
-        
-        // 
+        String robotName = "";
+
+        commandMap.put("command", command);
+        //
         Object[] arguments;
-        if (parts.length > 1) {
+        if (parts.length == 3) {
+            String[] partsLeft = parts[1].split("\\s+");
             // If there are arguments, split them further by spaces
-            arguments = parts[1].split("\\s+");
+            arguments = new String[]{partsLeft[1]};
+            robotName = partsLeft[0];
+        } else if (parts.length == 2){
+            arguments = new String[] {parts[1]};
         } else {
             // No arguments provided
             arguments = new Object[0];
         }
+        if(!robotName.isEmpty()){
+            commandMap.put("robot", robotName);
+        }
 
-        // Prepare the command and arguments for JSON formatting
-        HashMap<String, Object> commandMap = new HashMap<>();
-        commandMap.put("command", command);
+
         commandMap.put("arguments", arguments);
 
         return commandMap;
@@ -51,7 +62,7 @@ public class ClientProtocol {
         Object[] arguments;
         if (parts.length > 1) {
             // If there are arguments, split them further by spaces
-            arguments = parts[1].split("\\s+");
+            arguments = new Object[]{parts[1].split("\\s+")[0]};
         } else {
             // No arguments provided
             arguments = new Object[0];
@@ -66,12 +77,13 @@ public class ClientProtocol {
         return commandMap;
     }
 
+
     public static Map<String, Object> jsonRequestBuilder(String potentialRobotName, String make,
             ArrayList<Object> attributes) {
         
                 HashMap<String, Object> commandMap = new HashMap<>();
                 commandMap.put("robot", potentialRobotName);
-                attributes.add(make);
+                attributes.add(0, make);
                 commandMap.put("command", "launch");
                 commandMap.put("arguments", attributes);
 
@@ -91,7 +103,7 @@ public class ClientProtocol {
             if ("GUI".equals(responseMap.get("result")) ) {
                 return jsonResponse;
             }
-            
+
             if ("ERROR".equals(responseMap.get("result"))) {
                 Map<String, Object> dataReceived = (Map<String, Object>) responseMap.get("data");
                 if (dataReceived.containsKey("message"))
@@ -113,7 +125,7 @@ public class ClientProtocol {
             }
 
             String message = "";
-            
+
             if (responseMap.get("data") != null) {
                 if (responseMap.get("data") instanceof Map) {
                     Map<String, Object> innerMap = (Map<String, Object>) responseMap.get("data");
@@ -130,6 +142,7 @@ public class ClientProtocol {
                         String robot = (String) innerMap.get("robot");
                         message += "    Robot: " + robot  + "\n";
                     }
+
                     if (innerMap.get("state") != null) { // nested
                         message += "    State: " + "\n";
                         Map<String, Object> stateMap = (Map<String, Object>) innerMap.get("state");
@@ -144,20 +157,52 @@ public class ClientProtocol {
                         String shields = "        Shields: " + (String.valueOf((int) Math.round((double) stateMap.get("shields")))) + " hits left\n";
                         message += shields;
                     }
-                    if (innerMap.get("objects") != null) {  // obstacles one, nested within
-                        message += "    Objects: " + "\n";
-                        ArrayList<Object> objects = (ArrayList<Object>) innerMap.get("objects");
-                        for (Object object: objects) {
-                            Map<String, Object> obstacleMap = gson.fromJson(((String) object), new TypeToken<Map<String, Object>>(){}.getType());
-                            String direction = "        Direction: " + obstacleMap.get("direction") + "\n";
-                            message += direction;
-                            String type = "        Type: " + obstacleMap.get("type") + "\n";
-                            message += type;
-                            String distance = "        Distance: " + (String.valueOf((int) Math.round((double) obstacleMap.get("distance")))) + " steps away\n";
-                            message += distance;
-                            message += "\n";
+                    // Handling the "objects" field
+                    if (innerMap.get("objects") != null) {
+                        Object objectsField = innerMap.get("objects");
+
+                        // Check if "objects" is a string representation of an array
+                        if (objectsField instanceof String) {
+                            String objectsString = (String) objectsField;
+
+                            // Check if the string is a valid JSON array
+                            if (objectsString.equals("[]")) {
+                                message += "    Objects: []\n";  // Empty array case
+                            } else {
+                                // Try to parse the string as a JSON array
+                                try {
+                                    ArrayList<Object> objects = gson.fromJson(objectsString, new TypeToken<ArrayList<Object>>(){}.getType());
+                                    message += "    Objects: \n";
+                                    for (Object object : objects) {
+                                        Map<String, Object> obstacleMap = gson.fromJson(((String) object), new TypeToken<Map<String, Object>>(){}.getType());
+                                        String direction = "        Direction: " + obstacleMap.get("direction") + "\n";
+                                        message += direction;
+                                        String type = "        Type: " + obstacleMap.get("type") + "\n";
+                                        message += type;
+                                        String distance = "        Distance: " + (String.valueOf((int) Math.round((double) obstacleMap.get("distance")))) + " steps away\n";
+                                        message += distance;
+                                        message += "\n";
+                                    }
+                                } catch (Exception e) {
+                                    message += "    Failed to parse objects: " + objectsString + "\n";
+                                }
+                            }
+                        } else if (objectsField instanceof List) {
+                            message += "    Objects: \n";
+                            ArrayList<Object> objects = (ArrayList<Object>) objectsField;
+                            for (Object object : objects) {
+                                Map<String, Object> obstacleMap = gson.fromJson(((String) object), new TypeToken<Map<String, Object>>(){}.getType());
+                                String direction = "        Direction: " + obstacleMap.get("direction") + "\n";
+                                message += direction;
+                                String type = "        Type: " + obstacleMap.get("type") + "\n";
+                                message += type;
+                                String distance = "        Distance: " + (String.valueOf((int) Math.round((double) obstacleMap.get("distance")))) + " steps away\n";
+                                message += distance;
+                                message += "\n";
+                            }
                         }
                     }
+
                     if (innerMap.get("position") != null) {
                         Object position = (Object) innerMap.get("position");
                         message += "    Position: " + position  + "\n";
@@ -178,7 +223,7 @@ public class ClientProtocol {
                         String shields = String.valueOf((int) Math.round((double)innerMap.get("shields")));
                         message += "    Shields: " + shields + " hits left\n";
                     }
-                    
+
 
                 } else {
                     System.out.println("result is not a JSON object.");
@@ -199,7 +244,7 @@ public class ClientProtocol {
                     message += shots;
                     String shields = "    Shields: " + (String.valueOf((int) Math.round((double) innerMap.get("shields")))) + "\n";
                     message += shields;
-                    
+
                     return message;
                 } else {
                     System.out.println("state is not a JSON object.");
@@ -210,7 +255,7 @@ public class ClientProtocol {
             if (responseMap.get("command") != null) {
                 return (String) responseMap.get("command");
                 }
-            
+
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -283,5 +328,5 @@ public class ClientProtocol {
         }
     }
 
-    
+
 }

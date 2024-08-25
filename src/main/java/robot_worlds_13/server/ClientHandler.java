@@ -84,9 +84,10 @@ public class ClientHandler implements Runnable {
             // Inform client of successful connection
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> state = new HashMap<>();
-            data.clear();
-            data.put("message", "\nConnected successfully to server you can launch a robot!\n");
-            state.clear();
+//            data.clear();
+//            data.put("message", "\nConnected successfully to server you can launch a robot!\n");
+//            state.clear();
+//            out.println("Connected successfully to server you can launch a robot");
 //            sendMessage(ServerProtocol.buildResponse("OK",data));
 
 //            Server.broadcastMessage(ServerProtocol.buildResponse("OK", data));
@@ -215,12 +216,24 @@ public class ClientHandler implements Runnable {
 
                 // Launching the robot
                 if (requestedCommand.equalsIgnoreCase("launch") && !world.serverObject.robotNames.contains(potentialRobotName)) {
-                    
-                    data.clear();
-                    data.put("message", "Successfully launched " + "width " + world.width + " height " + world.height);
-//                    data.put("position", robot.position);
 
-//                    sendMessage(ServerProtocol.buildResponse("OK", data));
+//                    ArrayList<Object> objects = new ArrayList<>();
+                    // data
+//                    data.clear();
+//                    data.put("visibility", world.visibility);
+//                    data.put("position", new int[] {(int) world.getPosition().getX(), (int) world.getPosition().getY()});
+//                    data.put("objects", objects.isEmpty() ?"[]":objects);
+//                    data.put("message", "Successfully launched " + "width " + world.width + " height " + world.height);
+//                    // state
+//                    state.clear();
+//                    state.put("shields", world.maximumShieldStrength);
+//                    state.put("position", new int[] {world.getPosition().getX(), world.getPosition().getY()});
+//                    state.put("shots", world.maximumShots);
+//                    state.put("direction", world.getCurrentDirection());
+//                    state.put("status", "NORMAL");
+//
+//                    sendMessage(ServerProtocol.buildResponse("OK", data, state));
+//                    System.out.print(ServerProtocol.buildResponse("OK", data, state));
                     try {
 //                        TODO: changed sleep time to 1/2 sec
                         Thread.sleep(500);
@@ -256,10 +269,10 @@ public class ClientHandler implements Runnable {
                 }
             
             // System.out.println();
-            data.clear();
-            data.put("message", "OTHERCHARACTERS");
-            state.clear();
-            state.put("robots", currentRobotMap);
+//            data.clear();
+//            data.put("message", "OTHERCHARACTERS");
+//            state.clear();
+//            state.put("robots", currentRobotMap);
 //            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             // load robots bulletDistance, shields, shots
@@ -345,45 +358,47 @@ public class ClientHandler implements Runnable {
 //            sendMessage(ServerProtocol.buildResponse("OK", data, state));
 //            TODO: TEST AND CHANGE THE CODE UP.
 
-            List<Obstacle> obstacles = world.getObstacles();
-            data.clear();
-            data.put("message", "OBSTACLES");
-            state.clear();
-            state.put("obstacles", obstacles);
+//            List<Obstacle> obstacles = world.getObstacles();
+//            data.clear();
+//            data.put("message", "OBSTACLES");
+//            state.clear();
+//            state.put("obstacles", obstacles);
 //            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
 
-            List<Obstacle> lakes = world.getLakes();
-            data.clear();
-            data.put("message", "LAKES");
-            state.clear();
-            state.put("obstacles", lakes);
+//            List<Obstacle> lakes = world.getLakes();
+//            data.clear();
+//            data.put("message", "LAKES");
+//            state.clear();
+//            state.put("obstacles", lakes);
 //            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
-            List<Obstacle> pits = world.getBottomLessPits();
-            data.clear();
-            data.put("message", "PITS");
-            state.clear();
-            state.put("obstacles", pits);
+//            List<Obstacle> pits = world.getBottomLessPits();
+//            data.clear();
+//            data.put("message", "PITS");
+//            state.clear();
+//            state.put("obstacles", pits);
 //            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
             // starting position
+            ArrayList<Object> objects = new ArrayList<>();
+
             data.clear();
             data.put("visibility", robot.worldData.visibility);
             data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
-            data.put("objects", new ArrayList<>());
+            data.put("objects", objects.isEmpty() ?"[]":objects);
 
             // state
             state.clear();
             state = robot.getRobotState();
             sendMessage(ServerProtocol.buildResponse("OK", data, state));
-//            System.out.println("Response: " + ServerProtocol.buildResponse("OK", data, state));
+            System.out.println("Response: " + ServerProtocol.buildResponse("OK", data, state));
 
 
-            data.clear();
-            data.put("message", "LAUNCH");
-            state.clear();
-            state = robot.getGUIRobotState();
+//            data.clear();
+//            data.put("message", "LAUNCH");
+//            state.clear();
+//            state = robot.getGUIRobotState();
 //            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
             Command command;
             boolean shouldContinue = true;
@@ -402,11 +417,11 @@ public class ClientHandler implements Runnable {
                         world.serverObject.robotNames.remove(name);
                         world.serverObject.nameRobotMap.remove(name);
                         
-                        Map<String, Object> state = new HashMap<>();
-                        data.clear();
-                        data.put("message", "REMOVE");
-                        state.clear();
-                        state.put("robots", name);
+//                        Map<String, Object> state = new HashMap<>();
+//                        data.clear();
+//                        data.put("message", "REMOVE");
+//                        state.clear();
+//                        state.put("robots", name);
 //                        Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
 
                         ArrayList<Object> currentRobotState = new ArrayList<>();
@@ -424,8 +439,9 @@ public class ClientHandler implements Runnable {
 
             while (true) {
                 // sending prompt to client
-                data.clear();
-                data.put("message", "What must I do next?");
+//                data.clear();
+//                data.put("message", "What must I do next?");
+//                out.println("What must I do next?");
                 // TODO: FIX THIS TO ALWAYS DISPLAY ON CLIENT
 //                sendMessage(ServerProtocol.buildResponse("DISPLAY", data));
 //                System.out.println(ServerProtocol.buildResponse("DISPLAY", data));
@@ -488,7 +504,7 @@ public class ClientHandler implements Runnable {
                     data.put("position", new int[] {robot.getPosition().getX(), robot.getPosition().getY()});
                     data.put("objects", new ArrayList<>());
 
-                    // state
+//                  state
                     state.clear();
                     state = robot.getRobotState();
 //                    sendMessage(ServerProtocol.buildResponse("OK", data, state));
@@ -513,8 +529,10 @@ public class ClientHandler implements Runnable {
                 }
 
                 // print robot status after executing command
-                sendMessage(robot.getResponseToRobot());
-                Server.broadcastMessage(robot.getGUIResponseToRobot());
+                System.out.println(ServerProtocol.buildResponse("OK", data, state));
+                sendMessage(ServerProtocol.buildResponse("OK", data, state));
+//                sendMessage(robot.getResponseToRobot());
+//                Server.broadcastMessage(robot.getGUIResponseToRobot());
                 
                 if (shouldContinue) {
                     continue;
@@ -527,10 +545,10 @@ public class ClientHandler implements Runnable {
             connectedServer.removeRobot(name);
             world.serverObject.robotNames.remove(name);
             world.serverObject.nameRobotMap.remove(name);
-            data.clear();
-            data.put("message", "REMOVE");
-            state.clear();
-            state.put("robots", name);
+//            data.clear();
+//            data.put("message", "REMOVE");
+//            state.clear();
+//            state.put("robots", name);
 //            Server.broadcastMessage(ServerProtocol.buildResponse("GUI", data, state));
             currentRobotState = new ArrayList<>();
             currentRobotState.add(robot.getCurrentPosition());

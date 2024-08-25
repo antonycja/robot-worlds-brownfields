@@ -37,7 +37,7 @@ public class RightCommand extends Command {
         data.put("message", "RIGHT");
         state.clear();
         state = target.getGUIRobotState();
-        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
 
         return true;
     }

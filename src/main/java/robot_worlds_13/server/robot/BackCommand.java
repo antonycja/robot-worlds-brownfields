@@ -15,7 +15,6 @@ import robot_worlds_13.server.robot.world.IWorld.UpdateResponse;
  * message is returned.
  * Otherwise, the robot is moved backwards and a "Done" message is returned.
  *
- * @param target the robot to execute the command on
  * @return true if the command was executed successfully, false otherwise
  */
 public class BackCommand extends Command {
@@ -39,7 +38,7 @@ public class BackCommand extends Command {
             data.put("message", "BACK");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -53,7 +52,7 @@ public class BackCommand extends Command {
             data.put("message", "BACK");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -70,7 +69,7 @@ public class BackCommand extends Command {
             data.put("message", "BACK");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -86,7 +85,7 @@ public class BackCommand extends Command {
             data.put("message", "FRONT");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return false;
         }
 
@@ -100,7 +99,7 @@ public class BackCommand extends Command {
             data.put("message", "BACK");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -114,7 +113,7 @@ public class BackCommand extends Command {
             data.put("message", "BACK");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
             return true;
         }
 
@@ -130,7 +129,7 @@ public class BackCommand extends Command {
             data.put("message", "BACK");
             state.clear();
             state = target.getGUIRobotState();
-            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//            target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
         }
         return true;
     }

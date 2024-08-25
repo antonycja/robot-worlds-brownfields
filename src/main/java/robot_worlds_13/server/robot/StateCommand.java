@@ -28,7 +28,7 @@ public class StateCommand extends Command {
         data.put("message", "NONE");
         state.clear();
         state = target.getGUIRobotState();
-        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
+//        target.setGUIResponseToRobot(ServerProtocol.buildResponse("GUI", data, state));
 
         return true;
     }
