@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>robot_worlds_13</groupId>
     <artifactId>robot_worlds_13</artifactId>
     <version>1.0</version>
@@ -13,14 +11,6 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>lemnik-repo</id>-->
-<!--            <url>https://lemnik.org/maven</url>-->
-<!--        </repository>-->
-<!--    </repositories>-->
-
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -36,21 +26,19 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
                     <excludes>
-                        <!-- Uncomment the following line to exclude acceptance tests -->
+                        <!-- Uncomment the following lines to exclude specific tests -->
                         <!-- <exclude>**/AcceptanceTests/**/*.java</exclude> -->
                         <!-- <exclude>**/ClientTests/**/*.java</exclude> -->
                         <!-- <exclude>**/ServerTests/**/*.java</exclude> -->
                     </excludes>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -63,7 +51,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
@@ -84,7 +71,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -121,6 +107,7 @@
     </distributionManagement>
 
     <dependencies>
+        <!-- Testing dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -139,17 +126,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>5.9.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>3.6.28</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Main dependencies -->
         <dependency>
             <groupId>org.jline</groupId>
             <artifactId>jline</artifactId>
@@ -168,7 +151,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.4.1</version> <!-- Use the latest version available -->
+            <version>2.13.4.1</version>
         </dependency>
 
         <!-- SQLite JDBC Driver -->
@@ -182,20 +165,17 @@
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
-            <version>5.1.0</version> <!-- Use the latest version available -->
+            <version>5.1.0</version>
         </dependency>
+
+        <!-- SLF4J Simple Logger -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.31</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>net.lemnik</groupId>-->
-<!--            <artifactId>eodsql</artifactId>-->
-<!--            <version>2.2</version>-->
-<!--        </dependency>-->
-
+        <!-- EoD SQL -->
         <dependency>
             <groupId>com.eodsql</groupId>
             <artifactId>eodsql</artifactId>
@@ -204,7 +184,7 @@
             <systemPath>${project.basedir}/lib/eodsql.jar</systemPath>
         </dependency>
 
-
+        <!-- UniRest for HTTP requests (optional for testing) -->
         <dependency>
             <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
