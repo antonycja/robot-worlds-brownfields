@@ -13,10 +13,10 @@ build-job:
     - echo "Compiling the code..."
     - mvn clean #install
 #    - mvn validate
-    - echo "Starting up server"
-    - bash runServer.sh &  # Start server in background
-    - sleep 30
-    - mvn install
+    # - echo "Starting up server"
+    # - bash runServer.sh &  # Start server in background
+    - sleep 5
+    # - mvn install
     - echo "Startign complile process"
     - mvn compile
     - echo "Compile complete."
