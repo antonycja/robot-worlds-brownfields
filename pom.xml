@@ -190,13 +190,12 @@
             <version>1.7.31</version>
         </dependency>
 
-
         <dependency>
             <groupId>net.lemnik</groupId>
             <artifactId>eodsql</artifactId>
             <version>2.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/eodsql.jar</systemPath>
+<!--            <scope>compile</scope>-->
+<!--            <systemPath>${project.basedir}/lib/eodsql.jar</systemPath>-->
         </dependency>
 
         <dependency>

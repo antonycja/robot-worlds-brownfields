@@ -7,4 +7,4 @@
 clear
 
 # Run the generated JAR file
-java -jar lib//robot-worlds-server-jar-with-dependencies.jar
+java -jar lib/robot-worlds-server-jar-with-dependencies.jar
