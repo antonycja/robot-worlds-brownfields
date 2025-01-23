@@ -1,4 +1,4 @@
- ### Robot Worlds 1.0
+ ### Robot Worlds 2.0
 
 ![maxresdefault.jpg](robot_worlds_dbn_13%2Fmaxresdefault.jpg)
 This is a Java-based server-client application for a robot world simulation. The server manages a world with obstacles and robots, and clients can connect to the server to launch and control their own robots.
@@ -161,6 +161,10 @@ We welcome contributions to the Robot Worlds project! To contribute, follow thes
 * Nkosikhona Mlaba
 * Ayanda Mzimela (on martenity leave)
 * Thobile Mvuni
+
+### Advanced by:
+* Antony Maposa
+* 
 
 <br>
 
