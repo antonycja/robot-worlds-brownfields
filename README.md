@@ -164,7 +164,7 @@ We welcome contributions to the Robot Worlds project! To contribute, follow thes
 
 ### Advanced by:
 * Antony Maposa
-* 
+* Lindani Jonas
 
 <br>
 
