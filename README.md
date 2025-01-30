@@ -1,184 +1,336 @@
- ### Robot Worlds 2.0
+# Robot Worlds 2.0: Comprehensive Documentation
 
-![maxresdefault.jpg](robot_worlds_dbn_13%2Fmaxresdefault.jpg)
-This is a Java-based server-client application for a robot world simulation. The server manages a world with obstacles and robots, and clients can connect to the server to launch and control their own robots.
+## Overview
+Robot Worlds 2.0 is an interactive Java-based server-client application that simulates a dynamic robot world environment. In this simulation, multiple clients can connect to a central server, each controlling their own robot in a shared virtual world filled with obstacles and opportunities for robot-to-robot interaction.
 
-<br>
+## Core Features
 
+### Server Features
+- Multi-threaded server architecture supporting concurrent client connections
+- Real-time world state management and updates
+- Obstacle generation and placement system
+- Robot position and state tracking
+- Collision detection and damage calculation
+- World persistence with save/restore functionality
 
-### Features:
-- Server that manages a world with obstacles and robots
-- Clients can connect to the server to launch and control their own robots
-- Robots can move around the world, shoot, and interact with other robots and obstacles
-- The server keeps track of all robots and their statuses, and can broadcast messages to all clients
-- The world can be displayed in a GUI, and the server can send updates to the GUI to show the current state of the world
-- For every robot that joins the server, information about previously-launched robots is sent to the client and is visible
-- The server can send updates to the client's GUI to show the current state of all robots
+### Client Features
+- Choice between GUI and terminal interfaces
+- Real-time robot control and movement
+- Combat system with shooting mechanics
+- Robot status monitoring (health, position, ammunition)
+- Auto-updating world view
+- Command history and state tracking
 
-<br>
+### World Features
+- Dynamic obstacle placement
+- Multi-robot interaction
+- Damage and repair systems
+- Ammunition management
+- Configurable world size
 
+## System Requirements
 
-### System Requirements:
+### Hardware Requirements
+- Minimum 4GB RAM (8GB recommended)
+- 1GB free disk space
+- Network connection for client-server communication
 
-- A linux operating system
-- Java 11 or higher
-- Maven (for dependency management)
-- Access to a terminal that supports ANSI colors and Unicode characters
-- Internet access
+### Software Requirements
+- Linux-based operating system (Ubuntu 20.04 or newer recommended)
+- Java Development Kit (JDK) 17
+- Maven 3.6 or higher
+- Docker (optional, for containerized deployment)
+- Terminal emulator with ANSI color support
+- Network port access (default: 5050)
 
-<br>
+### Development Environment
+- Any Java IDE (IntelliJ IDEA or Eclipse recommended)
+- Git version control system
+- Text editor for configuration files
 
+## Build and Deployment Options
 
-### Getting Started:
+### 1. Standard Maven Build
+```bash
+# Compile the project
+mvn compile
 
-To get started with the Robot Worlds application, follow these steps:
+# Run tests
+mvn test
 
-    Clone the repository to your local machine
-    Open the project in your favorite Java IDE (e.g. IntelliJ, Eclipse)
-    Build and run the Server class to start the server
-    Build and run the Client class to start a client and connect to the server
-    Follow the prompts in the client to launch and control your robot
+# Create executable JAR
+mvn package
+```
 
-<br>
+### 2. Make Commands
+The project includes a Makefile with various useful commands:
+```bash
+# Compile the project
+make compile
 
+# Run tests with your own server
+make test_own
 
-### Setup and Installation:
+# Build and package
+make package
 
-1. On a linux machine, connect to the internet and run:
-        
-        $ sudo apt update
+# Clean build files
+make clean
 
-2. To install maven run:
-        
-        $ sudo apt install maven -y
+# Create a release
+make release
 
-3. To verify the installation, run:
-        
-        $ mvn -version
+# Development build
+make development
+```
 
-4. Install java using:
-        
-        $ sudo apt install default-jdk -y
+### 3. Docker Deployment
+The project can be containerized using Docker:
+```bash
+# Build Docker image
+make docker-build
 
-5. To verify the installation, run:
-        
-        $ java -version
+# Run Docker container
+make docker-run
 
-<br>
+# Stop Docker container
+make docker-stop
 
+# Full release cycle
+make docker-release
+```
 
-### Cloning and compiling instructions:
-1. Clone the repository in your local machine, do this by opening a terminal in a preffered folder
-2. Run the following command:
-        
-        $ git clone git@gitlab.wethinkco.de:nmlaba023/dbn13_robot_worlds.git
+Docker container specifications:
+- Base image: Ubuntu latest
+- Java 17
+- SQLite3
+- Exposed port: 5050
+- Includes necessary configuration files
 
-3. Once the repository is cloned, run:
-        
-        $ cd /dbn13_robot_worlds/robot_worlds_dbn_13
+## Detailed Installation Guide
 
-4. Run the following command, to compile and generate the class files:
-        
-        $ mvn clean compile
+### 1. System Preparation
+First, ensure your system is up to date:
+```bash
+# Update package lists
+sudo apt update
 
-<br>
+# Upgrade existing packages
+sudo apt upgrade -y
+```
 
+### 2. Java Installation
+Install the Java Development Kit:
+```bash
+# Install default JDK
+sudo apt install default-jdk -y
 
-### Running instructions:
-##### Running the server
-1. Run the server:
-        
-        $ mvn exec:java -Dexec.mainClass="robot_worlds_13.server.Server"
+# Verify installation
+java -version
+javac -version
+```
 
-2. The port number and address is visible server side, when you run the Server class
+### 3. Maven Installation
+Install and configure Maven:
+```bash
+# Install Maven
+sudo apt install maven -y
 
+# Verify installation
+mvn -version
+```
 
-##### Running the client:
-1. Run the client, without the gui:
-        
-        $ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client"
-            
-        or
+### 4. Docker Installation
+1. Build the Docker image:
+```bash
+docker build -t robot-worlds .
+```
 
-        $ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="ip_address port"
+2. Run the container:
+```bash
+docker run -d -p 5050:5050 --name robot_worlds_container robot-worlds
+```
 
-        e.g mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="20.20.19.0 2201"
+3. View container logs:
+```bash
+docker logs robot_worlds_container
+```
 
-2. Running the client with the gui:
+4. Stop the container:
+```bash
+docker stop robot_worlds_container
+```
 
-        Use vscode / intelliJ and run the Client.java class
-3. Ensure you are connected to the correct server and port (The port number is visible server side, when you run the Server class)
+## Project Structure
 
-##### Run tests:
-1. Run the tests with the following command:
-        
-        mvn test
+### Main Components
+- Server: `src/main/java/robot_worlds_13/server/`
+- Client: `src/main/java/robot_worlds_13/client/`
+- Configuration: `src/main/java/robot_worlds_13/server/configuration/`
 
-<br>
+### Dependencies
+Key dependencies include:
+- JUnit Jupiter 5.9.2 (testing)
+- Mockito 3.6.28 (testing)
+- JLine 3.26.1 (terminal handling)
+- Gson 2.8.9 (JSON processing)
+- Jackson Core 2.17.2 (JSON processing)
+- SQLite JDBC 3.41.2.2 (database)
+- Javalin 5.1.0 (web framework)
+- EODSQL (database queries)
 
+## Running the Application
 
-### Usage:
-##### Client commands:
-Here are some basic commands you can use in the client to control your robot:
+### Starting the Server
+1. From the project root directory, launch the server:
+```bash
+mvn exec:java -Dexec.mainClass="robot_worlds_13.server.Server"
+```
 
-    forward <steps>: Move the robot forward by the specified number of steps
-    back <steps>: Move the robot backward by the specified number of steps
-    left: Turn the robot to the left
-    right: Turn the robot to the right
-    look: Show the current state of the world around the robot
-    state: Show the current state of the robot
-    fire: Shoot a bullet in the current direction of the robot
-    repair: Repair the robot's shields
-    reload: Reload the robot's ammo
-    off: Quit the client and disconnect from the server
+### Starting the Client
 
-##### Server commands:
-Here are some basic commands you can use to control your server:
+#### Terminal Mode
+1. Basic connection (uses default settings):
+```bash
+mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client"
+```
 
-    robots: lists all robots in the server
-    dump: lists the state of the world
-    save <world name>: Save the current world configurations.
-    restore <world name>: Restore a saved world's configurations.
-    delete <world name>: Delete a saved world.
-    quit: quit the server
+2. Connection with specific server details:
+```bash
+mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="[ip_address] [port]"
+```
 
-<br>
+#### GUI Mode
+1. Open the project in your IDE
+2. Locate `Client.java` in the project explorer
+3. Right-click and select "Run" or "Debug"
+4. Enter server details in the connection dialog
 
+## Command Reference
 
-### Contributing:
+### Client Commands
+| Command | Syntax | Description | Example |
+|---------|--------|-------------|----------|
+| Forward | `forward <steps>` | Move robot forward by specified steps | `forward 5` |
+| Back | `back <steps>` | Move robot backward by specified steps | `back 3` |
+| Left | `left` | Rotate robot 90 degrees left | `left` |
+| Right | `right` | Rotate robot 90 degrees right | `right` |
+| Look | `look` | Display surrounding area (5x5 grid) | `look` |
+| State | `state` | Show robot's current status | `state` |
+| Fire | `fire` | Shoot in current direction | `fire` |
+| Repair | `repair` | Repair robot's shields (costs 1 turn) | `repair` |
+| Reload | `reload` | Reload ammunition (costs 1 turn) | `reload` |
+| Off | `off` | Disconnect from server | `off` |
 
-We welcome contributions to the Robot Worlds project! To contribute, follow these steps:
+### Server Commands
+| Command | Syntax | Description | Example |
+|---------|--------|-------------|----------|
+| Robots | `robots` | Display list of active robots | `robots` |
+| Dump | `dump` | Show complete world state | `dump` |
+| Save | `save <name>` | Save current world state | `save world1` |
+| Restore | `restore <name>` | Load saved world state | `restore world1` |
+| Delete | `delete <name>` | Remove saved world | `delete world1` |
+| Quit | `quit` | Shutdown server | `quit` |
 
-    Fork the repository
-    Create a new branch for your feature or bugfix
-    Make your changes and commit them to your branch
-    Push your changes to your forked repository
-    Create a pull request from your forked repository to the original repository
+## Game Mechanics
 
+### Robot Properties
+- Health: Maximum 100 points
+- Shields: Maximum 50 points, regenerates with repair command
+- Ammunition: 10 shots per reload
+- Movement: 1 step per movement command
+- Vision: 5x5 grid centered on robot
 
+### Combat System
+- Shots travel in straight lines
+- Direct hits cause 20 points of damage
+- Shields absorb 50% of damage
+- Robots are destroyed at 0 health
+- Missed shots continue until hitting obstacle or world boundary
 
-### Contributors:
+### World Interaction
+- Obstacles block movement and shots
+- Robots cannot move through other robots
+- World boundaries are solid
+- Each action (move, shoot, repair) counts as one turn
 
-* Summer Ngcobo
-* Sindiswa Zama
-* Nkosikhona Mlaba
-* Ayanda Mzimela (on martenity leave)
-* Thobile Mvuni
+## Server Configuration
 
-### Advanced by:
-* Antony Maposa
-* Lindani Jonas
+### Default Settings
+- Port: 5050
+- Database: SQLite
+- Configuration file location: `/app/src/main/java/robot_worlds_13/server/configuration/file.txt`
 
-<br>
+### Custom Configuration
+1. Modify the configuration file
+2. Rebuild the application/container
+3. Restart the server
 
+## Error Handling
 
-### Documentation:
+### Common Client Issues
+1. Connection refused
+   - Verify server is running
+   - Check IP address and port
+   - Ensure network connectivity
 
-For detailed documentation and additional resources, please visit our [Wiki](https://gitlab.wethinkco.de/nmlaba023/dbn13_robot_worlds/-/wikis/Robot-Worlds-Wiki/).
+2. Client crashes
+   - Check Java version compatibility
+   - Verify Maven dependencies
+   - Review client logs in `logs/client.log`
 
-<br>
+### Common Server Issues
+1. Port binding failed
+   - Ensure port is not in use
+   - Check port permissions
+   - Try alternative port
 
-### License:
+2. Memory issues
+   - Increase JVM heap size
+   - Monitor server resources
+   - Check for memory leaks
 
-The Robot Worlds project is licensed under the MIT License. See the LICENSE file for more information.
+## Contributing Guidelines
 
+1. Fork Repository
+   - Create personal fork from [robot-worlds-brownfields](https://github.com/antonycja/robot-worlds-brownfields)
+   - Keep fork synchronized with upstream
+
+2. Branch Creation
+   - Create feature branch from main
+   - Use descriptive branch names (e.g., `feature/new-combat-system`)
+
+3. Code Standards
+   - Follow Java coding conventions
+   - Maintain consistent indentation
+   - Add appropriate documentation
+   - Include unit tests
+
+4. Submit Changes
+   - Create detailed pull request
+   - Reference related issues
+   - Await code review
+
+## Development Team
+
+### Core Developers
+- Summer Ngcobo - Core Systems
+- Sindiswa Zama - Client Interface
+- Nkosikhona Mlaba - Server Architecture
+- Ayanda Mzimela - Game Mechanics
+- Thobile Mvuni - Testing
+
+### Advanced Features
+- Antony Maposa - Performance Optimization
+- Lindani Jonas - Enhanced Combat System
+
+## Additional Resources
+- [GitHub Repository](https://github.com/antonycja/robot-worlds-brownfields)
+- [Issue Tracker](https://github.com/antonycja/robot-worlds-brownfields/issues)
+- [Docker Hub](https://hub.docker.com/) (if published)
+
+## License
+Robot Worlds 2.0 is released under the MIT License. See the LICENSE file in the repository for full details.
+
+---
+*Last updated: January 30, 2025*
