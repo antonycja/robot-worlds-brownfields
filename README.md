@@ -327,7 +327,6 @@ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="[ip_
 ## Additional Resources
 - [GitHub Repository](https://github.com/antonycja/robot-worlds-brownfields)
 - [Issue Tracker](https://github.com/antonycja/robot-worlds-brownfields/issues)
-- [Docker Hub](https://hub.docker.com/) (if published)
 
 ## License
 Robot Worlds 2.0 is released under the MIT License. See the LICENSE file in the repository for full details.
