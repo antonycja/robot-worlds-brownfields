@@ -143,7 +143,7 @@ mvn -version
 ### 4. Docker Installation
 1. Build the Docker image:
 ```bash
-docker build -t robot-worlds .
+docker build -t robot-worlds.
 ```
 
 2. Run the container:
@@ -204,7 +204,7 @@ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="[ip_
 1. Open the project in your IDE
 2. Locate `Client.java` in the project explorer
 3. Right-click and select "Run" or "Debug"
-4. Enter server details in the connection dialog
+4. Enter server details in the connection dialogue
 
 ## Command Reference
 
@@ -239,14 +239,14 @@ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="[ip_
 - Shields: Maximum 50 points, regenerates with repair command
 - Ammunition: 10 shots per reload
 - Movement: 1 step per movement command
-- Vision: 5x5 grid centered on robot
+- Vision: 5x5 grid centred on robot
 
 ### Combat System
 - Shots travel in straight lines
 - Direct hits cause 20 points of damage
 - Shields absorb 50% of damage
 - Robots are destroyed at 0 health
-- Missed shots continue until hitting obstacle or world boundary
+- Missed shots continue until hitting an obstacle or world boundary
 
 ### World Interaction
 - Obstacles block movement and shots
@@ -270,8 +270,8 @@ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="[ip_
 
 ### Common Client Issues
 1. Connection refused
-   - Verify server is running
-   - Check IP address and port
+   - Verify the server is running
+   - Check the IP address and port
    - Ensure network connectivity
 
 2. Client crashes
@@ -281,7 +281,7 @@ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="[ip_
 
 ### Common Server Issues
 1. Port binding failed
-   - Ensure port is not in use
+   - Ensure the port is not in use
    - Check port permissions
    - Try alternative port
 
@@ -293,11 +293,11 @@ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="[ip_
 ## Contributing Guidelines
 
 1. Fork Repository
-   - Create personal fork from [robot-worlds-brownfields](https://github.com/antonycja/robot-worlds-brownfields)
+   - Create a personal fork from [robot-worlds-brownfields](https://github.com/antonycja/robot-worlds-brownfields)
    - Keep fork synchronized with upstream
 
 2. Branch Creation
-   - Create feature branch from main
+   - Create a feature branch from the main
    - Use descriptive branch names (e.g., `feature/new-combat-system`)
 
 3. Code Standards
@@ -307,22 +307,22 @@ mvn exec:java -Dexec.mainClass="robot_worlds_13.client.Client" -Dexec.args="[ip_
    - Include unit tests
 
 4. Submit Changes
-   - Create detailed pull request
+   - Create a detailed pull request
    - Reference related issues
    - Await code review
 
 ## Development Team
 
 ### Core Developers
-- Summer Ngcobo - Core Systems
-- Sindiswa Zama - Client Interface
-- Nkosikhona Mlaba - Server Architecture
-- Ayanda Mzimela - Game Mechanics
-- Thobile Mvuni - Testing
+- Summer Ngcobo
+- Sindiswa Zama
+- Nkosikhona Mlaba
+- Ayanda Mzimela
+- Thobile Mvuni
 
 ### Advanced Features
-- Antony Maposa - Performance Optimization
-- Lindani Jonas - Enhanced Combat System
+- Antony Maposa
+- Lindani Jonas
 
 ## Additional Resources
 - [GitHub Repository](https://github.com/antonycja/robot-worlds-brownfields)
