@@ -135,8 +135,11 @@ Here are some basic commands you can use in the client to control your robot:
 ##### Server commands:
 Here are some basic commands you can use to control your server:
 
-    robots: lists all robots in server
+    robots: lists all robots in the server
     dump: lists the state of the world
+    save <world name>: Save the current world configurations.
+    restore <world name>: Restore a saved world's configurations.
+    delete <world name>: Delete a saved world.
     quit: quit the server
 
 <br>
